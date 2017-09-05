@@ -1,7 +1,8 @@
-package com.corneliadavis.cloudnative.web;
+package com.corneliadavis.cloudnative.posts;
 
-import com.corneliadavis.cloudnative.domain.Post;
-import com.corneliadavis.cloudnative.repositories.PostRepository;
+import com.corneliadavis.cloudnative.connections.ConnectionsController;
+import com.corneliadavis.cloudnative.posts.Post;
+import com.corneliadavis.cloudnative.posts.PostRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

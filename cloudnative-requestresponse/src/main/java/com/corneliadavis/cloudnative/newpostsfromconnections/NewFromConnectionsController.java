@@ -1,9 +1,8 @@
-package com.corneliadavis.cloudnative.web;
+package com.corneliadavis.cloudnative.newpostsfromconnections;
 
-import com.corneliadavis.cloudnative.domain.Connection;
-import com.corneliadavis.cloudnative.domain.Post;
-import com.corneliadavis.cloudnative.domain.PostSummary;
-import com.corneliadavis.cloudnative.domain.User;
+import com.corneliadavis.cloudnative.connections.Connection;
+import com.corneliadavis.cloudnative.posts.Post;
+import com.corneliadavis.cloudnative.connections.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

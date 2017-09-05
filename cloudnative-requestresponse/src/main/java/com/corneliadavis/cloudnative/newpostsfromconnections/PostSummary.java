@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.domain;
+package com.corneliadavis.cloudnative.newpostsfromconnections;
 
 import java.util.Date;
 

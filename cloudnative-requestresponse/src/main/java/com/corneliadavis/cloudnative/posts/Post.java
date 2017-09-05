@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.domain;
+package com.corneliadavis.cloudnative.posts;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

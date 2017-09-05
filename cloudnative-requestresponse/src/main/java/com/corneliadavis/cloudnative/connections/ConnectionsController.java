@@ -1,9 +1,6 @@
-package com.corneliadavis.cloudnative.web;
+package com.corneliadavis.cloudnative.connections;
 
-import com.corneliadavis.cloudnative.domain.Connection;
-import com.corneliadavis.cloudnative.repositories.ConnectionRepository;
 import com.corneliadavis.cloudnative.repositories.UserRepository;
-import com.corneliadavis.cloudnative.domain.User;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;

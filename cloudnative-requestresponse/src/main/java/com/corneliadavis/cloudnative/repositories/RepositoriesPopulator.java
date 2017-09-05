@@ -1,8 +1,10 @@
 package com.corneliadavis.cloudnative.repositories;
 
-import com.corneliadavis.cloudnative.domain.Connection;
-import com.corneliadavis.cloudnative.domain.Post;
-import com.corneliadavis.cloudnative.domain.User;
+import com.corneliadavis.cloudnative.connections.Connection;
+import com.corneliadavis.cloudnative.connections.ConnectionRepository;
+import com.corneliadavis.cloudnative.posts.Post;
+import com.corneliadavis.cloudnative.connections.User;
+import com.corneliadavis.cloudnative.posts.PostRepository;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.context.ApplicationContext;
