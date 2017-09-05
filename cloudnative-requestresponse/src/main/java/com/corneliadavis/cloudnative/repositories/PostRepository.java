@@ -1,6 +1,5 @@
 package com.corneliadavis.cloudnative.repositories;
 
-import com.corneliadavis.cloudnative.domain.Connection;
 import com.corneliadavis.cloudnative.domain.Post;
 import org.springframework.data.repository.CrudRepository;
 

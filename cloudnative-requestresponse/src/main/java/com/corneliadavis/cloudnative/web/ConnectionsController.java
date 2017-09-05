@@ -36,10 +36,15 @@ public class ConnectionsController {
 		return users;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value="/users/{username}")
-	public User getByUsername(@PathVariable("username") String username, HttpServletResponse response) {
-        logger.info("getting user " + username);
-        return userRepository.findByUsername(username);
+	@RequestMapping(method = RequestMethod.GET, value="/users/{user}")
+	public User getByUsername(@PathVariable("user") String user, HttpServletResponse response) {
+        logger.info("getting user " + user);
+        try {
+            Long id = Long.parseLong(user);
+            return userRepository.findOne(id);
+        } catch(NumberFormatException e) {
+            return userRepository.findByUsername(user);
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET, value="/connections")
@@ -61,20 +66,5 @@ public class ConnectionsController {
 
         return connections;
     }
-
-
-
-/*	private Recipe[] parseRecipes(Map<String, Object> resp) {
-
-		List<Recipe> recipies = new ArrayList<Recipe>();
-
-		Object[] recipiesIn = (Object[]) resp.get("recipes");
-		for (int i=0; i<recipiesIn.length; i++) {
-			Map<String, Object> recipe = (Map<String, Object>) recipiesIn[i];
-			recipies.add(new Recipe((String)recipe.get("recipe_id"), (String)recipe.get("title")));
-		}
-
-		return recipies.toArray(new Recipe[0]);
-	}*/
 
 }
