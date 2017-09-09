@@ -8,12 +8,12 @@ import java.util.Date;
 public class PostSummary {
 
     private Date date;
-    private String username;
+    private String usersname;
     private String title;
 
-    public PostSummary(String username, String title, Date date) {
+    public PostSummary(String usersname, String title, Date date) {
         this.date = date;
-        this.username = username;
+        this.usersname = usersname;
         this.title = title;
     }
 
@@ -21,8 +21,8 @@ public class PostSummary {
         return date;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUsersname() {
+        return usersname;
     }
 
     public String getTitle() {

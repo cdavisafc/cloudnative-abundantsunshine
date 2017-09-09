@@ -32,10 +32,10 @@ public class NewFromConnectionsController {
 
 
     @RequestMapping(method = RequestMethod.GET, value="/connectionsNewPosts/{username}")
-	public Iterable<PostSummary> getByUsername(@PathVariable("username") String username, HttpServletResponse response) {
+    public Iterable<PostSummary> getByUsername(@PathVariable("username") String username, HttpServletResponse response) {
 
         ArrayList<PostSummary> postSummaries = new ArrayList<PostSummary>();
-	    logger.info("getting posts for user network " + username);
+        logger.info("getting posts for user network " + username);
 
         String ids = "";
         RestTemplate restTemplate = new RestTemplate();
@@ -54,14 +54,14 @@ public class NewFromConnectionsController {
         Post[] posts = respPosts.getBody();
 
         for (int i=0; i<posts.length; i++)
-            postSummaries.add(new PostSummary(getUsername(posts[i].getUserId()), posts[i].getTitle(), posts[i].getDate()));
+            postSummaries.add(new PostSummary(getUsersname(posts[i].getUserId()), posts[i].getTitle(), posts[i].getDate()));
 
         return postSummaries;
     }
 
-    private String getUsername(Long id) {
+    private String getUsersname(Long id) {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<User> resp = restTemplate.getForEntity(usersUrl+id, User.class);
-        return resp.getBody().getUsername();
+        return resp.getBody().getName();
     }
 }
