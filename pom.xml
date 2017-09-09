@@ -10,6 +10,7 @@
 
 	<modules>
 		<module>cloudnative-requestresponse</module>
+		<module>cloudnative-eventdriven</module>
 		<module>cloudnative-parent</module>
 	</modules>
 
