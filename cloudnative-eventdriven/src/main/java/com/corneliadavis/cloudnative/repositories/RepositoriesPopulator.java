@@ -2,6 +2,10 @@ package com.corneliadavis.cloudnative.repositories;
 
 import com.corneliadavis.cloudnative.connections.Connection;
 import com.corneliadavis.cloudnative.connections.ConnectionRepository;
+import com.corneliadavis.cloudnative.connections.UserRepository;
+import com.corneliadavis.cloudnative.newpostsfromconnections.localstorage.MConnectionRepository;
+import com.corneliadavis.cloudnative.newpostsfromconnections.localstorage.MPostRepository;
+import com.corneliadavis.cloudnative.newpostsfromconnections.localstorage.MUserRepository;
 import com.corneliadavis.cloudnative.posts.Post;
 import com.corneliadavis.cloudnative.connections.User;
 import com.corneliadavis.cloudnative.posts.PostRepository;
@@ -41,6 +45,13 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
             if (userRepository != null && userRepository.count() == 0) {
                 populate(userRepository, connectionRepository, postRepository);
             }
+
+            MUserRepository mUserRepository =
+                    BeanFactoryUtils.beanOfTypeIncludingAncestors(applicationContext, MUserRepository.class);
+            MPostRepository mPostRepository =
+                    BeanFactoryUtils.beanOfTypeIncludingAncestors(applicationContext, MPostRepository.class);
+            MConnectionRepository mConnectionRepository =
+                    BeanFactoryUtils.beanOfTypeIncludingAncestors(applicationContext, MConnectionRepository.class);
         }
 
     }

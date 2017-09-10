@@ -3,30 +3,11 @@ package com.corneliadavis.cloudnative.newpostsfromconnections;
 import java.util.Date;
 
 /**
- * Created by corneliadavis on 9/4/17.
+ * Created by corneliadavis on 9/9/17.
  */
-public class PostSummary {
 
-    private Date date;
-    private String usersname;
-    private String title;
-
-    public PostSummary(String usersname, String title, Date date) {
-        this.date = date;
-        this.usersname = usersname;
-        this.title = title;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public String getUsersname() {
-        return usersname;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
+public interface PostSummary {
+    Date getDate();
+    String getUsersName();
+    String getTitle();
 }

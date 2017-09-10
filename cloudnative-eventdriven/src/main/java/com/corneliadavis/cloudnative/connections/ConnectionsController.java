@@ -1,6 +1,5 @@
 package com.corneliadavis.cloudnative.connections;
 
-import com.corneliadavis.cloudnative.repositories.UserRepository;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
