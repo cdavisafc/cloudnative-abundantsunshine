@@ -36,8 +36,6 @@ public class NewFromConnectionsController {
     @RequestMapping(method = RequestMethod.GET, value="/connectionsNewPosts/{username}")
     public Iterable<PostSummary> getByUsername(@PathVariable("username") String username, HttpServletResponse response) {
 
-        //loadTestData();
-
         Iterable<PostSummary> postSummaries;
         logger.info("getting posts for user network " + username);
 
@@ -48,39 +46,4 @@ public class NewFromConnectionsController {
         return postSummaries;
     }
 
-    private void loadTestData () {
-        MUser user1 = new MUser(1L, "Cornelia", "cdavisafc");
-        mUserRepository.save(user1);
-        MUser user2 = new MUser(2L, "Max", "madmax");
-        mUserRepository.save(user2);
-        MUser user3 = new MUser(3L, "Glen", "gmaxdavis");
-        mUserRepository.save(user3);
-
-        MPost post1 = new MPost(1L, new Date(), 2L, "Max Title");
-        post1.setmUser(user2);
-        mPostRepository.save(post1);
-        MPost post2 = new MPost(2L, new Date(), 1L, "Cornelia Title");
-        post2.setmUser(user1);
-        mPostRepository.save(post2);
-        post2 = new MPost(3L, new Date(), 1L, "Cornelia Title2");
-        post2.setmUser(user1);
-        mPostRepository.save(post2);
-        post2 = new MPost(4L, new Date(), 3L, "Glen Title");
-        post2.setmUser(user3);
-        mPostRepository.save(post2);
-
-        MConnection connection = new MConnection(1L, 2L, 1L);
-        connection.setFollowerUser(user2);
-        connection.setFollowedUser(user1);
-        mConnectionRepository.save(connection);
-        connection = new MConnection(2L, 1L, 2L);
-        connection.setFollowerUser(user1);
-        connection.setFollowedUser(user2);
-        mConnectionRepository.save(connection);
-        connection = new MConnection(3L, 1L, 3L);
-        connection.setFollowerUser(user1);
-        connection.setFollowedUser(user3);
-        mConnectionRepository.save(connection);
-
-    }
 }
