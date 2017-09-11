@@ -36,7 +36,7 @@ public class NewFromConnectionsController {
     @RequestMapping(method = RequestMethod.GET, value="/connectionsNewPosts/{username}")
     public Iterable<PostSummary> getByUsername(@PathVariable("username") String username, HttpServletResponse response) {
 
-        loadTestData();
+        //loadTestData();
 
         Iterable<PostSummary> postSummaries;
         logger.info("getting posts for user network " + username);
@@ -49,59 +49,35 @@ public class NewFromConnectionsController {
     }
 
     private void loadTestData () {
-        MUser user1 = new MUser();
-        user1.setId(1L);
-        user1.setUsername("cdavisafc");
-        user1.setName("Cornelia");
+        MUser user1 = new MUser(1L, "Cornelia", "cdavisafc");
         mUserRepository.save(user1);
-        MUser user2 = new MUser();
-        user2.setId(2L);
-        user2.setUsername("madmax");
-        user2.setName("Max");
+        MUser user2 = new MUser(2L, "Max", "madmax");
         mUserRepository.save(user2);
-        MUser user3 = new MUser();
-        user3.setId(3L);
-        user3.setUsername("gmaxdavis");
-        user3.setName("Glen");
+        MUser user3 = new MUser(3L, "Glen", "gmaxdavis");
         mUserRepository.save(user3);
 
-        MPost post1 = new MPost();
-        post1.setId(1L);
-        post1.setDate(new Date());
-        post1.setUserId(2L);
-        post1.setTitle("The Title");
+        MPost post1 = new MPost(1L, new Date(), 2L, "Max Title");
         post1.setmUser(user2);
         mPostRepository.save(post1);
-        MPost post2 = new MPost();
-        post2.setId(2L);
-        post2.setDate(new Date());
-        post2.setUserId(1L);
-        post2.setTitle("C Title");
+        MPost post2 = new MPost(2L, new Date(), 1L, "Cornelia Title");
         post2.setmUser(user1);
         mPostRepository.save(post2);
-        post2.setId(3L);
-        post2.setDate(new Date());
-        post2.setUserId(1L);
-        post2.setTitle("C Title again");
+        post2 = new MPost(3L, new Date(), 1L, "Cornelia Title2");
         post2.setmUser(user1);
         mPostRepository.save(post2);
-        post2.setId(4L);
-        post2.setDate(new Date());
-        post2.setUserId(1L);
-        post2.setTitle("Glen Title");
+        post2 = new MPost(4L, new Date(), 3L, "Glen Title");
         post2.setmUser(user3);
         mPostRepository.save(post2);
 
-        MConnection connection = new MConnection();
-        connection.setId(1L);
+        MConnection connection = new MConnection(1L, 2L, 1L);
         connection.setFollowerUser(user2);
         connection.setFollowedUser(user1);
         mConnectionRepository.save(connection);
-        connection.setId(2L);
+        connection = new MConnection(2L, 1L, 2L);
         connection.setFollowerUser(user1);
         connection.setFollowedUser(user2);
         mConnectionRepository.save(connection);
-        connection.setId(3L);
+        connection = new MConnection(3L, 1L, 3L);
         connection.setFollowerUser(user1);
         connection.setFollowedUser(user3);
         mConnectionRepository.save(connection);

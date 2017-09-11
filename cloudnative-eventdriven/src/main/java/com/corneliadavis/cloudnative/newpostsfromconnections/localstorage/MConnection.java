@@ -19,6 +19,14 @@ public class MConnection {
     @ManyToOne
     private MUser followedUser;
 
+    protected  MConnection() {}
+
+    public MConnection(Long id, Long follower, Long followed) {
+        this.id = id;
+        this.follower = follower;
+        this.followed = followed;
+    }
+
     public Long getId() {
         return id;
     }

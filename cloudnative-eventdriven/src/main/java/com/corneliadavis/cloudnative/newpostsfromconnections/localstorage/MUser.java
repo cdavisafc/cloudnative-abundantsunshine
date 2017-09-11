@@ -24,6 +24,14 @@ public class MUser {
     @OneToMany(mappedBy = "followedUser")
     private Collection<MConnection> followed = new ArrayList<MConnection>();
 
+    protected MUser() {}
+
+    public MUser(Long id, String name, String username) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+    }
+
     public Long getId() {
         return id;
     }

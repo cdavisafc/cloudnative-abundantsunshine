@@ -8,7 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -32,6 +34,10 @@ public class ConnectionsWriteController {
         logger.info("Have a new user with username " + newUser.getUsername());
         userRepository.save(newUser);
 
+        //event
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.postForEntity("http://localhost:8080/connectionsNewPosts/users", newUser, String.class);
+
     }
 
     @RequestMapping(method = RequestMethod.PUT, value="/users/{id}")
@@ -42,6 +48,10 @@ public class ConnectionsWriteController {
         newUser.setId(userId);
         userRepository.save(newUser);
 
+        //event
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.put("http://localhost:8080/connectionsNewPosts/users/"+newUser.getId(), newUser);
+
     }
 
     @RequestMapping(method = RequestMethod.POST, value="/connections")
@@ -50,6 +60,10 @@ public class ConnectionsWriteController {
         logger.info("Have a new connection: " + newConnection.getFollower() + " is following " + newConnection.getFollowed());
         connectionRepository.save(newConnection);
 
+        //event
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> resp = restTemplate.postForEntity("http://localhost:8080/connectionsNewPosts/connections", newConnection, String.class);
+        logger.info("resp " + resp.getStatusCode());
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value="/connections/{id}")
@@ -59,6 +73,10 @@ public class ConnectionsWriteController {
 
         logger.info("deleting connection: " + connection.getFollower() + " is no longer following " + connection.getFollowed());
         connectionRepository.delete(connectionId);
+
+        //event
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.delete("http://localhost:8080/connectionsNewPosts/connections/"+connectionId);
 
     }
 

@@ -18,6 +18,15 @@ public class MPost {
     @ManyToOne
     private MUser mUser;
 
+    protected MPost() {}
+
+    public MPost(Long id, Date date, Long userId, String title) {
+        this.id = id;
+        this.date = date;
+        this.userId = userId;
+        this.title = title;
+    }
+
     public Date getDate() {
         return date;
     }
