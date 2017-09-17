@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.repositories;
+package com.corneliadavis.cloudnative.connections;
 
 import com.corneliadavis.cloudnative.connections.User;
 import org.springframework.data.repository.CrudRepository;

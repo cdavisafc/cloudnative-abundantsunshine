@@ -1,7 +1,8 @@
-package com.corneliadavis.cloudnative.repositories;
+package com.corneliadavis.cloudnative.config;
 
 import com.corneliadavis.cloudnative.connections.Connection;
 import com.corneliadavis.cloudnative.connections.ConnectionRepository;
+import com.corneliadavis.cloudnative.connections.UserRepository;
 import com.corneliadavis.cloudnative.posts.Post;
 import com.corneliadavis.cloudnative.connections.User;
 import com.corneliadavis.cloudnative.posts.PostRepository;
