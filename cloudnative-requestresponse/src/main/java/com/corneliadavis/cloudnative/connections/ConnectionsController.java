@@ -43,6 +43,24 @@ public class ConnectionsController {
         }
     }
 
+    @RequestMapping(method = RequestMethod.POST, value="/users")
+    public void newUser(@RequestBody User newUser, HttpServletResponse response) {
+
+        logger.info("Have a new user with username " + newUser.getUsername());
+        userRepository.save(newUser);
+
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value="/users/{id}")
+    public void updateUser(@PathVariable("id") Long userId, @RequestBody User newUser, HttpServletResponse response) {
+
+        logger.info("Updating user with id " + userId);
+        User user = userRepository.findOne(userId);
+        newUser.setId(userId);
+        userRepository.save(newUser);
+
+    }
+
     @RequestMapping(method = RequestMethod.GET, value="/connections")
     public Iterable<Connection> getConnections(HttpServletResponse response) {
 
@@ -62,5 +80,24 @@ public class ConnectionsController {
 
         return connections;
     }
+
+    @RequestMapping(method = RequestMethod.POST, value="/connections")
+    public void newConnection(@RequestBody Connection newConnection, HttpServletResponse response) {
+
+        logger.info("Have a new connection: " + newConnection.getFollower() + " is following " + newConnection.getFollowed());
+        connectionRepository.save(newConnection);
+
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value="/connections/{id}")
+    public void deleteConnection(@PathVariable("id") Long connectionId, HttpServletResponse response) {
+
+        Connection connection = connectionRepository.findOne(connectionId);
+
+        logger.info("deleting connection: " + connection.getFollower() + " is no longer following " + connection.getFollowed());
+        connectionRepository.delete(connectionId);
+
+    }
+
 
 }

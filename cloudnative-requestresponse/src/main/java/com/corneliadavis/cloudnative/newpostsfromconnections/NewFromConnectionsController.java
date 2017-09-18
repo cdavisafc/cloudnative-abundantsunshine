@@ -49,7 +49,7 @@ public class NewFromConnectionsController {
         }
         logger.info("connections = " + ids);
 
-        // get posts
+        // get posts for those connections
         ResponseEntity<Post[]> respPosts = restTemplate.getForEntity(postsUrl+ids, Post[].class);
         Post[] posts = respPosts.getBody();
 
