@@ -1,46 +1,42 @@
-package com.corneliadavis.cloudnative.utilities;
+package com.corneliadavis.cloudnative.config;
 
 import com.corneliadavis.cloudnative.connections.Connection;
-import com.corneliadavis.cloudnative.connections.ConnectionRepository;
 import com.corneliadavis.cloudnative.connections.User;
-import com.corneliadavis.cloudnative.connections.UserRepository;
 import com.corneliadavis.cloudnative.connections.write.ConnectionsWriteController;
 import com.corneliadavis.cloudnative.posts.Post;
 import com.corneliadavis.cloudnative.posts.write.PostsWriteController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletResponse;
+/**
+ * Created by corneliadavis on 9/4/17.
+ */
+@Component
+public class RepositoriesPopulator implements ApplicationListener<ApplicationReadyEvent>, ApplicationContextAware {
 
-
-@RestController
-public class InitializationController implements ApplicationContextAware {
-
-    private static final Logger logger = LoggerFactory.getLogger(InitializationController.class);
-    private UserRepository userRepository;
-    private ConnectionRepository connectionRepository;
-    private static ApplicationContext applicationContext;
+    private static final Logger logger = LoggerFactory.getLogger(RepositoriesPopulator.class);
+    private ApplicationContext applicationContext;
 
     @Override
-    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
-        applicationContext = ctx;
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 
-    @Autowired
-    public InitializationController(UserRepository userRepository, ConnectionRepository connectionRepository) {
-        this.userRepository = userRepository;
-        this.connectionRepository = connectionRepository;
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent event) {
+
+        logger.info("Loading sample data");
+        populate();
+
     }
 
-    @RequestMapping(method = RequestMethod.POST, value="/populateSampleData")
-    public void populate(HttpServletResponse response) {
+    private void populate() {
         User user1, user2, user3;
         Post post1, post2, post3, post4;
         Connection connection1, connection2, connection3;
@@ -71,6 +67,4 @@ public class InitializationController implements ApplicationContextAware {
         connectionsWriteController.newConnection(connection3, null);
 
     }
-
-
 }

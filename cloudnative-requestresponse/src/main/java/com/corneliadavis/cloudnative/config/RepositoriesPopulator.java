@@ -1,13 +1,13 @@
 package com.corneliadavis.cloudnative.config;
 
 import com.corneliadavis.cloudnative.connections.Connection;
-import com.corneliadavis.cloudnative.connections.ConnectionRepository;
-import com.corneliadavis.cloudnative.connections.UserRepository;
-import com.corneliadavis.cloudnative.posts.Post;
+import com.corneliadavis.cloudnative.connections.ConnectionsController;
 import com.corneliadavis.cloudnative.connections.User;
-import com.corneliadavis.cloudnative.posts.PostRepository;
+import com.corneliadavis.cloudnative.posts.Post;
+import com.corneliadavis.cloudnative.posts.PostsController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RepositoriesPopulator implements ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
 
+    private static final Logger logger = LoggerFactory.getLogger(RepositoriesPopulator.class);
     private ApplicationContext applicationContext;
 
     @Override
@@ -29,51 +30,39 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (event.getApplicationContext().equals(applicationContext)) {
-            UserRepository userRepository =
-                    BeanFactoryUtils.beanOfTypeIncludingAncestors(applicationContext, UserRepository.class);
-
-            ConnectionRepository connectionRepository =
-                    BeanFactoryUtils.beanOfTypeIncludingAncestors(applicationContext, ConnectionRepository.class);
-
-            PostRepository postRepository =
-                    BeanFactoryUtils.beanOfTypeIncludingAncestors(applicationContext, PostRepository.class);
-
-            if (userRepository != null && userRepository.count() == 0) {
-                populate(userRepository, connectionRepository, postRepository);
-            }
-        }
-
+        logger.info("Loading sample data");
+        populate();
     }
 
-    private void populate(UserRepository userRepository, ConnectionRepository connectionRepository, PostRepository postRepository) {
-        User user;
-        user = new User("Cornelia", "cdavisafc");    userRepository.save(user);
-        user = new User("Max", "madmax");      userRepository.save(user);
-        user = new User("Glen", "gmaxdavis");        userRepository.save(user);
+    private void populate() {
+        User user1, user2, user3;
+        Post post1, post2, post3, post4;
+        Connection connection1, connection2, connection3;
+        ConnectionsController connectionsWriteController = applicationContext.getBean(ConnectionsController.class);
+        PostsController postsWriteController = applicationContext.getBean(PostsController.class);
 
-        Connection connection;
-        connection = new Connection(userRepository.findByUsername("cdavisafc").getId(),
-                userRepository.findByUsername("madmax").getId());
-        connectionRepository.save(connection);
-        connection = new Connection(userRepository.findByUsername("cdavisafc").getId(),
-                userRepository.findByUsername("gmaxdavis").getId());    connectionRepository.save(connection);
-        connection = new Connection(userRepository.findByUsername("gmaxdavis").getId(),
-                userRepository.findByUsername("madmax").getId());    connectionRepository.save(connection);
-        connection = new Connection(userRepository.findByUsername("madmax").getId(),
-                userRepository.findByUsername("cdavisafc").getId());    connectionRepository.save(connection);
+        user1 = new User("Cornelia", "cdavisafc");
+        connectionsWriteController.newUser(user1,null);
+        user2 = new User("Max", "madmax");
+        connectionsWriteController.newUser(user2,null);
+        user3 = new User( "Glen", "gmaxdavis");
+        connectionsWriteController.newUser(user3,null);
 
-        Post post;
-        post = new Post(userRepository.findByUsername("cdavisafc").getId(),"First Post", "This is the body of the first post");
-        postRepository.save(post);
-        post = new Post(userRepository.findByUsername("cdavisafc").getId(),"Second Post", "This is the body of the second post");
-        postRepository.save(post);
-        post = new Post(userRepository.findByUsername("cdavisafc").getId(),"Third Post", "This is the body of the third post");
-        postRepository.save(post);
-        post = new Post(userRepository.findByUsername("madmax").getId(),"First Post", "This is the body of Max's first post");
-        postRepository.save(post);
+        post1 = new Post(2L, "Max Title", "The body of the post");
+        postsWriteController.newPost(post1, null);
+        post2 = new Post(1L, "Cornelia Title", "The body of the post");
+        postsWriteController.newPost(post2, null);
+        post3 = new Post(1L, "Cornelia Title2", "The body of the post");
+        postsWriteController.newPost(post3, null);
+        post4 = new Post(3L, "Glen Title", "The body of the post");
+        postsWriteController.newPost(post4, null);
 
-
+        connection1 = new Connection(2L, 1L);
+        connectionsWriteController.newConnection(connection1, null);
+        connection2 = new Connection(1L, 2L);
+        connectionsWriteController.newConnection(connection2, null);
+        connection3 = new Connection(1L, 3L);
+        connectionsWriteController.newConnection(connection3, null);
 
     }
 
