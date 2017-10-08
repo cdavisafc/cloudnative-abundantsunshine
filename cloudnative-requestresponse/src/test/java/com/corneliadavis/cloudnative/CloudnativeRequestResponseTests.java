@@ -1,5 +1,6 @@
 package com.corneliadavis.cloudnative;
 
+//import com.corneliadavis.cloudnative.config.CloudnativeEventDrivenApplication;
 import com.corneliadavis.cloudnative.config.CloudnativeApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,25 +18,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CloudnativeApplication.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 @AutoConfigureMockMvc
-public class CloudnativeEventDrivenTests {
+public class CloudnativeRequestResponseTests {
 
-	@Autowired
-	private  MockMvc mockMvc;
+    @Autowired
+    private  MockMvc mockMvc;
 
-	@Test
-	public void contextLoads() {
-	}
+    @Test
+    public void contextLoads() {
+    }
 
-	@Test
-	public void	actuator() throws Exception {
+    @Test
+    public void	actuator() throws Exception {
 
-		mockMvc.perform(get("/env"))
-				.andExpect(status().isOk());
-	}
+        mockMvc.perform(get("/env"))
+                .andExpect(status().isOk());
+    }
 
 
-	@Test
-	public void	checkUserCounts() throws Exception {
+    @Test
+    public void	checkUserCounts() throws Exception {
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
@@ -64,6 +65,6 @@ public class CloudnativeEventDrivenTests {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$", hasSize(2)));
-	}
+    }
 
 }

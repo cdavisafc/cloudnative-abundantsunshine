@@ -14,9 +14,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories("com.corneliadavis.cloudnative.*")
 @ComponentScan(basePackages = { "com.corneliadavis.cloudnative.*" })
 @EntityScan("com.corneliadavis.cloudnative.*")
-public class CloudnativeEventDrivenApplication {
+public class CloudnativeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CloudnativeEventDrivenApplication.class, args);
+		SpringApplication.run(CloudnativeApplication.class, args);
 	}
 }
