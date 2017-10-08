@@ -34,13 +34,12 @@ public class NewFromConnectionsController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value="/connectionsNewPosts/{username}")
-    public Iterable<PostSummary> getByUsername(@PathVariable("username") String username, HttpServletResponse response) {
+    public Iterable<PostSummary> getByUsername(@PathVariable("username") String username,
+                                               HttpServletResponse response) {
 
         Iterable<PostSummary> postSummaries;
         logger.info("getting posts for user network " + username);
 
-        //postSummaries = mPostRepository.findAllOfThem();
-        //postSummaries = mPostRepository.findByUsername(username);
         postSummaries = mPostRepository.findForUsersConnections(username);
 
         return postSummaries;

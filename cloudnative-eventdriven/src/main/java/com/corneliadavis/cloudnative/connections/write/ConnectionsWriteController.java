@@ -57,12 +57,14 @@ public class ConnectionsWriteController {
     @RequestMapping(method = RequestMethod.POST, value="/connections")
     public void newConnection(@RequestBody Connection newConnection, HttpServletResponse response) {
 
-        logger.info("Have a new connection: " + newConnection.getFollower() + " is following " + newConnection.getFollowed());
+        logger.info("Have a new connection: " + newConnection.getFollower() +
+                    " is following " + newConnection.getFollowed());
         connectionRepository.save(newConnection);
 
         //event
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> resp = restTemplate.postForEntity("http://localhost:8080/connectionsNewPosts/connections", newConnection, String.class);
+        ResponseEntity<String> resp = restTemplate.postForEntity(
+                "http://localhost:8080/connectionsNewPosts/connections", newConnection, String.class);
         logger.info("resp " + resp.getStatusCode());
     }
 

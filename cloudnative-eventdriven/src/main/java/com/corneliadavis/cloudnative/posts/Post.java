@@ -37,6 +37,8 @@ public class Post {
         return date;
     }
 
+    public void setDate(Date date) { this.date = date; }
+
     public Long getUserId() {
         return userId;
     }

@@ -3,7 +3,6 @@ package com.corneliadavis.cloudnative.posts.write;
 import com.corneliadavis.cloudnative.connections.ConnectionsController;
 import com.corneliadavis.cloudnative.posts.Post;
 import com.corneliadavis.cloudnative.posts.PostRepository;
-import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Date;
 
 @RestController
 public class PostsWriteController {
@@ -29,11 +29,15 @@ public class PostsWriteController {
     public void newPost(@RequestBody Post newPost, HttpServletResponse response) {
 
         logger.info("Have a new post with title " + newPost.getTitle());
+
+        if (newPost.getDate() == null)
+            newPost.setDate(new Date());
         postRepository.save(newPost);
 
         //event
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> resp = restTemplate.postForEntity("http://localhost:8080/connectionsNewPosts/posts", newPost, String.class);
+        ResponseEntity<String> resp = restTemplate.postForEntity(
+                "http://localhost:8080/connectionsNewPosts/posts", newPost, String.class);
         logger.info("[Post] resp " + resp.getStatusCode());
 
     }

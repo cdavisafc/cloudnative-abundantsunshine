@@ -47,7 +47,8 @@ public class EventsController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value="/users/{id}")
-    public void updateUser(@PathVariable("id") Long userId, @RequestBody User newUser, HttpServletResponse response) {
+    public void updateUser(@PathVariable("id") Long userId,
+                           @RequestBody User newUser, HttpServletResponse response) {
 
         logger.info("Updating user with id " + userId);
         MUser mUser = mUserRepository.findOne(userId);
@@ -58,8 +59,10 @@ public class EventsController {
     @RequestMapping(method = RequestMethod.POST, value="/connections")
     public void newConnection(@RequestBody Connection newConnection, HttpServletResponse response) {
 
-        logger.info("Have a new connection: " + newConnection.getFollower() + " is following " + newConnection.getFollowed());
-        MConnection mConnection = new MConnection(newConnection.getId(), newConnection.getFollower(), newConnection.getFollowed());
+        logger.info("Have a new connection: " + newConnection.getFollower() +
+                    " is following " + newConnection.getFollowed());
+        MConnection mConnection = new MConnection(newConnection.getId(), newConnection.getFollower(),
+                                                  newConnection.getFollowed());
         // add connection to the users
         MUser mUser;
         mUser = mUserRepository.findOne(newConnection.getFollower());
@@ -74,7 +77,8 @@ public class EventsController {
 
         MConnection mConnection = mConnectionRepository.findOne(connectionId);
 
-        logger.info("deleting connection: " + mConnection.getFollower() + " is no longer following " + mConnection.getFollowed());
+        logger.info("deleting connection: " + mConnection.getFollower() +
+                    " is no longer following " + mConnection.getFollowed());
         mConnectionRepository.delete(connectionId);
 
     }
