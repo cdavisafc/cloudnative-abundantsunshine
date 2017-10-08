@@ -1,6 +1,5 @@
 package com.corneliadavis.cloudnative;
 
-//import com.corneliadavis.cloudnative.config.CloudnativeEventDrivenApplication;
 import com.corneliadavis.cloudnative.config.CloudnativeApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;

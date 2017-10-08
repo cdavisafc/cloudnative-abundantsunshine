@@ -9,9 +9,10 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>cloudnative-parent</module>
 		<module>cloudnative-requestresponse</module>
 		<module>cloudnative-eventdriven</module>
-		<module>cloudnative-parent</module>
+		<module>cloudnative-statelessness</module>
 	</modules>
 
 
