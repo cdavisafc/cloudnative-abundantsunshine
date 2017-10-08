@@ -8,7 +8,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>cloudnative-requestresponses</name>
+	<name>cloudnative-eventdriven</name>
 	<description>Microservices in request/response invocation style</description>
 
 	<parent>
