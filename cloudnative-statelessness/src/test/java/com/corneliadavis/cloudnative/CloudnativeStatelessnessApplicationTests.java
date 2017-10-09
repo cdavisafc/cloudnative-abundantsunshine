@@ -102,11 +102,6 @@ public class CloudnativeStatelessnessApplicationTests {
 		assertFalse(CloudnativeApplication.validTokens.isEmpty());
 
 		String validToken = CloudnativeApplication.validTokens.keySet().iterator().next();
-		String validName = CloudnativeApplication.validTokens.get(validToken);
-
-		String query = System.getenv("SEED_INGREDIENT");
-		if (query == null) query = "rice%20flour";
-
 		mockMvc.perform(get("/connectionsNewPosts").cookie(new Cookie("userToken", validToken)))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json;charset=UTF-8"))

@@ -1,5 +1,6 @@
 package com.corneliadavis.cloudnative.newpostsfromconnections;
 
+import com.corneliadavis.cloudnative.config.CloudnativeApplication;
 import com.corneliadavis.cloudnative.connections.Connection;
 import com.corneliadavis.cloudnative.posts.Post;
 import com.corneliadavis.cloudnative.connections.User;
@@ -8,10 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,32 +29,43 @@ public class NewFromConnectionsController {
     private String usersUrl;
 
 
-    @RequestMapping(method = RequestMethod.GET, value="/connectionsNewPosts/{username}")
-    public Iterable<PostSummary> getByUsername(@PathVariable("username") String username, HttpServletResponse response) {
+    @RequestMapping(method = RequestMethod.GET, value="/connectionsNewPosts")
+    public Iterable<PostSummary> getByUsername(@CookieValue(value = "userToken", required=false) String token, HttpServletResponse response) {
 
-        ArrayList<PostSummary> postSummaries = new ArrayList<PostSummary>();
-        logger.info("getting posts for user network " + username);
+        if (token == null)
+            response.setStatus(401);
+        else {
+            String username = CloudnativeApplication.validTokens.get(token);
+            if (username == null)
+                response.setStatus(401);
+            else {
 
-        String ids = "";
-        RestTemplate restTemplate = new RestTemplate();
+                ArrayList<PostSummary> postSummaries = new ArrayList<PostSummary>();
+                logger.info("getting posts for user network " + username);
 
-        // get connections
-        ResponseEntity<Connection[]> respConns = restTemplate.getForEntity(connectionsUrl+username, Connection[].class);
-        Connection[] connections = respConns.getBody();
-        for (int i=0; i<connections.length; i++) {
-            if (i > 0) ids += ",";
-            ids += connections[i].getFollowed().toString();
+                String ids = "";
+                RestTemplate restTemplate = new RestTemplate();
+
+                // get connections
+                ResponseEntity<Connection[]> respConns = restTemplate.getForEntity(connectionsUrl + username, Connection[].class);
+                Connection[] connections = respConns.getBody();
+                for (int i = 0; i < connections.length; i++) {
+                    if (i > 0) ids += ",";
+                    ids += connections[i].getFollowed().toString();
+                }
+                logger.info("connections = " + ids);
+
+                // get posts for those connections
+                ResponseEntity<Post[]> respPosts = restTemplate.getForEntity(postsUrl + ids, Post[].class);
+                Post[] posts = respPosts.getBody();
+
+                for (int i = 0; i < posts.length; i++)
+                    postSummaries.add(new PostSummary(getUsersname(posts[i].getUserId()), posts[i].getTitle(), posts[i].getDate()));
+
+                return postSummaries;
+            }
         }
-        logger.info("connections = " + ids);
-
-        // get posts for those connections
-        ResponseEntity<Post[]> respPosts = restTemplate.getForEntity(postsUrl+ids, Post[].class);
-        Post[] posts = respPosts.getBody();
-
-        for (int i=0; i<posts.length; i++)
-            postSummaries.add(new PostSummary(getUsersname(posts[i].getUserId()), posts[i].getTitle(), posts[i].getDate()));
-
-        return postSummaries;
+        return null;
     }
 
     private String getUsersname(Long id) {
