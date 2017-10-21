@@ -32,13 +32,15 @@ public class NewFromConnectionsController {
     @RequestMapping(method = RequestMethod.GET, value="/connectionsNewPosts")
     public Iterable<PostSummary> getByUsername(@CookieValue(value = "userToken", required=false) String token, HttpServletResponse response) {
 
-        if (token == null)
+        if (token == null) {
+            logger.info("attempted to access connection's new posts with no login token");
             response.setStatus(401);
-        else {
+        } else {
             String username = CloudnativeApplication.validTokens.get(token);
-            if (username == null)
+            if (username == null) {
+                logger.info("attempted to access connection's new posts with invalid token");
                 response.setStatus(401);
-            else {
+            } else {
 
                 ArrayList<PostSummary> postSummaries = new ArrayList<PostSummary>();
                 logger.info("getting posts for user network " + username);
