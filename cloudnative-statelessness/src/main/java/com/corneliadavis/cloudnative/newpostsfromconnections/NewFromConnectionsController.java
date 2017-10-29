@@ -1,5 +1,6 @@
 package com.corneliadavis.cloudnative.newpostsfromconnections;
 
+import com.corneliadavis.cloudnative.Utils;
 import com.corneliadavis.cloudnative.connections.Connection;
 import com.corneliadavis.cloudnative.posts.Post;
 import com.corneliadavis.cloudnative.connections.User;
@@ -35,7 +36,7 @@ public class NewFromConnectionsController {
     public Iterable<PostSummary> getByUsername(@PathVariable("username") String username, HttpServletResponse response) {
 
         ArrayList<PostSummary> postSummaries = new ArrayList<PostSummary>();
-        logger.info("getting posts for user network " + username);
+        logger.info(Utils.ipTag() + "getting posts for user network " + username);
 
         String ids = "";
         RestTemplate restTemplate = new RestTemplate();
@@ -47,7 +48,7 @@ public class NewFromConnectionsController {
             if (i > 0) ids += ",";
             ids += connections[i].getFollowed().toString();
         }
-        logger.info("connections = " + ids);
+        logger.info(Utils.ipTag() + "connections = " + ids);
 
         // get posts for those connections
         ResponseEntity<Post[]> respPosts = restTemplate.getForEntity(postsUrl+ids, Post[].class);

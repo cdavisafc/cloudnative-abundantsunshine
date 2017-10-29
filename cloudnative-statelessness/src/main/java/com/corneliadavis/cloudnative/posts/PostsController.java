@@ -1,5 +1,6 @@
 package com.corneliadavis.cloudnative.posts;
 
+import com.corneliadavis.cloudnative.Utils;
 import com.corneliadavis.cloudnative.connections.ConnectionsController;
 import com.corneliadavis.cloudnative.posts.Post;
 import com.corneliadavis.cloudnative.posts.PostRepository;
@@ -28,14 +29,14 @@ public class PostsController {
         Iterable<Post> posts;
 
         if (userIds == null) {
-            logger.info("getting all posts");
+            logger.info(Utils.ipTag() + "getting all posts");
             posts = postRepository.findAll();
             return posts;
         } else {
             ArrayList<Post> postsForUsers = new ArrayList<Post>();
             String userId[] = userIds.split(",");
             for (int i = 0; i < userId.length; i++) {
-                logger.info("getting posts for userId " + userId[i]);
+                logger.info(Utils.ipTag() + "getting posts for userId " + userId[i]);
                 posts = postRepository.findByUserId(Long.parseLong(userId[i]));
                 posts.forEach(post -> postsForUsers.add(post));
             }
@@ -48,7 +49,7 @@ public class PostsController {
     @RequestMapping(method = RequestMethod.POST, value="/posts")
     public void newPost(@RequestBody Post newPost, HttpServletResponse response) {
 
-        logger.info("Have a new post with title " + newPost.getTitle());
+        logger.info(Utils.ipTag() + "Have a new post with title " + newPost.getTitle());
         postRepository.save(newPost);
 
     }
