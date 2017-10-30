@@ -20,7 +20,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <springcloud.version>1.2.2.RELEASE</springcloud.version>
+        <springcloud.version>1.3.3.RELEASE</springcloud.version>
     </properties>
 
     <build>
