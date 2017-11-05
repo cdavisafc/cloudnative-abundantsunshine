@@ -13,6 +13,7 @@
 		<module>cloudnative-requestresponse</module>
 		<module>cloudnative-eventdriven</module>
 		<module>cloudnative-statelessness</module>
+		<module>cloudnative-appconfiguration</module>
 	</modules>
 
 
