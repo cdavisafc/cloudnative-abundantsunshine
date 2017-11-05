@@ -30,13 +30,17 @@ public class NewFromConnectionsController {
     private String postsUrl;
     @Value("${newfromconnectionscontroller.usersUrl}")
     private String usersUrl;
+    @Value("${INSTANCE_IP}")
+    private String ip;
+    @Value("${INSTANCE_PORT}")
+    private String p;
 
 
     @RequestMapping(method = RequestMethod.GET, value="/connectionsNewPosts/{username}")
     public Iterable<PostSummary> getByUsername(@PathVariable("username") String username, HttpServletResponse response) {
 
         ArrayList<PostSummary> postSummaries = new ArrayList<PostSummary>();
-        logger.info(Utils.ipTag() + "getting posts for user network " + username);
+        logger.info(Utils.ipTag(ip,p) + "getting posts for user network " + username);
 
         String ids = "";
         RestTemplate restTemplate = new RestTemplate();
@@ -48,7 +52,7 @@ public class NewFromConnectionsController {
             if (i > 0) ids += ",";
             ids += connections[i].getFollowed().toString();
         }
-        logger.info(Utils.ipTag() + "connections = " + ids);
+        logger.info(Utils.ipTag(ip,p) + "connections = " + ids);
 
         // get posts for those connections
         ResponseEntity<Post[]> respPosts = restTemplate.getForEntity(postsUrl+ids, Post[].class);
