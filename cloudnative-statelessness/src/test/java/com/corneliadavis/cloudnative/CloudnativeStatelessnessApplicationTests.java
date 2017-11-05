@@ -1,13 +1,18 @@
 package com.corneliadavis.cloudnative;
 
 import com.corneliadavis.cloudnative.config.CloudnativeApplication;
+import com.corneliadavis.cloudnative.connections.User;
+import com.corneliadavis.cloudnative.connections.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,7 +28,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "newfromconnectionscontroller.postsUrl:http://localhost:8080/posts?userIds=",
         "newfromconnectionscontroller.usersUrl:http://localhost:8080/users/"})
 @AutoConfigureMockMvc
-public class CloudnativeStatelessnessApplicationTests {
+public class CloudnativeStatelessnessApplicationTests implements ApplicationContextAware {
+
+    private ApplicationContext applicationContext;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 
     @Autowired
     private  MockMvc mockMvc;
@@ -70,6 +82,12 @@ public class CloudnativeStatelessnessApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$", hasSize(2)));
+    }
+
+    @Test(expected = Exception.class)
+    public void exceptionOnNonUniqueUsername (){
+        UserRepository userRepository = applicationContext.getBean(UserRepository.class);
+        userRepository.save(new User("doesn't matter", "cdavisafc"));
     }
 
 }

@@ -4,11 +4,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  * Created by corneliadavis on 9/4/17.
  */
 @Entity
+@Table(uniqueConstraints=@UniqueConstraint(columnNames="USERNAME"))
 public class User {
 
     @Id
