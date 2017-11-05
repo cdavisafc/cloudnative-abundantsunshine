@@ -26,7 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(properties = {
         "newfromconnectionscontroller.connectionsUrl:http://localhost:8080/connections/",
         "newfromconnectionscontroller.postsUrl:http://localhost:8080/posts?userIds=",
-        "newfromconnectionscontroller.usersUrl:http://localhost:8080/users/"})
+        "newfromconnectionscontroller.usersUrl:http://localhost:8080/users/",
+        "server.port=8080"})
 @AutoConfigureMockMvc
 public class CloudnativeStatelessnessApplicationTests implements ApplicationContextAware {
 

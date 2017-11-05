@@ -17,22 +17,19 @@ public class ConnectionsController {
     private static final Logger logger = LoggerFactory.getLogger(ConnectionsController.class);
     private UserRepository userRepository;
     private ConnectionRepository connectionRepository;
-
-    @Value("${INSTANCE_IP}")
-    private String ip;
-    @Value("${INSTANCE_PORT}")
-    private String p;
+    private Utils utils;
 
     @Autowired
-    public ConnectionsController(UserRepository userRepository, ConnectionRepository connectionRepository) {
+    public ConnectionsController(UserRepository userRepository, ConnectionRepository connectionRepository, Utils utils) {
         this.userRepository = userRepository;
         this.connectionRepository = connectionRepository;
+        this.utils = utils;
     }
 
 	@RequestMapping(method = RequestMethod.GET, value="/users")
 	public Iterable<User> getUsers(HttpServletResponse response) {
 
-        logger.info(Utils.ipTag(ip,p) + "getting users");
+        logger.info(utils.ipTag() + "getting users");
         Iterable<User> users;
         users = userRepository.findAll();
 
@@ -42,7 +39,7 @@ public class ConnectionsController {
 	@RequestMapping(method = RequestMethod.GET, value="/users/{user}")
 	public User getByUsername(@PathVariable("user") String user, HttpServletResponse response) {
         String ipAddress = System.getenv("POD_IP");
-        logger.info(Utils.ipTag(ip,p) + "getting user " + user);
+        logger.info(utils.ipTag() + "getting user " + user);
         try {
             Long id = Long.parseLong(user);
             return userRepository.findOne(id);
@@ -54,7 +51,7 @@ public class ConnectionsController {
     @RequestMapping(method = RequestMethod.POST, value="/users")
     public void newUser(@RequestBody User newUser, HttpServletResponse response) {
 
-        logger.info(Utils.ipTag(ip,p) + "Have a new user with username " + newUser.getUsername());
+        logger.info(utils.ipTag() + "Have a new user with username " + newUser.getUsername());
         userRepository.save(newUser);
 
     }
@@ -62,7 +59,7 @@ public class ConnectionsController {
     @RequestMapping(method = RequestMethod.PUT, value="/users/{id}")
     public void updateUser(@PathVariable("id") Long userId, @RequestBody User newUser, HttpServletResponse response) {
 
-        logger.info(Utils.ipTag(ip,p) + "Updating user with id " + userId);
+        logger.info(utils.ipTag() + "Updating user with id " + userId);
         User user = userRepository.findOne(userId);
         newUser.setId(userId);
         userRepository.save(newUser);
@@ -72,7 +69,7 @@ public class ConnectionsController {
     @RequestMapping(method = RequestMethod.GET, value="/connections")
     public Iterable<Connection> getConnections(HttpServletResponse response) {
 
-        logger.info(Utils.ipTag(ip,p) + "getting connections");
+        logger.info(utils.ipTag() + "getting connections");
         Iterable<Connection> connections;
         connections = connectionRepository.findAll();
 
@@ -81,7 +78,7 @@ public class ConnectionsController {
 
     @RequestMapping(method = RequestMethod.GET, value="/connections/{username}")
     public Iterable<Connection> getConnections(@PathVariable("username") String username, HttpServletResponse response) {
-        logger.info(Utils.ipTag(ip,p) + "getting connections for username " + username);
+        logger.info(utils.ipTag() + "getting connections for username " + username);
         Long userId = getByUsername(username, null).getId();
         Iterable<Connection> connections;
         connections = connectionRepository.findByFollower(userId);
@@ -92,7 +89,7 @@ public class ConnectionsController {
     @RequestMapping(method = RequestMethod.POST, value="/connections")
     public void newConnection(@RequestBody Connection newConnection, HttpServletResponse response) {
 
-        logger.info(Utils.ipTag(ip,p) + "Have a new connection: " + newConnection.getFollower() + " is following " + newConnection.getFollowed());
+        logger.info(utils.ipTag() + "Have a new connection: " + newConnection.getFollower() + " is following " + newConnection.getFollowed());
         connectionRepository.save(newConnection);
 
     }
@@ -102,7 +99,7 @@ public class ConnectionsController {
 
         Connection connection = connectionRepository.findOne(connectionId);
 
-        logger.info(Utils.ipTag(ip,p) + "deleting connection: " + connection.getFollower() + " is no longer following " + connection.getFollowed());
+        logger.info(utils.ipTag() + "deleting connection: " + connection.getFollower() + " is no longer following " + connection.getFollowed());
         connectionRepository.delete(connectionId);
 
     }
