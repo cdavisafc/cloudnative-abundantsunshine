@@ -14,6 +14,7 @@
 		<module>cloudnative-eventdriven</module>
 		<module>cloudnative-statelessness</module>
 		<module>cloudnative-appconfiguration</module>
+		<module>cloudnative-serverless</module>
 	</modules>
 
 
