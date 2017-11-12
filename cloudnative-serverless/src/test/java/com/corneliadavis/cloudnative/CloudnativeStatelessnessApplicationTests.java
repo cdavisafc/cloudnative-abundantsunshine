@@ -44,25 +44,11 @@ public class CloudnativeStatelessnessApplicationTests implements ApplicationCont
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
- /*       this.connectionsController = applicationContext.getBean(ConnectionsController.class);
-        this.postsController = applicationContext.getBean(PostsController.class);
-        this.newFromConnectionsController = applicationContext.getBean(NewFromConnectionsController.class);
-        this.connectionsController = new ConnectionsController();
-        this.postsController = applicationContext.getBean(PostsController.class);
-        this.newFromConnectionsController = applicationContext.getBean(NewFromConnectionsController.class);*/
     }
 
     @Test
     public void contextLoads() {
     }
-
-/*    @Test
-    public void	actuator() throws Exception {
-
-        mockMvc.perform(get("/env"))
-                .andExpect(status().isOk());
-    }*/
-
 
     @Test
     public void	checkUserCounts() throws Exception {
