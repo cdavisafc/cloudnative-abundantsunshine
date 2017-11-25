@@ -33,6 +33,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>1.5.8.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
@@ -104,6 +105,23 @@
 					</execution>
 				</executions>
 			</plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!-- Does not bundle a bootstrap loader. (e.g. classes and libs are not loaded into a BOOT-INF directory
+                    Pre version 1.4.0.RELEASE of Spring Boot - this was default but if you do not specify this layout for version 1.4.0.RELEASE
+                    going forward - you will get a class not found exception when trying to invoke a handler from Amazon Lambda -->
+                    <layout>MODULE</layout>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 
