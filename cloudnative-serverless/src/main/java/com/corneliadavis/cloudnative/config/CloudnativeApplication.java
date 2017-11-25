@@ -20,6 +20,7 @@ import java.util.Map;
 @ComponentScan(basePackages = { "com.corneliadavis.cloudnative.*" })
 @EntityScan("com.corneliadavis.cloudnative.*")
 @PropertySource("classpath:application.properties")
+@SpringBootApplication
 public class CloudnativeApplication {
 
 	@Bean

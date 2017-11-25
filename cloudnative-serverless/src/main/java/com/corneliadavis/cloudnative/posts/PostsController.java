@@ -12,7 +12,7 @@ import java.util.ArrayList;
 @Component
 public class PostsController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ConnectionsController.class);
+    private static final Logger logger = LoggerFactory.getLogger(PostsController.class);
     private PostRepository postRepository;
     private Utils utils;
 
