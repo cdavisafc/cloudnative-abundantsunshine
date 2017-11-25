@@ -1,8 +1,6 @@
 package com.corneliadavis.cloudnative.newpostsfromconnections;
 
 import com.corneliadavis.cloudnative.Utils;
-import com.corneliadavis.cloudnative.connections.Connection;
-import com.corneliadavis.cloudnative.connections.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
@@ -46,6 +44,26 @@ public class NewFromConnectionsController {
         }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    static class ConnectionResult {
+        @JsonProperty
+        Long followed;
+
+        public Long getFollowed() {
+            return followed;
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    static class UserResult {
+        @JsonProperty
+        String name;
+
+        public String getName() {
+            return name;
+        }
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(NewFromConnectionsController.class);
 
     @Value("${newfromconnectionscontroller.connectionsUrl}")
@@ -70,8 +88,8 @@ public class NewFromConnectionsController {
         RestTemplate restTemplate = new RestTemplate();
 
         // get connections
-        ResponseEntity<Connection[]> respConns = restTemplate.getForEntity(connectionsUrl+username, Connection[].class);
-        Connection[] connections = respConns.getBody();
+        ResponseEntity<ConnectionResult[]> respConns = restTemplate.getForEntity(connectionsUrl+username, ConnectionResult[].class);
+        ConnectionResult[] connections = respConns.getBody();
         for (int i=0; i<connections.length; i++) {
             if (i > 0) ids += ",";
             ids += connections[i].getFollowed().toString();
@@ -90,7 +108,7 @@ public class NewFromConnectionsController {
 
     private String getUsersname(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<User> resp = restTemplate.getForEntity(usersUrl+id, User.class);
+        ResponseEntity<UserResult> resp = restTemplate.getForEntity(usersUrl+id, UserResult.class);
         return resp.getBody().getName();
     }
 }

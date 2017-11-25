@@ -19,6 +19,7 @@
     <modules>
         <module>cloudnative-statelessness-posts</module>
         <module>cloudnative-statelessness-connections</module>
+        <module>cloudnative-statelessness-connectionposts</module>
     </modules>
 
 
