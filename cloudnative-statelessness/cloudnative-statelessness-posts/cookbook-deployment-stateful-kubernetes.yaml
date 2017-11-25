@@ -1,0 +1,39 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: stateful
+spec:
+  selector:
+    app: cn-stateless
+  ports:
+  - protocol: "TCP"
+    port: 80
+    targetPort: 8080
+  type: NodePort
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: cn-stateful
+  labels:
+    app: cn-stateful
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cn-stateful
+  template:
+    metadata:
+      labels:
+        app: cn-stateful
+    spec:
+      containers:
+      - name: cn-stateful
+        image: cdavisafc/cloudnative-statelessness
+        env:
+          - name: INSTANCE_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: PORT
+            value: "8080"
