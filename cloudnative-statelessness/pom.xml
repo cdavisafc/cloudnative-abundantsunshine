@@ -17,9 +17,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>cloudnative-statelessness-posts</module>
-        <module>cloudnative-statelessness-connections</module>
-        <module>cloudnative-statelessness-connectionposts</module>
+        <module>cloudnative-posts</module>
+        <module>cloudnative-connections</module>
+        <module>cloudnative-connectionposts</module>
     </modules>
 
 
