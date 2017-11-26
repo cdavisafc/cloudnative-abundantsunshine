@@ -33,23 +33,22 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
 
     private void populate() {
         Post post1, post2, post3, post4;
-        PostsController postsWriteController = applicationContext.getBean(PostsController.class);
+        PostsController postsController = applicationContext.getBean(PostsController.class);
 
-        try {
+        // hacky way of not loading data if posts already exist - could be race conditions but not worrying about that
+
+        Iterable<Post> posts = postsController.getPostsByUserId("2",null);
+        if (!posts.iterator().hasNext()) {
 
             post1 = new Post(2L, "Max Title", "The body of the post");
-            postsWriteController.newPost(post1, null);
+            postsController.newPost(post1, null);
             post2 = new Post(1L, "Cornelia Title", "The body of the post");
-            postsWriteController.newPost(post2, null);
+            postsController.newPost(post2, null);
             post3 = new Post(1L, "Cornelia Title2", "The body of the post");
-            postsWriteController.newPost(post3, null);
+            postsController.newPost(post3, null);
             post4 = new Post(3L, "Glen Title", "The body of the post");
-            postsWriteController.newPost(post4, null);
+            postsController.newPost(post4, null);
 
-        } catch (Exception e)
-        {
-            // slightly hacky but with a uniqueness constraint on the username for a User, can stop
-            // repository population if it's already been done.
         }
 
     }
