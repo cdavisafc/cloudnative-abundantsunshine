@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.newpostsfromconnections.localstorage;
+package com.corneliadavis.cloudnative.connectionsposts.localstorage;
 
 import org.springframework.data.repository.CrudRepository;
 

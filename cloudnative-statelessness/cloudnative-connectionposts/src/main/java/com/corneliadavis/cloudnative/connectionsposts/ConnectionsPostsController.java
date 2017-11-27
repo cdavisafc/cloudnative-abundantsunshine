@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.newpostsfromconnections;
+package com.corneliadavis.cloudnative.connectionsposts;
 
 import com.corneliadavis.cloudnative.Utils;
 import com.corneliadavis.cloudnative.config.CloudnativeApplication;

@@ -1,6 +1,6 @@
-package com.corneliadavis.cloudnative.newpostsfromconnections.localstorage;
+package com.corneliadavis.cloudnative.connectionsposts.localstorage;
 
-import com.corneliadavis.cloudnative.newpostsfromconnections.PostSummary;
+import com.corneliadavis.cloudnative.connectionsposts.PostSummary;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

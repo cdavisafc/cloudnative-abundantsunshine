@@ -1,10 +1,8 @@
-package com.corneliadavis.cloudnative.newpostsfromconnections.eventhandlers;
+package com.corneliadavis.cloudnative.connectionsposts.eventhandlers;
 
 import com.corneliadavis.cloudnative.connections.Connection;
-import com.corneliadavis.cloudnative.connections.ConnectionRepository;
 import com.corneliadavis.cloudnative.connections.User;
-import com.corneliadavis.cloudnative.connections.UserRepository;
-import com.corneliadavis.cloudnative.newpostsfromconnections.localstorage.*;
+import com.corneliadavis.cloudnative.connectionsposts.localstorage.*;
 import com.corneliadavis.cloudnative.posts.Post;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
