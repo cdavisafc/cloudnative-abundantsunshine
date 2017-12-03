@@ -1,0 +1,41 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: posts
+spec:
+  selector:
+    app: posts
+  ports:
+  - protocol: "TCP"
+    port: 80
+    targetPort: 8080
+  type: NodePort
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: posts
+  labels:
+    app: posts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: posts
+  template:
+    metadata:
+      labels:
+        app: posts
+    spec:
+      containers:
+      - name: posts
+        image: cdavisafc/cloudnative-statelessness-posts
+        env:
+          - name: INSTANCE_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: PORT
+            value: "8080"
+          - name: SPRING_APPLICATION_JSON
+            value: '{"spring":{"datasource":{"url":"jdbc:mysql://192.168.99.100:32321/cookbook"}}}'
