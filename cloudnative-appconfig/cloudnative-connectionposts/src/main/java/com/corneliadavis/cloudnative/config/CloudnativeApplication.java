@@ -1,5 +1,6 @@
 package com.corneliadavis.cloudnative.config;
 
+import com.corneliadavis.cloudnative.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -35,6 +36,11 @@ public class CloudnativeApplication {
 		factory.setPort(redisPort);
 		factory.setUsePool(false);
 		return factory;
+	}
+
+	@Bean
+	public Utils utilService() {
+		return new Utils();
 	}
 
 	public static void main(String[] args) { SpringApplication.run(CloudnativeApplication.class, args); }

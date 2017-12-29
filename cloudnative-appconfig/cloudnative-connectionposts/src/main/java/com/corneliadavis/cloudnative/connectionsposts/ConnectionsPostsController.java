@@ -1,15 +1,12 @@
 package com.corneliadavis.cloudnative.connectionsposts;
 
 import com.corneliadavis.cloudnative.Utils;
-import com.corneliadavis.cloudnative.config.CloudnativeApplication;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseEntity;
@@ -73,10 +70,10 @@ public class ConnectionsPostsController {
     private String postsUrl;
     @Value("${connectionpostscontroller.usersUrl}")
     private String usersUrl;
-    @Value("${INSTANCE_IP}")
-    private String ip;
-    @Value("${INSTANCE_PORT}")
-    private String p;
+    @Value("${com.corneliadavis.cloudnative.posts.secret}")
+    private String postsSecret;
+    @Value("${com.corneliadavis.cloudnative.connections.secret}")
+    private String connectionsSecret;
 
     private StringRedisTemplate template;
 
@@ -85,40 +82,42 @@ public class ConnectionsPostsController {
         this.template = template;
     }
 
-
+    @Autowired
+    Utils utils;
 
     @RequestMapping(method = RequestMethod.GET, value="/connectionsPosts")
     public Iterable<PostSummary> getByUsername(@CookieValue(value = "userToken", required=false) String token, HttpServletResponse response) {
 
         if (token == null) {
-            logger.info(Utils.ipTag(ip, p) + "connectionsPosts access attempt without auth token");
+            logger.info(utils.ipTag() + "connectionsPosts access attempt without auth token");
             response.setStatus(401);
         } else {
-            //String username = CloudnativeApplication.validTokens.get(token);
             ValueOperations<String, String> ops = this.template.opsForValue();
             String username = ops.get(token);
             if (username == null) {
-                logger.info(Utils.ipTag(ip, p) + "connectionsPosts access attempt with invalid token");
+                logger.info(utils.ipTag() + "connectionsPosts access attempt with invalid token");
                 response.setStatus(401);
             } else {
 
                 ArrayList<PostSummary> postSummaries = new ArrayList<PostSummary>();
-                logger.info(Utils.ipTag(ip, p) + "getting posts for user network " + username);
+                logger.info(utils.ipTag() + "getting posts for user network " + username);
 
                 String ids = "";
                 RestTemplate restTemplate = new RestTemplate();
 
                 // get connections
-                ResponseEntity<ConnectionResult[]> respConns = restTemplate.getForEntity(connectionsUrl + username, ConnectionResult[].class);
+                String secretQueryParam = "?secret=" + connectionsSecret;
+                ResponseEntity<ConnectionResult[]> respConns = restTemplate.getForEntity(connectionsUrl + username + secretQueryParam, ConnectionResult[].class);
                 ConnectionResult[] connections = respConns.getBody();
                 for (int i = 0; i < connections.length; i++) {
                     if (i > 0) ids += ",";
                     ids += connections[i].getFollowed().toString();
                 }
-                logger.info(Utils.ipTag(ip, p) + "connections = " + ids);
+                logger.info(utils.ipTag() + "connections = " + ids);
 
+                secretQueryParam = "&secret=" + postsSecret;
                 // get posts for those connections
-                ResponseEntity<PostResult[]> respPosts = restTemplate.getForEntity(postsUrl + ids, PostResult[].class);
+                ResponseEntity<PostResult[]> respPosts = restTemplate.getForEntity(postsUrl + ids + secretQueryParam, PostResult[].class);
                 PostResult[] posts = respPosts.getBody();
 
                 for (int i = 0; i < posts.length; i++)
@@ -132,7 +131,8 @@ public class ConnectionsPostsController {
 
     private String getUsersname(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<UserResult> resp = restTemplate.getForEntity(usersUrl+id, UserResult.class);
+        String secretQueryParam = "?secret=" + connectionsSecret;
+        ResponseEntity<UserResult> resp = restTemplate.getForEntity(usersUrl + id + secretQueryParam, UserResult.class);
         return resp.getBody().getName();
     }
 }
