@@ -1,9 +1,0 @@
----
-applications:
-- name: mycookbook
-  instances: 2
-  path: target/cloudnative-statelessness-0.0.1-SNAPSHOT.jar
-  env:
-    NEWFROMCONNECTIONSCONTROLLER_CONNECTIONSURL: http://mycookbook.cfapps.io/connections/
-    NEWFROMCONNECTIONSCONTROLLER_POSTSURL: http://mycookbook.cfapps.io/posts?userIds=
-    NEWFROMCONNECTIONSCONTROLLER_USERSURL: http://mycookbook.cfapps.io/users/
