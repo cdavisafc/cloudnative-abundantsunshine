@@ -6,6 +6,7 @@ import com.corneliadavis.cloudnative.connections.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
@@ -20,6 +21,9 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
 
     private static final Logger logger = LoggerFactory.getLogger(RepositoriesPopulator.class);
     private ApplicationContext applicationContext;
+
+    @Value("${com.corneliadavis.cloudnative.connections.secret}")
+    private String secret;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -40,18 +44,18 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
         try {
 
             user1 = new User("Cornelia", "cdavisafc");
-            connectionsWriteController.newUser(user1, null);
+            connectionsWriteController.newUser(user1, secret, null);
             user2 = new User("Max", "madmax");
-            connectionsWriteController.newUser(user2, null);
+            connectionsWriteController.newUser(user2, secret, null);
             user3 = new User("Glen", "gmaxdavis");
-            connectionsWriteController.newUser(user3, null);
+            connectionsWriteController.newUser(user3, secret, null);
 
             connection1 = new Connection(2L, 1L);
-            connectionsWriteController.newConnection(connection1, null);
+            connectionsWriteController.newConnection(connection1, secret, null);
             connection2 = new Connection(1L, 2L);
-            connectionsWriteController.newConnection(connection2, null);
+            connectionsWriteController.newConnection(connection2, secret, null);
             connection3 = new Connection(1L, 3L);
-            connectionsWriteController.newConnection(connection3, null);
+            connectionsWriteController.newConnection(connection3, secret, null);
 
         } catch (Exception e)
         {
