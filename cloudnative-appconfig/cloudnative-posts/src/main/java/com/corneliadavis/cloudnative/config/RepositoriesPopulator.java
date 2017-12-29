@@ -5,11 +5,19 @@ import com.corneliadavis.cloudnative.posts.PostsController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.embedded.EmbeddedServletContainer;
+import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
+import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by corneliadavis on 9/4/17.
@@ -20,6 +28,14 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
     private static final Logger logger = LoggerFactory.getLogger(RepositoriesPopulator.class);
     private ApplicationContext applicationContext;
 
+    @Value("${com.corneliadavis.cloudnative.posts.secret}")
+    private String password;
+//    @Value("${local.server.port}")
+//    private String localServerPort;
+
+    @Autowired
+    Environment environment;
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
@@ -28,6 +44,11 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         logger.info("Loading sample data");
+        EmbeddedWebApplicationContext webAppContext = (EmbeddedWebApplicationContext) applicationContext;
+        EmbeddedServletContainer cont = webAppContext.getEmbeddedServletContainer();
+        //webAppContext.getServletContext().get
+        //int localServerPort = cont.getPort();
+        //logger.info("Local Server port "+localServerPort);
         populate();
     }
 
@@ -37,7 +58,7 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
 
         // hacky way of not loading data if posts already exist - could be race conditions but not worrying about that
 
-        Iterable<Post> posts = postsController.getPostsByUserId("2",null);
+        Iterable<Post> posts = postsController.getPostsByUserId("2", password, null);
         if (!posts.iterator().hasNext()) {
 
             post1 = new Post(2L, "Max Title", "The body of the post");

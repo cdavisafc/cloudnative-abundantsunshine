@@ -16,35 +16,48 @@ public class PostsController {
     private static final Logger logger = LoggerFactory.getLogger(PostsController.class);
     private PostRepository postRepository;
 
-    @Value("${INSTANCE_IP}")
-    private String ip;
-    @Value("${INSTANCE_PORT}")
-    private String p;
+    @Value("${com.corneliadavis.cloudnative.posts.secret}")
+    private String password;
+//    @Value("${local.server.port}")
+//    private String localServerPort;
 
     @Autowired
     public PostsController(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
 
+    @Autowired
+    Utils utils;
+
     @RequestMapping(method = RequestMethod.GET, value="/posts")
-    public Iterable<Post> getPostsByUserId(@RequestParam(value="userIds", required=false) String userIds, HttpServletResponse response) {
+    public Iterable<Post> getPostsByUserId(@RequestParam(value="userIds", required=false) String userIds, @RequestParam(value="secret", required=true) String secret,  HttpServletResponse response) {
 
         Iterable<Post> posts;
 
-        if (userIds == null) {
-            logger.info(Utils.ipTag(ip,p) + "getting all posts");
-            posts = postRepository.findAll();
-            return posts;
-        } else {
-            ArrayList<Post> postsForUsers = new ArrayList<Post>();
-            String userId[] = userIds.split(",");
-            for (int i = 0; i < userId.length; i++) {
-                logger.info(Utils.ipTag(ip,p) + "getting posts for userId " + userId[i]);
-                posts = postRepository.findByUserId(Long.parseLong(userId[i]));
-                posts.forEach(post -> postsForUsers.add(post));
-            }
-            return postsForUsers;
+        if (secret.equals(password)) {
 
+            logger.info(utils.ipTag() + "Accessing posts using secret " + secret);
+           // logger.info("port = ", localServerPort);
+
+            if (userIds == null) {
+                logger.info(utils.ipTag() + "getting all posts");
+                posts = postRepository.findAll();
+                return posts;
+            } else {
+                ArrayList<Post> postsForUsers = new ArrayList<Post>();
+                String userId[] = userIds.split(",");
+                for (int i = 0; i < userId.length; i++) {
+                    logger.info(utils.ipTag() + "getting posts for userId " + userId[i]);
+                    posts = postRepository.findByUserId(Long.parseLong(userId[i]));
+                    posts.forEach(post -> postsForUsers.add(post));
+                }
+                return postsForUsers;
+
+            }
+        } else {
+            logger.info(utils.ipTag() + "Attempt to access Post service with secret " + secret + " (expecting " + password + ")");
+            response.setStatus(401);
+            return null;
         }
 
     }
@@ -52,7 +65,7 @@ public class PostsController {
     @RequestMapping(method = RequestMethod.POST, value="/posts")
     public void newPost(@RequestBody Post newPost, HttpServletResponse response) {
 
-        logger.info(Utils.ipTag(ip,p) + "Have a new post with title " + newPost.getTitle());
+        logger.info(utils.ipTag() + "Have a new post with title " + newPost.getTitle());
         postRepository.save(newPost);
 
     }

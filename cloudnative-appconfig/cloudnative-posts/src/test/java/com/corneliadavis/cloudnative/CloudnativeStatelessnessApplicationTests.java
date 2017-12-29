@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -29,6 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CloudnativeStatelessnessApplicationTests implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
+    @Value("${com.corneliadavis.cloudnative.posts.secret}")
+    private String password;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -52,7 +55,7 @@ public class CloudnativeStatelessnessApplicationTests implements ApplicationCont
     @Test
     public void	checkPostCounts() throws Exception {
 
-        mockMvc.perform(get("/posts"))
+        mockMvc.perform(get("/posts").param("secret", password))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$", hasSize(4)));
