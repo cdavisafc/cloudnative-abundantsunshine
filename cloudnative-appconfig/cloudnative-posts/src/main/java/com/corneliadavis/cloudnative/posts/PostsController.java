@@ -18,8 +18,6 @@ public class PostsController {
 
     @Value("${com.corneliadavis.cloudnative.posts.secret}")
     private String password;
-//    @Value("${local.server.port}")
-//    private String localServerPort;
 
     @Autowired
     public PostsController(PostRepository postRepository) {
@@ -30,14 +28,15 @@ public class PostsController {
     Utils utils;
 
     @RequestMapping(method = RequestMethod.GET, value="/posts")
-    public Iterable<Post> getPostsByUserId(@RequestParam(value="userIds", required=false) String userIds, @RequestParam(value="secret", required=true) String secret,  HttpServletResponse response) {
+    public Iterable<Post> getPostsByUserId(@RequestParam(value="userIds", required=false) String userIds, 
+                                           @RequestParam(value="secret", required=true) String secret,  
+                                           HttpServletResponse response) {
 
         Iterable<Post> posts;
 
         if (secret.equals(password)) {
 
             logger.info(utils.ipTag() + "Accessing posts using secret " + secret);
-           // logger.info("port = ", localServerPort);
 
             if (userIds == null) {
                 logger.info(utils.ipTag() + "getting all posts");
@@ -63,10 +62,20 @@ public class PostsController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value="/posts")
-    public void newPost(@RequestBody Post newPost, HttpServletResponse response) {
+    public void newPost(@RequestBody Post newPost,
+                        @RequestParam(value = "secret", required = true) String secret,
+                        HttpServletResponse response) {
 
-        logger.info(utils.ipTag() + "Have a new post with title " + newPost.getTitle());
-        postRepository.save(newPost);
+        if (secret.equals(password)) {
+
+            logger.info(utils.ipTag() + "Accessing posts using secret " + secret);
+
+            logger.info(utils.ipTag() + "Have a new post with title " + newPost.getTitle());
+            postRepository.save(newPost);
+        } else {
+            logger.info(utils.ipTag() + "Attempt to access Post service with secret " + secret + " (expecting " + password + ")");
+            response.setStatus(401);
+        }
 
     }
 
