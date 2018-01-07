@@ -45,7 +45,3 @@ spec:
             value: "192.168.99.100"
           - name: REDIS_PORT
             value: "32410"
-          - name: SPRING_APPLICATION_NAME
-            value: "mycookbook"
-          - name: SPRING_CLOUD_CONFIG_URI
-            value: "http://192.168.99.100:32433"

@@ -11,15 +11,11 @@ import com.corneliadavis.cloudnative.Utils;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
-@RefreshScope
 @RestController
 public class PostsController {
 
     private static final Logger logger = LoggerFactory.getLogger(PostsController.class);
     private PostRepository postRepository;
-
-    @Value("${com.corneliadavis.cloudnative.posts.secret}")
-    private String configuredSecret;
 
     @Autowired
     public PostsController(PostRepository postRepository) {
@@ -35,8 +31,6 @@ public class PostsController {
                                            HttpServletResponse response) {
 
         Iterable<Post> posts;
-
-        if (secret.equals(configuredSecret)) {
 
             logger.info(utils.ipTag() + "Accessing posts using secret " + secret);
 
@@ -55,11 +49,6 @@ public class PostsController {
                 return postsForUsers;
 
             }
-        } else {
-            logger.info(utils.ipTag() + "Attempt to access Post service with secret " + secret + " (expecting " + configuredSecret + ")");
-            response.setStatus(401);
-            return null;
-        }
 
     }
 
@@ -68,16 +57,10 @@ public class PostsController {
                         @RequestParam(value = "secret", required = true) String secret,
                         HttpServletResponse response) {
 
-        if (secret.equals(configuredSecret)) {
-
             logger.info(utils.ipTag() + "Accessing posts using secret " + secret);
 
             logger.info(utils.ipTag() + "Have a new post with title " + newPost.getTitle());
             postRepository.save(newPost);
-        } else {
-            logger.info(utils.ipTag() + "Attempt to access Post service with secret " + secret + " (expecting " + configuredSecret + ")");
-            response.setStatus(401);
-        }
 
     }
 

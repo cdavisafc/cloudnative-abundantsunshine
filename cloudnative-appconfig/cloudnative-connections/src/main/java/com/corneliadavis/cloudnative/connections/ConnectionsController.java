@@ -11,16 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 
-@RefreshScope
 @RestController
 public class ConnectionsController {
 
     private static final Logger logger = LoggerFactory.getLogger(ConnectionsController.class);
     private UserRepository userRepository;
     private ConnectionRepository connectionRepository;
-
-    @Value("${com.corneliadavis.cloudnative.connections.secret}")
-    private String configuredSecret;
 
     @Autowired
     Utils utils;
@@ -35,25 +31,17 @@ public class ConnectionsController {
 	public Iterable<User> getUsers(@RequestParam(value="secret", required=true) String secret,
                                    HttpServletResponse response) {
 
-        if (secret.equals(configuredSecret)) {
 
             logger.info(utils.ipTag() + "getting users");
             Iterable<User> users;
             users = userRepository.findAll();
             return users;
-        } else {
-            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting " + configuredSecret + ")");
-            response.setStatus(401);
-            return null;
-        }
     }
 
 	@RequestMapping(method = RequestMethod.GET, value="/users/{user}")
 	public User getByUsername(@PathVariable("user") String user,
                               @RequestParam(value="secret", required=true) String secret,
                               HttpServletResponse response) {
-
-        if (secret.equals(configuredSecret)) {
 
             logger.info(utils.ipTag() + "Accessing posts using secret " + secret);
             String ipAddress = System.getenv("POD_IP");
@@ -64,11 +52,6 @@ public class ConnectionsController {
             } catch (NumberFormatException e) {
                 return userRepository.findByUsername(user);
             }
-        } else {
-            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting " + configuredSecret + ")");
-            response.setStatus(401);
-            return null;
-        }
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/users")
@@ -76,15 +59,9 @@ public class ConnectionsController {
                         @RequestParam(value = "secret", required = true) String secret,
                         HttpServletResponse response) {
 
-        if (secret.equals(configuredSecret)) {
-
             logger.info(utils.ipTag() + "Have a new user with username " + newUser.getUsername());
             userRepository.save(newUser);
 
-        } else {
-            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting " + configuredSecret + ")");
-            response.setStatus(401);
-        }
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/users/{id}")
@@ -93,42 +70,28 @@ public class ConnectionsController {
                            @RequestParam(value = "secret", required = true) String secret,
                            HttpServletResponse response) {
 
-        if (secret.equals(configuredSecret)) {
-
             logger.info(utils.ipTag() + "Updating user with id " + userId);
             User user = userRepository.findOne(userId);
             newUser.setId(userId);
             userRepository.save(newUser);
 
-        } else {
-            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting " + configuredSecret + ")");
-            response.setStatus(401);
-        }
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/connections")
     public Iterable<Connection> getConnections(@RequestParam(value = "secret", required = true) String secret,
                                                HttpServletResponse response) {
 
-        if (secret.equals(configuredSecret)) {
-
             logger.info(utils.ipTag() + "getting connections");
             Iterable<Connection> connections;
             connections = connectionRepository.findAll();
 
             return connections;
-        } else {
-            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting " + configuredSecret + ")");
-            response.setStatus(401);
-            return null;
-        }
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/connections/{username}")
     public Iterable<Connection> getConnections(@PathVariable("username") String username,
                                                @RequestParam(value = "secret", required = true) String secret,
                                                HttpServletResponse response) {
-        if (secret.equals(configuredSecret)) {
 
             logger.info(utils.ipTag() + "getting connections for username " + username);
             Long userId = getByUsername(username, secret, null).getId();
@@ -136,11 +99,6 @@ public class ConnectionsController {
             connections = connectionRepository.findByFollower(userId);
 
             return connections;
-        } else {
-            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting " + configuredSecret + ")");
-            response.setStatus(401);
-            return null;
-        }
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/connections")
@@ -148,15 +106,9 @@ public class ConnectionsController {
                               @RequestParam(value = "secret", required = true) String secret,
                               HttpServletResponse response) {
 
-        if (secret.equals(configuredSecret)) {
-
             logger.info(utils.ipTag() + "Have a new connection: " + newConnection.getFollower() + " is following " + newConnection.getFollowed());
             connectionRepository.save(newConnection);
 
-        } else {
-            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting " + configuredSecret + ")");
-            response.setStatus(401);
-        }
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/connections/{id}")
@@ -164,18 +116,11 @@ public class ConnectionsController {
                                  @RequestParam(value = "secret", required = true) String secret,
                                  HttpServletResponse response) {
 
-        if (secret.equals(configuredSecret)) {
-
             Connection connection = connectionRepository.findOne(connectionId);
 
             logger.info(utils.ipTag() + "deleting connection: " + connection.getFollower() + " is no longer following " + connection.getFollowed());
             connectionRepository.delete(connectionId);
 
-        } else {
-            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting " + configuredSecret + ")");
-            response.setStatus(401);
-        }
     }
-
 
 }
