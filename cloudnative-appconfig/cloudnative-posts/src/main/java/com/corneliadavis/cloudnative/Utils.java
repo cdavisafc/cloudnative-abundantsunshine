@@ -13,7 +13,7 @@ public class Utils implements ApplicationContextAware, ApplicationListener<Embed
 
     private ApplicationContext applicationContext;
     private int port;
-    @Value("${INSTANCE_IP}")
+    @Value("${ipaddress}")
     private String ip;
 
     public String ipTag() {

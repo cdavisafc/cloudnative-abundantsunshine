@@ -40,4 +40,4 @@ spec:
           - name: SPRING_APPLICATION_NAME
             value: "mycookbook"
           - name: SPRING_CLOUD_CONFIG_URI
-            value: "http://192.168.99.100:31077"
+            value: "http://192.168.99.100:32433"
