@@ -87,7 +87,7 @@ public class ConnectionsPostsController {
     @Autowired
     Utils utils;
 
-    @RequestMapping(method = RequestMethod.GET, value="/connectionsPosts")
+    @RequestMapping(method = RequestMethod.GET, value="/connectionPosts")
     public Iterable<PostSummary> getByUsername(@CookieValue(value = "userToken", required=false) String token, HttpServletResponse response) {
 
         if (token == null) {

@@ -58,7 +58,7 @@ public class CloudnativeStatelessnessApplicationTests implements ApplicationCont
 
     @Test
     public void	helloInvalidToken() throws Exception {
-        mockMvc.perform(get("/connectionsPosts").cookie(new Cookie("userToken", "1234")))
+        mockMvc.perform(get("/connectionPosts").cookie(new Cookie("userToken", "1234")))
                 .andExpect(status().isUnauthorized());
     }
 

@@ -29,23 +29,23 @@ spec:
     spec:
       containers:
       - name: connection-posts
-        image: cdavisafc/cloudnative-appconfig-connectionposts
+        image: cdavisafc/cloudnative-appconfig-connectionposts:0.0.2
         env:
           - name: INSTANCE_IP
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
           - name: CONNECTIONPOSTSCONTROLLER_POSTSURL
-            value: "http://192.168.99.100:30457/posts?userIds="
+            value: "http://192.168.99.100:30393/posts?userIds="
           - name: CONNECTIONPOSTSCONTROLLER_CONNECTIONSURL
-            value: "http://192.168.99.100:30558/connections/"
+            value: "http://192.168.99.100:31386/connections/"
           - name: CONNECTIONPOSTSCONTROLLER_USERSURL
-            value: "http://192.168.99.100:30558/users/"
+            value: "http://192.168.99.100:31386/users/"
           - name: REDIS_HOSTNAME
             value: "192.168.99.100"
           - name: REDIS_PORT
-            value: "32410"
+            value: "31330"
           - name: SPRING_APPLICATION_NAME
             value: "mycookbook"
           - name: SPRING_CLOUD_CONFIG_URI
-            value: "http://192.168.99.100:32433"
+            value: "http://192.168.99.100:31681"
