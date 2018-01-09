@@ -28,10 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(properties = {
         "newfromconnectionscontroller.connectionsUrl:http://localhost:8080/connections/",
         "newfromconnectionscontroller.postsUrl:http://localhost:8080/posts?userIds=",
-        "newfromconnectionscontroller.usersUrl:http://localhost:8080/users/",
-        "com.corneliadavis.cloudnative.posts.secret:forTests",
-        "com.corneliadavis.cloudnative.connections.secret:forTests",
-        "spring.cloud.config.enabled:false"})
+        "newfromconnectionscontroller.usersUrl:http://localhost:8080/users/"})
 @AutoConfigureMockMvc
 public class CloudnativeStatelessnessApplicationTests implements ApplicationContextAware {
 
@@ -58,7 +55,7 @@ public class CloudnativeStatelessnessApplicationTests implements ApplicationCont
 
     @Test
     public void	helloInvalidToken() throws Exception {
-        mockMvc.perform(get("/connectionsPosts").cookie(new Cookie("userToken", "1234")))
+        mockMvc.perform(get("/connectionPosts").cookie(new Cookie("userToken", "1234")))
                 .andExpect(status().isUnauthorized());
     }
 

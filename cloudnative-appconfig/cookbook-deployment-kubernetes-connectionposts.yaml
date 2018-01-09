@@ -29,19 +29,19 @@ spec:
     spec:
       containers:
       - name: connection-posts
-        image: cdavisafc/cloudnative-appconfig-connectionposts
+        image: cdavisafc/cloudnative-appconfig-connectionposts:0.0.1
         env:
           - name: INSTANCE_IP
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
           - name: CONNECTIONPOSTSCONTROLLER_POSTSURL
-            value: "http://192.168.99.100:30457/posts?userIds="
+            value: "http://192.168.99.100:30082/posts?userIds="
           - name: CONNECTIONPOSTSCONTROLLER_CONNECTIONSURL
-            value: "http://192.168.99.100:30558/connections/"
+            value: "http://192.168.99.100:31132/connections/"
           - name: CONNECTIONPOSTSCONTROLLER_USERSURL
-            value: "http://192.168.99.100:30558/users/"
+            value: "http://192.168.99.100:31132/users/"
           - name: REDIS_HOSTNAME
             value: "192.168.99.100"
           - name: REDIS_PORT
-            value: "32410"
+            value: "31330"

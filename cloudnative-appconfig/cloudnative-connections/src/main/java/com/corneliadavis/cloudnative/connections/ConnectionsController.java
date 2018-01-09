@@ -28,8 +28,7 @@ public class ConnectionsController {
     }
 
 	@RequestMapping(method = RequestMethod.GET, value="/users")
-	public Iterable<User> getUsers(@RequestParam(value="secret", required=true) String secret,
-                                   HttpServletResponse response) {
+	public Iterable<User> getUsers(HttpServletResponse response) {
 
 
             logger.info(utils.ipTag() + "getting users");
@@ -40,10 +39,9 @@ public class ConnectionsController {
 
 	@RequestMapping(method = RequestMethod.GET, value="/users/{user}")
 	public User getByUsername(@PathVariable("user") String user,
-                              @RequestParam(value="secret", required=true) String secret,
                               HttpServletResponse response) {
 
-            logger.info(utils.ipTag() + "Accessing posts using secret " + secret);
+            logger.info(utils.ipTag() + "Accessing posts");
             String ipAddress = System.getenv("POD_IP");
             logger.info(utils.ipTag() + "getting user " + user);
             try {
@@ -56,7 +54,6 @@ public class ConnectionsController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/users")
     public void newUser(@RequestBody User newUser,
-                        @RequestParam(value = "secret", required = true) String secret,
                         HttpServletResponse response) {
 
             logger.info(utils.ipTag() + "Have a new user with username " + newUser.getUsername());
@@ -67,7 +64,6 @@ public class ConnectionsController {
     @RequestMapping(method = RequestMethod.PUT, value = "/users/{id}")
     public void updateUser(@PathVariable("id") Long userId,
                            @RequestBody User newUser,
-                           @RequestParam(value = "secret", required = true) String secret,
                            HttpServletResponse response) {
 
             logger.info(utils.ipTag() + "Updating user with id " + userId);
@@ -78,8 +74,7 @@ public class ConnectionsController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/connections")
-    public Iterable<Connection> getConnections(@RequestParam(value = "secret", required = true) String secret,
-                                               HttpServletResponse response) {
+    public Iterable<Connection> getConnections(HttpServletResponse response) {
 
             logger.info(utils.ipTag() + "getting connections");
             Iterable<Connection> connections;
@@ -90,11 +85,10 @@ public class ConnectionsController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/connections/{username}")
     public Iterable<Connection> getConnections(@PathVariable("username") String username,
-                                               @RequestParam(value = "secret", required = true) String secret,
                                                HttpServletResponse response) {
 
             logger.info(utils.ipTag() + "getting connections for username " + username);
-            Long userId = getByUsername(username, secret, null).getId();
+            Long userId = getByUsername(username, null).getId();
             Iterable<Connection> connections;
             connections = connectionRepository.findByFollower(userId);
 
@@ -103,7 +97,6 @@ public class ConnectionsController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/connections")
     public void newConnection(@RequestBody Connection newConnection,
-                              @RequestParam(value = "secret", required = true) String secret,
                               HttpServletResponse response) {
 
             logger.info(utils.ipTag() + "Have a new connection: " + newConnection.getFollower() + " is following " + newConnection.getFollowed());
@@ -113,7 +106,6 @@ public class ConnectionsController {
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/connections/{id}")
     public void deleteConnection(@PathVariable("id") Long connectionId,
-                                 @RequestParam(value = "secret", required = true) String secret,
                                  HttpServletResponse response) {
 
             Connection connection = connectionRepository.findOne(connectionId);
