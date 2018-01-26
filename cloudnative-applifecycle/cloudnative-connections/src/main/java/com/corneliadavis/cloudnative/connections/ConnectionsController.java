@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 
@@ -18,9 +17,6 @@ public class ConnectionsController {
     private static final Logger logger = LoggerFactory.getLogger(ConnectionsController.class);
     private UserRepository userRepository;
     private ConnectionRepository connectionRepository;
-
-    @Value("${com.corneliadavis.cloudnative.connections.secret}")
-    private String configuredSecret;
 
     @Autowired
     Utils utils;
@@ -35,14 +31,14 @@ public class ConnectionsController {
 	public Iterable<User> getUsers(@RequestParam(value="secret", required=true) String secret,
                                    HttpServletResponse response) {
 
-        if (secret.equals(configuredSecret)) {
+        if (utils.isValidSecret(secret)) {
 
             logger.info(utils.ipTag() + "getting users");
             Iterable<User> users;
             users = userRepository.findAll();
             return users;
         } else {
-            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting " + configuredSecret + ")");
+            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting one of " + utils.validSecrets() + ")");
             response.setStatus(401);
             return null;
         }
@@ -53,7 +49,7 @@ public class ConnectionsController {
                               @RequestParam(value="secret", required=true) String secret,
                               HttpServletResponse response) {
 
-        if (secret.equals(configuredSecret)) {
+        if (utils.isValidSecret(secret)) {
 
             logger.info(utils.ipTag() + "Accessing posts using secret " + secret);
             String ipAddress = System.getenv("POD_IP");
@@ -65,7 +61,7 @@ public class ConnectionsController {
                 return userRepository.findByUsername(user);
             }
         } else {
-            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting " + configuredSecret + ")");
+            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting one of " + utils.validSecrets() + ")");
             response.setStatus(401);
             return null;
         }
@@ -76,13 +72,13 @@ public class ConnectionsController {
                         @RequestParam(value = "secret", required = true) String secret,
                         HttpServletResponse response) {
 
-        if (secret.equals(configuredSecret)) {
+        if (utils.isValidSecret(secret)) {
 
             logger.info(utils.ipTag() + "Have a new user with username " + newUser.getUsername());
             userRepository.save(newUser);
 
         } else {
-            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting " + configuredSecret + ")");
+            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting one of " + utils.validSecrets() + ")");
             response.setStatus(401);
         }
     }
@@ -93,7 +89,7 @@ public class ConnectionsController {
                            @RequestParam(value = "secret", required = true) String secret,
                            HttpServletResponse response) {
 
-        if (secret.equals(configuredSecret)) {
+        if (utils.isValidSecret(secret)) {
 
             logger.info(utils.ipTag() + "Updating user with id " + userId);
             User user = userRepository.findOne(userId);
@@ -101,7 +97,7 @@ public class ConnectionsController {
             userRepository.save(newUser);
 
         } else {
-            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting " + configuredSecret + ")");
+            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting one of " + utils.validSecrets() + ")");
             response.setStatus(401);
         }
     }
@@ -110,7 +106,7 @@ public class ConnectionsController {
     public Iterable<Connection> getConnections(@RequestParam(value = "secret", required = true) String secret,
                                                HttpServletResponse response) {
 
-        if (secret.equals(configuredSecret)) {
+        if (utils.isValidSecret(secret)) {
 
             logger.info(utils.ipTag() + "getting connections");
             Iterable<Connection> connections;
@@ -118,7 +114,7 @@ public class ConnectionsController {
 
             return connections;
         } else {
-            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting " + configuredSecret + ")");
+            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting one of " + utils.validSecrets() + ")");
             response.setStatus(401);
             return null;
         }
@@ -128,7 +124,7 @@ public class ConnectionsController {
     public Iterable<Connection> getConnections(@PathVariable("username") String username,
                                                @RequestParam(value = "secret", required = true) String secret,
                                                HttpServletResponse response) {
-        if (secret.equals(configuredSecret)) {
+        if (utils.isValidSecret(secret)) {
 
             logger.info(utils.ipTag() + "getting connections for username " + username);
             Long userId = getByUsername(username, secret, null).getId();
@@ -137,7 +133,7 @@ public class ConnectionsController {
 
             return connections;
         } else {
-            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting " + configuredSecret + ")");
+            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting one of " + utils.validSecrets() + ")");
             response.setStatus(401);
             return null;
         }
@@ -148,13 +144,13 @@ public class ConnectionsController {
                               @RequestParam(value = "secret", required = true) String secret,
                               HttpServletResponse response) {
 
-        if (secret.equals(configuredSecret)) {
+        if (utils.isValidSecret(secret)) {
 
             logger.info(utils.ipTag() + "Have a new connection: " + newConnection.getFollower() + " is following " + newConnection.getFollowed());
             connectionRepository.save(newConnection);
 
         } else {
-            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting " + configuredSecret + ")");
+            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting one of " + utils.validSecrets() + ")");
             response.setStatus(401);
         }
     }
@@ -164,7 +160,7 @@ public class ConnectionsController {
                                  @RequestParam(value = "secret", required = true) String secret,
                                  HttpServletResponse response) {
 
-        if (secret.equals(configuredSecret)) {
+        if (utils.isValidSecret(secret)) {
 
             Connection connection = connectionRepository.findOne(connectionId);
 
@@ -172,7 +168,7 @@ public class ConnectionsController {
             connectionRepository.delete(connectionId);
 
         } else {
-            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting " + configuredSecret + ")");
+            logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting one of " + utils.validSecrets() + ")");
             response.setStatus(401);
         }
     }

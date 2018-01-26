@@ -22,8 +22,8 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
     private static final Logger logger = LoggerFactory.getLogger(RepositoriesPopulator.class);
     private ApplicationContext applicationContext;
 
-    @Value("${com.corneliadavis.cloudnative.connections.secret}")
-    private String secret;
+    @Value("${com.corneliadavis.cloudnative.connections.secrets}")
+    private String secrets;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -40,6 +40,8 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
         User user1, user2, user3;
         Connection connection1, connection2, connection3;
         ConnectionsController connectionsWriteController = applicationContext.getBean(ConnectionsController.class);
+
+        String secret = secrets.split(",")[0]; // assuming there is at least one secret
 
         try {
 
