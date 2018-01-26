@@ -45,7 +45,7 @@ public class Utils implements ApplicationContextAware, ApplicationListener<Appli
             String secrets[] = configuredSecretsIn.split(",");
             for (int i=0; i<secrets.length; i++)
                 configSecrets.add(secrets[i].trim());
-            logger.info(ipTag() + "Posts Service initialized with secret(s): " + configuredSecretsIn);
+            logger.info(ipTag() + "Connections Service initialized with secret(s): " + configuredSecretsIn);
         }
     }
 

@@ -72,10 +72,6 @@ public class ConnectionsPostsController {
     private String postsUrl;
     @Value("${connectionpostscontroller.usersUrl}")
     private String usersUrl;
-    @Value("${com.corneliadavis.cloudnative.posts.secrets}")
-    private String postsSecret;
-    @Value("${com.corneliadavis.cloudnative.connections.secret}")
-    private String connectionsSecret;
 
     private StringRedisTemplate template;
 
@@ -108,7 +104,7 @@ public class ConnectionsPostsController {
                 RestTemplate restTemplate = new RestTemplate();
 
                 // get connections
-                String secretQueryParam = "?secret=" + connectionsSecret;
+                String secretQueryParam = "?secret=" + utils.getConnectionsSecret();
                 ResponseEntity<ConnectionResult[]> respConns = restTemplate.getForEntity(connectionsUrl + username + secretQueryParam, ConnectionResult[].class);
                 ConnectionResult[] connections = respConns.getBody();
                 for (int i = 0; i < connections.length; i++) {
@@ -117,7 +113,7 @@ public class ConnectionsPostsController {
                 }
                 logger.info(utils.ipTag() + "connections = " + ids);
 
-                secretQueryParam = "&secret=" + postsSecret;
+                secretQueryParam = "&secret=" + utils.getPostsSecret();
                 // get posts for those connections
                 ResponseEntity<PostResult[]> respPosts = restTemplate.getForEntity(postsUrl + ids + secretQueryParam, PostResult[].class);
                 PostResult[] posts = respPosts.getBody();
@@ -133,7 +129,7 @@ public class ConnectionsPostsController {
 
     private String getUsersname(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        String secretQueryParam = "?secret=" + connectionsSecret;
+        String secretQueryParam = "?secret=" + utils.getConnectionsSecret();
         ResponseEntity<UserResult> resp = restTemplate.getForEntity(usersUrl + id + secretQueryParam, UserResult.class);
         return resp.getBody().getName();
     }
