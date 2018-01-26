@@ -10,7 +10,6 @@ import com.corneliadavis.cloudnative.Utils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 
 @RefreshScope
@@ -19,10 +18,6 @@ public class PostsController {
 
     private static final Logger logger = LoggerFactory.getLogger(PostsController.class);
     private PostRepository postRepository;
-    @Value("${com.corneliadavis.cloudnative.posts.secrets}")
-    private String configuredSecretsIn;
-    private Set<String> configSecrets;
-
 
     @Autowired
     public PostsController(PostRepository postRepository) { this.postRepository = postRepository; }
