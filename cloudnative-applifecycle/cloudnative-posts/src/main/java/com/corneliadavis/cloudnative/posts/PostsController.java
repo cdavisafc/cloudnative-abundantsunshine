@@ -19,6 +19,8 @@ public class PostsController {
     private static final Logger logger = LoggerFactory.getLogger(PostsController.class);
     private PostRepository postRepository;
 
+    private boolean isHealthy = true;
+
     @Autowired
     public PostsController(PostRepository postRepository) { this.postRepository = postRepository; }
 
@@ -77,5 +79,20 @@ public class PostsController {
 
     }
 
+    @RequestMapping(method = RequestMethod.GET, value="/healthz")
+    public void healthCheck(HttpServletResponse response) {
+
+        if (this.isHealthy) response.setStatus(200);
+        else response.setStatus(500);
+
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value="/infect")
+    public void makeUnhealthy(HttpServletResponse response) {
+
+        this.isHealthy = false;
+        response.setStatus(200);
+
+    }
 
 }

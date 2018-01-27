@@ -74,6 +74,15 @@ public class CloudnativeStatelessnessApplicationTests implements ApplicationCont
                 .andExpect(cookie().exists("userToken"));
     }
 
+    @Test
+    public void	testHealth() throws Exception {
+
+        mockMvc.perform(get("/healthz"))
+                .andExpect(status().isOk());
+
+    }
+
+
     // TODO: Fix this test - it's currently an integration test in that it requires connections and posts services
     // need to mock those for this test.
     /*@Test

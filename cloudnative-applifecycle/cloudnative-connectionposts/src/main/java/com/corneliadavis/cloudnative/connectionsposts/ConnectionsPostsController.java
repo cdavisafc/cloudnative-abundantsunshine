@@ -75,6 +75,8 @@ public class ConnectionsPostsController {
 
     private StringRedisTemplate template;
 
+    private boolean isHealthy = true;
+
     @Autowired
     public ConnectionsPostsController(StringRedisTemplate template) {
         this.template = template;
@@ -126,6 +128,15 @@ public class ConnectionsPostsController {
         }
         return null;
     }
+
+    @RequestMapping(method = RequestMethod.GET, value="/healthz")
+    public void healthCheck(HttpServletResponse response) {
+
+        if (this.isHealthy) response.setStatus(200);
+        else response.setStatus(500);
+
+    }
+
 
     private String getUsersname(Long id) {
         RestTemplate restTemplate = new RestTemplate();

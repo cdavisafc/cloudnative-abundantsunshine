@@ -30,22 +30,30 @@ spec:
       containers:
       - name: connection-posts
         image: cdavisafc/cloudnative-applifecycle-connectionposts:0.0.2
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 5
         env:
           - name: INSTANCE_IP
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
           - name: CONNECTIONPOSTSCONTROLLER_POSTSURL
-            value: "http://192.168.99.100:30393/posts?userIds="
+            value: "http://192.168.99.100:31930/posts?userIds="
           - name: CONNECTIONPOSTSCONTROLLER_CONNECTIONSURL
-            value: "http://192.168.99.100:31386/connections/"
+            value: "http://192.168.99.100:30389/connections/"
           - name: CONNECTIONPOSTSCONTROLLER_USERSURL
-            value: "http://192.168.99.100:31386/users/"
+            value: "http://192.168.99.100:30389/users/"
           - name: REDIS_HOSTNAME
             value: "192.168.99.100"
           - name: REDIS_PORT
-            value: "31330"
+            value: "31456"
           - name: SPRING_APPLICATION_NAME
             value: "mycookbook"
           - name: SPRING_CLOUD_CONFIG_URI
-            value: "http://192.168.99.100:31681"
+            value: "http://192.168.99.100:32679"
+          - name: ROLLING_UPGRADE_NOOP
+            value: "0"

@@ -3,15 +3,10 @@ package com.corneliadavis.cloudnative;
 import com.corneliadavis.cloudnative.config.CloudnativeApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -19,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -54,4 +50,15 @@ public class CloudnativeStatelessnessApplicationTests {
 
     }
 
+    @Test
+    public void	testHealthSimulation() throws Exception {
+
+        mockMvc.perform(get("/healthz"))
+                .andExpect(status().isOk());
+        mockMvc.perform(post("/infect"))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/healthz"))
+                .andExpect(status().is5xxServerError());
+
+    }
 }

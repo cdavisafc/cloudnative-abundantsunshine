@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.TestPropertySource;
@@ -74,6 +73,14 @@ public class CloudnativeStatelessnessApplicationTests implements ApplicationCont
     public void exceptionOnNonUniqueUsername (){
         UserRepository userRepository = applicationContext.getBean(UserRepository.class);
         userRepository.save(new User("doesn't matter", "cdavisafc"));
+    }
+
+    @Test
+    public void	testHealth() throws Exception {
+
+        mockMvc.perform(get("/healthz"))
+                .andExpect(status().isOk());
+
     }
 
 }

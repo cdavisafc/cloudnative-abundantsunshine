@@ -18,6 +18,8 @@ public class ConnectionsController {
     private UserRepository userRepository;
     private ConnectionRepository connectionRepository;
 
+    private boolean isHealthy = true;
+
     @Autowired
     Utils utils;
 
@@ -173,5 +175,12 @@ public class ConnectionsController {
         }
     }
 
+    @RequestMapping(method = RequestMethod.GET, value="/healthz")
+    public void healthCheck(HttpServletResponse response) {
+
+        if (this.isHealthy) response.setStatus(200);
+        else response.setStatus(500);
+
+    }
 
 }
