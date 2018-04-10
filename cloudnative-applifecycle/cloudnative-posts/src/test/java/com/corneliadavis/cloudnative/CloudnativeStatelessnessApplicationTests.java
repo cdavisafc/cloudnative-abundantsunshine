@@ -57,8 +57,9 @@ public class CloudnativeStatelessnessApplicationTests {
                 .andExpect(status().isOk());
         mockMvc.perform(post("/infect"))
                 .andExpect(status().isOk());
-        mockMvc.perform(get("/healthz"))
-                .andExpect(status().is5xxServerError());
+ //       mockMvc.perform(get("/healthz"))
+ //               .andExpect(status().is5xxServerError());
+        // With the latest implementation will simply sleep for a long time after infected.
 
     }
 }

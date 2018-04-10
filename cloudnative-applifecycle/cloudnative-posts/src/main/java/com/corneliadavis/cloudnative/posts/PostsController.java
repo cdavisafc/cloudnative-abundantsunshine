@@ -80,10 +80,10 @@ public class PostsController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value="/healthz")
-    public void healthCheck(HttpServletResponse response) {
+    public void healthCheck(HttpServletResponse response) throws InterruptedException {
 
         if (this.isHealthy) response.setStatus(200);
-        else response.setStatus(500);
+        else Thread.sleep(400000);
 
     }
 
