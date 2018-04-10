@@ -47,5 +47,5 @@ spec:
             value: "mycookbook"
           - name: SPRING_CLOUD_CONFIG_URI
             value: "http://192.168.99.100:32679"
-          - name: ROLLING_UPGRADE_NOOP
+          - name: VERSION_TRIGGER
             value: "2"
