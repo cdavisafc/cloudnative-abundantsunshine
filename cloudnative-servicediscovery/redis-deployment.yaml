@@ -1,0 +1,35 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: redis-svc
+spec:
+  selector:
+    app: redis
+  ports:
+  - protocol: "TCP"
+    port: 6379
+    targetPort: 6379
+  type: NodePort
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:latest
+        ports:
+          - containerPort: 6379
+            name: redis
