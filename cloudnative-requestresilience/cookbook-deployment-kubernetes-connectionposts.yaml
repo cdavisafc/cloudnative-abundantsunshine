@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: connection-posts
+  name: connection-posts-svc
 spec:
   selector:
     app: connection-posts
@@ -42,18 +42,18 @@ spec:
               fieldRef:
                 fieldPath: status.podIP
           - name: CONNECTIONPOSTSCONTROLLER_POSTSURL
-            value: "http://192.168.99.100:31930/posts?userIds="
+            value: "http://posts-svc/posts?userIds="
           - name: CONNECTIONPOSTSCONTROLLER_CONNECTIONSURL
-            value: "http://192.168.99.100:30389/connections/"
+            value: "http://connections-svc/connections/"
           - name: CONNECTIONPOSTSCONTROLLER_USERSURL
-            value: "http://192.168.99.100:30389/users/"
+            value: "http://connections-svc/users/"
           - name: REDIS_HOSTNAME
-            value: "192.168.99.100"
+            value: "redis-svc"
           - name: REDIS_PORT
-            value: "31456"
+            value: "6379"
           - name: SPRING_APPLICATION_NAME
             value: "mycookbook"
           - name: SPRING_CLOUD_CONFIG_URI
-            value: "http://192.168.99.100:32679"
+            value: "http://sccs-svc:8888"
           - name: VERSIONING_TRIGGER
             value: "1"
