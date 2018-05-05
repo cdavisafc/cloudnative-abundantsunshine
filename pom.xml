@@ -15,6 +15,7 @@
 		<module>cloudnative-statelessness</module>
 		<module>cloudnative-appconfig</module>
 		<module>cloudnative-applifecycle</module>
+		<module>cloudnative-requestresilience</module>
 	</modules>
 
 
