@@ -30,11 +30,14 @@ public class PostsController {
     @RequestMapping(method = RequestMethod.GET, value="/posts")
     public Iterable<Post> getPostsByUserId(@RequestParam(value="userIds", required=false) String userIds, 
                                            @RequestParam(value="secret", required=true) String secret,  
-                                           HttpServletResponse response) {
+                                           HttpServletResponse response) throws InterruptedException {
 
         Iterable<Post> posts;
 
-        if (utils.isValidSecret(secret)) {
+        if (!this.isHealthy) {
+            Thread.sleep(400000);
+            return null;
+        } else if (utils.isValidSecret(secret)) {
 
             logger.info(utils.ipTag() + "Accessing posts using secret " + secret);
 
@@ -90,9 +93,20 @@ public class PostsController {
     @RequestMapping(method = RequestMethod.POST, value="/infect")
     public void makeUnhealthy(HttpServletResponse response) {
 
+        logger.info("Infecting this posts service instance");
         this.isHealthy = false;
         response.setStatus(200);
 
     }
+
+    @RequestMapping(method = RequestMethod.POST, value="/heal")
+    public void makeHealthy(HttpServletResponse response) {
+
+        logger.info("Healing this posts service instance");
+        this.isHealthy = true;
+        response.setStatus(200);
+
+    }
+
 
 }

@@ -41,11 +41,15 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        logger.info("Loading sample data");
-        populate();
+        try {
+            logger.info("Loading sample data");
+            populate();
+        } catch (Exception e) {
+            logger.error("Error populating Posts database - exception: " + e.getMessage());
+        }
     }
 
-    private void populate() {
+    private void populate() throws InterruptedException {
         Post post1, post2, post3, post4;
         PostsController postsController = applicationContext.getBean(PostsController.class);
 
