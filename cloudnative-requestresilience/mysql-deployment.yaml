@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: mysql:5.7.21
+        image: mysql:5.7.22
         args: []
         env:
           - name: MYSQL_ROOT_PASSWORD
