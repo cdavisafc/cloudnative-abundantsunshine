@@ -30,13 +30,14 @@ spec:
     spec:
       containers:
       - name: posts
-        image: cdavisafc/cloudnative-applifecycle-posts
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 60
-          periodSeconds: 5
+        image: cdavisafc/cloudnative-requestresilience-posts
+#        disabling liveness probe to allow us to demonstrate handling failures in a different way
+#        livenessProbe:
+#          httpGet:
+#            path: /healthz
+#            port: 8080
+#          initialDelaySeconds: 60
+#          periodSeconds: 5
         env:
           - name: INSTANCE_IP
             valueFrom:
@@ -49,4 +50,4 @@ spec:
           - name: SPRING_CLOUD_CONFIG_URI
             value: "http://sccs-svc:8888"
           - name: VERSIONING_TRIGGER
-            value: "4"
+            value: "5"
