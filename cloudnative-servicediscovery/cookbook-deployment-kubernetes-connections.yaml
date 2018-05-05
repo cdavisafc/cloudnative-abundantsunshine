@@ -46,6 +46,6 @@ spec:
           - name: SPRING_APPLICATION_NAME
             value: "mycookbook"
           - name: SPRING_CLOUD_CONFIG_URI
-            value: "http://192.168.99.100:31749"
+            value: "http://sccs-svc:8888"
           - name: ROLLING_UPGRADE_NOOP
             value: "2"
