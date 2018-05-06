@@ -85,6 +85,9 @@ public class ConnectionsPostsController {
     @Autowired
     Utils utils;
 
+    @Autowired
+    RestTemplate restTemplate;
+
     @RequestMapping(method = RequestMethod.GET, value="/connectionPosts")
     public Iterable<PostSummary> getByUsername(@CookieValue(value = "userToken", required=false) String token, HttpServletResponse response) {
 
@@ -103,7 +106,7 @@ public class ConnectionsPostsController {
                 logger.info(utils.ipTag() + "getting posts for user network " + username);
 
                 String ids = "";
-                RestTemplate restTemplate = new RestTemplate();
+                //RestTemplate restTemplate = new RestTemplate();
 
                 // get connections
                 String secretQueryParam = "?secret=" + utils.getConnectionsSecret();
@@ -117,11 +120,19 @@ public class ConnectionsPostsController {
 
                 secretQueryParam = "&secret=" + utils.getPostsSecret();
                 // get posts for those connections
-                ResponseEntity<PostResult[]> respPosts = restTemplate.getForEntity(postsUrl + ids + secretQueryParam, PostResult[].class);
-                PostResult[] posts = respPosts.getBody();
-
-                for (int i = 0; i < posts.length; i++)
-                    postSummaries.add(new PostSummary(getUsersname(posts[i].getUserId()), posts[i].getTitle(), posts[i].getDate()));
+                try {
+                    ResponseEntity<PostResult[]> respPosts = restTemplate.getForEntity(postsUrl + ids + secretQueryParam, PostResult[].class);
+                    PostResult[] posts = respPosts.getBody();
+                    for (int i = 0; i < posts.length; i++)
+                        postSummaries.add(new PostSummary(getUsersname(posts[i].getUserId()), posts[i].getTitle(), posts[i].getDate()));
+                } catch (Exception e) {
+                    // insulate client of ConnectionsPosts from downstream failure by catching the timeout exception
+                    // and just returning an empty result set.
+                    // Do give indication that there might be some trouble but returning a success status code, but
+                    // with an indication that there might be something going on.
+                    logger.info(utils.ipTag() + "On request to unhealthy posts service  " + e.getMessage());
+                    response.setStatus(207);
+                }
 
                 return postSummaries;
             }
