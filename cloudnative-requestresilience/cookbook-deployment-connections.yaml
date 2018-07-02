@@ -18,7 +18,7 @@ metadata:
   labels:
     app: connections
 spec:
-  replicas: 1
+  replicas: 7
   selector:
     matchLabels:
       app: connections
