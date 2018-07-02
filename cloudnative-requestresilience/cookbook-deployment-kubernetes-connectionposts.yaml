@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: connection-posts
-        image: cdavisafc/cloudnative-requestresilience-connectionposts
+        image: cdavisafc/cloudnative-requestresilience-connectionposts:0.0.1
 #        resources:
 #          limits:
 #            memory: "2048Mi"
