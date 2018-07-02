@@ -77,6 +77,10 @@ public class ConnectionsPostsController implements InitializingBean {
     @Value("${connectionpostscontroller.implementRetries}")
     private String implementRetriesS;
     private Boolean implementRetries = false;
+    @Value("${connectionpostscontroller.connectTimeout}")
+    private int connectTimeout;
+    @Value("${connectionpostscontroller.readTimeout}")
+    private int readTimeout;
 
     private StringRedisTemplate template;
 
@@ -121,8 +125,8 @@ public class ConnectionsPostsController implements InitializingBean {
 
                 String ids = "";
 				RestTemplate restTemplate = restTemplateBuilder
-												.setConnectTimeout(250)
-												.setReadTimeout(500)
+												.setConnectTimeout(connectTimeout)
+												.setReadTimeout(readTimeout)
 												.build();
 
                 // get connections
