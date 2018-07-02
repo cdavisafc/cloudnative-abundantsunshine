@@ -16,6 +16,8 @@ spec:
             - "-n"
             - "-t"
             - "/etc/jmeter/jmeter_run.jmx"
+            - "-l"
+            - "resultsconnectionsposts"
           volumeMounts:
             - name: jmeter-config-volume
               mountPath: /etc/jmeter
