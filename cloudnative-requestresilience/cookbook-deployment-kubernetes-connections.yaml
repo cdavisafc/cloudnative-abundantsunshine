@@ -26,6 +26,7 @@ spec:
     metadata:
       labels:
         app: connections
+        appcollection: blog-aggregator
     spec:
       containers:
       - name: connections
@@ -47,5 +48,5 @@ spec:
             value: "mycookbook"
           - name: SPRING_CLOUD_CONFIG_URI
             value: "http://sccs-svc:8888"
-          - name: ROLLING_UPGRADE_NOOP
-            value: "2"
+          - name: VERSIONING_TRIGGER
+            value: "3"

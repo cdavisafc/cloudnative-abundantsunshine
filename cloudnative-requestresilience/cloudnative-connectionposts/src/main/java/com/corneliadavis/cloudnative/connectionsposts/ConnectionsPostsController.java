@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -13,6 +14,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ import java.util.Date;
 
 @RefreshScope
 @RestController
-public class ConnectionsPostsController {
+public class ConnectionsPostsController implements InitializingBean {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     static class PostResult {
@@ -72,6 +74,9 @@ public class ConnectionsPostsController {
     private String postsUrl;
     @Value("${connectionpostscontroller.usersUrl}")
     private String usersUrl;
+    @Value("${connectionpostscontroller.implementRetries}")
+    private String implementRetriesS;
+    private Boolean implementRetries = false;
 
     private StringRedisTemplate template;
 
@@ -86,7 +91,15 @@ public class ConnectionsPostsController {
     Utils utils;
 
     @Autowired
-    RestTemplate restTemplate;
+    RestTemplateBuilder restTemplateBuilder;
+
+    @Override
+    public void afterPropertiesSet() {
+        logger.info(utils.ipTag() + "Retry config is " + implementRetriesS);
+        if (implementRetriesS.contentEquals("true")) {
+            this.implementRetries = true;
+        }
+    }
 
     @RequestMapping(method = RequestMethod.GET, value="/connectionPosts")
     public Iterable<PostSummary> getByUsername(@CookieValue(value = "userToken", required=false) String token, HttpServletResponse response) {
@@ -100,13 +113,17 @@ public class ConnectionsPostsController {
             if (username == null) {
                 logger.info(utils.ipTag() + "connectionsPosts access attempt with invalid token");
                 response.setStatus(401);
+                return null;
             } else {
 
                 ArrayList<PostSummary> postSummaries = new ArrayList<PostSummary>();
                 logger.info(utils.ipTag() + "getting posts for user network " + username);
 
                 String ids = "";
-                //RestTemplate restTemplate = new RestTemplate();
+				RestTemplate restTemplate = restTemplateBuilder
+												.setConnectTimeout(250)
+												.setReadTimeout(500)
+												.build();
 
                 // get connections
                 String secretQueryParam = "?secret=" + utils.getConnectionsSecret();
@@ -120,23 +137,32 @@ public class ConnectionsPostsController {
 
                 secretQueryParam = "&secret=" + utils.getPostsSecret();
                 // get posts for those connections
-                try {
-                    ResponseEntity<PostResult[]> respPosts = restTemplate.getForEntity(postsUrl + ids + secretQueryParam, PostResult[].class);
-                    PostResult[] posts = respPosts.getBody();
-                    for (int i = 0; i < posts.length; i++)
-                        postSummaries.add(new PostSummary(getUsersname(posts[i].getUserId()), posts[i].getTitle(), posts[i].getDate()));
-                } catch (Exception e) {
-                    // insulate client of ConnectionsPosts from downstream failure by catching the timeout exception
-                    // and just returning an empty result set.
-                    // Do give indication that there might be some trouble but returning a success status code, but
-                    // with an indication that there might be something going on.
-                    logger.info(utils.ipTag() + "On request to unhealthy posts service  " + e.getMessage());
-                    response.setStatus(207);
+                // very naive retries on Posts service
+                int retryCount = 0;
+                while (implementRetries || retryCount == 0) {
+                    try {
+                        ResponseEntity<PostResult[]> respPosts = restTemplate.getForEntity(postsUrl + ids + secretQueryParam, PostResult[].class);
+                        if (respPosts.getStatusCode().is5xxServerError()) {
+                            response.setStatus(500);
+                            return null;
+                        } else {
+                            PostResult[] posts = respPosts.getBody();
+                            for (int i = 0; i < posts.length; i++)
+                                postSummaries.add(new PostSummary(getUsersname(posts[i].getUserId()), posts[i].getTitle(), posts[i].getDate()));
+                            return postSummaries;
+                        }
+                    } catch (Exception e) {
+                        // Will occur when a connection times out. For this naive implementation, we will simply
+						// try again.
+                        logger.info(utils.ipTag() + "On (" + retryCount + ") request to unhealthy posts service  " + e.getMessage());
+                        retryCount++;
+                    }
                 }
-
-                return postSummaries;
             }
         }
+        // Do give indication that there might be some trouble but returning a success status code, but
+        // with an indication that there might be something going on.
+        response.setStatus(207);
         return null;
     }
 

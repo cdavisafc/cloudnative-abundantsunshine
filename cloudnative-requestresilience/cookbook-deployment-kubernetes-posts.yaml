@@ -27,17 +27,25 @@ spec:
       name: posts
       labels:
         app: posts
+        appcollection: blog-aggregator
     spec:
       containers:
       - name: posts
         image: cdavisafc/cloudnative-requestresilience-posts
-#        disabling liveness probe to allow us to demonstrate handling failures in a different way
 #        livenessProbe:
 #          httpGet:
 #            path: /healthz
 #            port: 8080
 #          initialDelaySeconds: 60
 #          periodSeconds: 5
+#        readinessProbe:
+#          httpGet:
+#            path: /healthz
+#            port: 8080
+#          initialDelaySeconds: 30
+#          periodSeconds: 5
+#        securityContext:
+#          privileged: true
         env:
           - name: INSTANCE_IP
             valueFrom:
@@ -50,4 +58,6 @@ spec:
           - name: SPRING_CLOUD_CONFIG_URI
             value: "http://sccs-svc:8888"
           - name: VERSIONING_TRIGGER
+            value: "12"
+          - name: SERVER_TOMCAT_MAX-CONNECTIONS
             value: "5"
