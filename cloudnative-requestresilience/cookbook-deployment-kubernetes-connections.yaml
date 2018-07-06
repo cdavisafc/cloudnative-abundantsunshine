@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: connections
-        image: cdavisafc/cloudnative-requestresilience-connections
+        image: cdavisafc/cloudnative-requestresilience-connections:latest
         livenessProbe:
           httpGet:
             path: /healthz

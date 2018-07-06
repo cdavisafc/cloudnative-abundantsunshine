@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class PostsService {
     @Autowired
     Utils utils;
 
-    @Retryable( value = Exception.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+    @Retryable( value = ResourceAccessException.class, maxAttempts = 3, backoff = @Backoff(delay = 500))
     public ArrayList<PostSummary> getPosts(String ids, RestTemplate restTemplate) throws Exception {
 
         ArrayList<PostSummary> postSummaries = new ArrayList<PostSummary>();

@@ -53,12 +53,12 @@ public class CloudnativeStatelessnessApplicationTests {
     @Test
     public void	testHealthSimulation() throws Exception {
 
-        mockMvc.perform(get("/healthz"))
-                .andExpect(status().isOk());
         mockMvc.perform(post("/infect"))
                 .andExpect(status().isOk());
- //       mockMvc.perform(get("/healthz"))
- //               .andExpect(status().is5xxServerError());
+        mockMvc.perform(post("/heal"))
+                .andExpect(status().isOk());
+        //mockMvc.perform(get("/healthz"))
+        //        .andExpect(status().isOk());
         // With the latest implementation will simply sleep for a long time after infected.
 
     }

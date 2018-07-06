@@ -31,19 +31,19 @@ spec:
     spec:
       containers:
       - name: posts
-        image: cdavisafc/cloudnative-requestresilience-posts
+        image: cdavisafc/cloudnative-requestresilience-posts:latest
         livenessProbe:
           httpGet:
             path: /healthz
             port: 8080
           initialDelaySeconds: 60
-          periodSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 30
-          periodSeconds: 5
+          periodSeconds: 180
+#        readinessProbe:
+#          httpGet:
+#            path: /healthz
+#            port: 8080
+#          initialDelaySeconds: 15
+#          periodSeconds: 5
         securityContext:
           privileged: true
         env:
