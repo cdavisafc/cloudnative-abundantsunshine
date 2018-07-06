@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: connection-posts
-        image: cdavisafc/cloudnative-requestresilience-connectionposts:0.0.1
+        image: cdavisafc/cloudnative-requestresilience-connectionposts:0.0.2
         resources:
           limits:
             memory: "2048Mi"
@@ -66,4 +66,4 @@ spec:
           - name: SPRING_CLOUD_CONFIG_URI
             value: "http://sccs-svc:8888"
           - name: VERSIONING_TRIGGER
-            value: "12"
+            value: "15"
