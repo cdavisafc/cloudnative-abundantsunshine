@@ -27,6 +27,9 @@ public class PostsController {
     @Autowired
     Utils utils;
 
+    @Value("${postscontroller.sleepDuration}")
+    private int sleepDuration;
+
     @RequestMapping(method = RequestMethod.GET, value="/posts")
     public Iterable<Post> getPostsByUserId(@RequestParam(value="userIds", required=false) String userIds, 
                                            @RequestParam(value="secret", required=true) String secret,  
@@ -35,7 +38,7 @@ public class PostsController {
         Iterable<Post> posts;
 
         if (!this.isHealthy) {
-            Thread.sleep(400000);
+            Thread.sleep(sleepDuration);
             return null;
         } else if (utils.isValidSecret(secret)) {
 
@@ -86,7 +89,7 @@ public class PostsController {
     public void healthCheck(HttpServletResponse response) throws InterruptedException {
 
         if (this.isHealthy) response.setStatus(200);
-        else Thread.sleep(400000);
+        else Thread.sleep(sleepDuration);
 
     }
 
