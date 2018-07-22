@@ -84,13 +84,13 @@ public class ConnectionsPostsController implements InitializingBean {
     @Value("${connectionpostscontroller.readTimeout}")
     private int readTimeout;
 
-    private StringRedisTemplate template;
+    private StringRedisTemplate stringRedisTemplate;
 
     private boolean isHealthy = true;
 
     @Autowired
     public ConnectionsPostsController(StringRedisTemplate template) {
-        this.template = template;
+        this.stringRedisTemplate = template;
     }
 
     @Autowired
@@ -117,7 +117,7 @@ public class ConnectionsPostsController implements InitializingBean {
             logger.info(utils.ipTag() + "connectionsPosts access attempt without auth token");
             response.setStatus(401);
         } else {
-            ValueOperations<String, String> ops = this.template.opsForValue();
+            ValueOperations<String, String> ops = this.stringRedisTemplate.opsForValue();
             String username = ops.get(token);
             if (username == null) {
                 logger.info(utils.ipTag() + "connectionsPosts access attempt with invalid token");

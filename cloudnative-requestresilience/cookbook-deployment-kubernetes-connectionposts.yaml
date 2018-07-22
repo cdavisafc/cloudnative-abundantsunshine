@@ -18,7 +18,7 @@ metadata:
   labels:
     app: connection-posts
 spec:
-  replicas: 5
+  replicas: 1
   selector:
     matchLabels:
       app: connection-posts
@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: connection-posts
-        image: cdavisafc/cloudnative-requestresilience-connectionposts:0.0.2
+        image: cdavisafc/cloudnative-requestresilience-connectionposts:0.0.3
         resources:
           limits:
             memory: "2048Mi"

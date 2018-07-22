@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.retry.annotation.EnableRetry;
 
 
@@ -20,6 +21,7 @@ import org.springframework.retry.annotation.EnableRetry;
 @SpringBootApplication
 @ComponentScan(basePackages = { "com.corneliadavis.cloudnative.*" })
 @EntityScan("com.corneliadavis.cloudnative.*")
+@EnableRedisRepositories("com.corneliadavis.cloudnative.*")
 public class CloudnativeApplication {
 
 	@Value("${redis.hostname}")

@@ -80,7 +80,6 @@
 			<version>1.2.2.RELEASE</version>
 		</dependency>
 
-
 	</dependencies>
 
 	<build>
