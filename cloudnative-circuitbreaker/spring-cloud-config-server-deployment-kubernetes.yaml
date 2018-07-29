@@ -1,0 +1,36 @@
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: sccs-svc
+spec:
+  selector:
+    app: sccs
+  ports:
+  - protocol: "TCP"
+    port: 8888
+    targetPort: 8888
+  type: NodePort
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: sccs
+  labels:
+    app: sccs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sccs
+  template:
+    metadata:
+      labels:
+        app: sccs
+    spec:
+      containers:
+      - name: sccs
+        image: hyness/spring-cloud-config-server
+        env:
+          - name: SPRING_CLOUD_CONFIG_SERVER_GIT_URI
+            value: "https://github.com/cdavisafc/cloud-native-config.git"

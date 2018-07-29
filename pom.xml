@@ -16,6 +16,7 @@
 		<module>cloudnative-appconfig</module>
 		<module>cloudnative-applifecycle</module>
 		<module>cloudnative-requestresilience</module>
+		<module>cloudnative-circuitbreaker</module>
 	</modules>
 
 

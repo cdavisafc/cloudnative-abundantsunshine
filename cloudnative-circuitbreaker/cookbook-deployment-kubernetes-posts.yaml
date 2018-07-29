@@ -1,0 +1,63 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: posts-svc
+spec:
+  selector:
+    app: posts
+  ports:
+  - protocol: "TCP"
+    port: 80
+    targetPort: 8080
+  type: NodePort
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: posts
+  labels:
+    app: posts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: posts
+  template:
+    metadata:
+      name: posts
+      labels:
+        app: posts
+        appcollection: blog-aggregator
+    spec:
+      containers:
+      - name: posts
+        image: cdavisafc/cloudnative-requestresilience-posts:0.0.2
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 180
+#        readinessProbe:
+#          httpGet:
+#            path: /healthz
+#            port: 8080
+#          initialDelaySeconds: 15
+#          periodSeconds: 5
+        securityContext:
+          privileged: true
+        env:
+          - name: INSTANCE_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: SPRING_APPLICATION_JSON
+            value: '{"spring":{"datasource":{"url":"jdbc:mysql://mysql-svc/cookbook"}}}'
+          - name: SPRING_APPLICATION_NAME
+            value: "mycookbook"
+          - name: SPRING_CLOUD_CONFIG_URI
+            value: "http://sccs-svc:8888"
+          - name: VERSIONING_TRIGGER
+            value: "12"
+          - name: SERVER_TOMCAT_MAX-CONNECTIONS
+            value: "5"

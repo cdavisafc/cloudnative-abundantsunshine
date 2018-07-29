@@ -1,0 +1,28 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: jmeter-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jmeter-server
+    spec:
+      containers:
+        - name: jmeter
+          image: justb4/jmeter
+          args:
+            - "-n"
+            - "-t"
+            - "/etc/jmeter/jmeter_run.jmx"
+            - "-l"
+            - "resultsconnectionsposts"
+          volumeMounts:
+            - name: jmeter-config-volume
+              mountPath: /etc/jmeter
+      volumes:
+        - name: jmeter-config-volume
+          configMap:
+            defaultMode: 420
+            name: jmeter-config
