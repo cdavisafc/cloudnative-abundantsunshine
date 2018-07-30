@@ -58,7 +58,7 @@ public class CloudnativeStatelessnessApplicationTests implements ApplicationCont
         mockMvc.perform(get("/users?secret=forTests"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$", hasSize(3)));
+                .andExpect(jsonPath("$", hasSize(4)));
     }
     @Test
     public void	checkConnectionCounts() throws Exception {
@@ -72,7 +72,7 @@ public class CloudnativeStatelessnessApplicationTests implements ApplicationCont
     @Test(expected = Exception.class)
     public void exceptionOnNonUniqueUsername (){
         UserRepository userRepository = applicationContext.getBean(UserRepository.class);
-        userRepository.save(new User("doesn't matter", "cdavisafc"));
+        userRepository.save(new User( 100L,"doesn't matter", "cdavisafc"));
     }
 
     @Test

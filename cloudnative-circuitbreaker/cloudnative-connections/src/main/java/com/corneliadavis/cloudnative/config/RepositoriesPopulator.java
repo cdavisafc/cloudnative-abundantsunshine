@@ -37,7 +37,7 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
     }
 
     private void populate() {
-        User user1, user2, user3;
+        User user1, user2, user3, user4;
         Connection connection1, connection2, connection3;
         ConnectionsController connectionsWriteController = applicationContext.getBean(ConnectionsController.class);
 
@@ -45,12 +45,14 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
 
         try {
 
-            user1 = new User("Cornelia", "cdavisafc");
+            user1 = new User(1L,"Cornelia", "cdavisafc");
             connectionsWriteController.newUser(user1, secret, null);
-            user2 = new User("Max", "madmax");
+            user2 = new User(2L,"Max", "madmax");
             connectionsWriteController.newUser(user2, secret, null);
-            user3 = new User("Glen", "gmaxdavis");
+            user3 = new User(3L,"Glen", "gmaxdavis");
             connectionsWriteController.newUser(user3, secret, null);
+            user4 = new User( 999L,"Sponsor", "sponsor");
+            connectionsWriteController.newUser(user4, secret, null);
 
             connection1 = new Connection(2L, 1L);
             connectionsWriteController.newConnection(connection1, secret, null);
