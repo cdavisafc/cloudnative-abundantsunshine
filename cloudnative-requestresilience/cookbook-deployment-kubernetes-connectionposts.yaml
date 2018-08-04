@@ -52,7 +52,7 @@ spec:
           - name: CONNECTIONPOSTSCONTROLLER_USERSURL
             value: "http://connections-svc/users/"
           - name: CONNECTIONPOSTSCONTROLLER_IMPLEMENTRETRIES
-            value: "false"
+            value: "true"
           - name: CONNECTIONPOSTSCONTROLLER_CONNECTTIMEOUT
             value: "250"
           - name: CONNECTIONPOSTSCONTROLLER_READTIMEOUT

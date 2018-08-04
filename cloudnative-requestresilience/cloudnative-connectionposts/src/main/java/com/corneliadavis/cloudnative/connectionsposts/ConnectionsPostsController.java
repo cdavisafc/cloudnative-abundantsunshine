@@ -145,7 +145,11 @@ public class ConnectionsPostsController implements InitializingBean {
                 int retryCount = 0;
                 while (implementRetries || retryCount == 0) {
                     try {
-                        ResponseEntity<PostResult[]> respPosts = restTemplate.getForEntity(postsUrl + ids + secretQueryParam, PostResult[].class);
+                        RestTemplate restTemp = restTemplateBuilder
+                                .setConnectTimeout(connectTimeout)
+                                .setReadTimeout(readTimeout)
+                                .build();
+                        ResponseEntity<PostResult[]> respPosts = restTemp.getForEntity(postsUrl + ids + secretQueryParam, PostResult[].class);
                         if (respPosts.getStatusCode().is5xxServerError()) {
                             response.setStatus(500);
                             return null;
