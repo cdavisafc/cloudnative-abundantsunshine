@@ -9,7 +9,7 @@ spec:
   - protocol: "TCP"
     port: 80
     targetPort: 8080
-  type: NodePort
+  type: LoadBalancer
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
@@ -18,7 +18,7 @@ metadata:
   labels:
     app: connection-posts
 spec:
-  replicas: 1
+  replicas: 5
   selector:
     matchLabels:
       app: connection-posts
@@ -31,9 +31,9 @@ spec:
       containers:
       - name: connection-posts
         image: cdavisafc/cloudnative-requestresilience-connectionposts:0.0.1
-#        resources:
-#          limits:
-#            memory: "2048Mi"
+        resources:
+          limits:
+            memory: "2048Mi"
 #        livenessProbe:
 #          httpGet:
 #            path: /healthz

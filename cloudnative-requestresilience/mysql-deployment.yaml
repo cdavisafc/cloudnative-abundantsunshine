@@ -9,7 +9,7 @@ spec:
   - protocol: "TCP"
     port: 3306
     targetPort: 3306
-  type: NodePort
+  type: LoadBalancer
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: mysql:5.7.22
+        image: cdavisafc/mysql
         args: []
         securityContext:
           privileged: true

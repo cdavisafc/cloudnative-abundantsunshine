@@ -18,7 +18,7 @@ metadata:
   labels:
     app: posts
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app: posts
@@ -32,18 +32,18 @@ spec:
       containers:
       - name: posts
         image: cdavisafc/cloudnative-requestresilience-posts
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 60
-          periodSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 30
-          periodSeconds: 5
+#        livenessProbe:
+#          httpGet:
+#            path: /healthz
+#            port: 8080
+#          initialDelaySeconds: 60
+#          periodSeconds: 5
+#        readinessProbe:
+#          httpGet:
+#            path: /healthz
+#            port: 8080
+#          initialDelaySeconds: 30
+#          periodSeconds: 5
         securityContext:
           privileged: true
         env:
