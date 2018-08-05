@@ -163,7 +163,13 @@ public class ConnectionsPostsController implements InitializingBean {
                         // Will occur when a connection times out. For this naive implementation, we will simply
 						// try again.
                         logger.info(utils.ipTag() + "On (" + retryCount + ") request to unhealthy posts service  " + e.getMessage());
-                        retryCount++;
+                        if (implementRetries)
+                            retryCount++;
+                        else {
+                            logger.info(utils.ipTag() + "Not implementing retries - returning with a 500");
+                            response.setStatus(500);
+                            return null;
+                        }
                     }
                 }
             }
