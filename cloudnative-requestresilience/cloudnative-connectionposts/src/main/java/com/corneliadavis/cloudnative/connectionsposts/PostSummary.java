@@ -17,6 +17,8 @@ public class PostSummary {
         this.title = title;
     }
 
+    public PostSummary() {}
+
     public Date getDate() {
         return date;
     }
@@ -29,4 +31,15 @@ public class PostSummary {
         return title;
     }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setUsersname(String usersname) {
+        this.usersname = usersname;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

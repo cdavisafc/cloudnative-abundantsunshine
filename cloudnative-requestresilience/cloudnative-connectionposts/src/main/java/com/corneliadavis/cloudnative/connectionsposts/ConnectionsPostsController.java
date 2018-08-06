@@ -84,13 +84,13 @@ public class ConnectionsPostsController implements InitializingBean {
     @Value("${connectionpostscontroller.readTimeout}")
     private int readTimeout;
 
-    private StringRedisTemplate template;
+    private StringRedisTemplate stringRedisTemplate;
 
     private boolean isHealthy = true;
 
     @Autowired
     public ConnectionsPostsController(StringRedisTemplate template) {
-        this.template = template;
+        this.stringRedisTemplate = template;
     }
 
     @Autowired
@@ -117,7 +117,7 @@ public class ConnectionsPostsController implements InitializingBean {
             logger.info(utils.ipTag() + "connectionsPosts access attempt without auth token");
             response.setStatus(401);
         } else {
-            ValueOperations<String, String> ops = this.template.opsForValue();
+            ValueOperations<String, String> ops = this.stringRedisTemplate.opsForValue();
             String username = ops.get(token);
             if (username == null) {
                 logger.info(utils.ipTag() + "connectionsPosts access attempt with invalid token");
@@ -153,7 +153,6 @@ public class ConnectionsPostsController implements InitializingBean {
                     response.setStatus(200);
                     return postSummaries;
                 } catch (HttpServerErrorException e) {
-                    // Occurs when call to Posts service returned a 500
                     logger.info(utils.ipTag() + "Call to Posts service returned 500");
                     response.setStatus(500);
                     return null;
@@ -162,7 +161,8 @@ public class ConnectionsPostsController implements InitializingBean {
                     response.setStatus(500);
                     return null;
                 } catch (Exception e) {
-                    logger.info(utils.ipTag() + "(unexpected) Exception " + e.getMessage() + " Exception Class " + e.getClass());
+                    logger.info(utils.ipTag() + "Unexpected Exception: Exception Class " + e.getClass() + e.getMessage());
+                    response.setStatus(500);
                     return null;
                 }
             }
