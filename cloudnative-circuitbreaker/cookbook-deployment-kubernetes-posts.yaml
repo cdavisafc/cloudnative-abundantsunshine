@@ -18,7 +18,7 @@ metadata:
   labels:
     app: posts
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: posts
@@ -31,13 +31,13 @@ spec:
     spec:
       containers:
       - name: posts
-        image: cdavisafc/cloudnative-requestresilience-posts:0.0.2
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 60
-          periodSeconds: 180
+        image: cdavisafc/cloudnative-circuitbreaker-posts:0.0.1
+#        livenessProbe:
+#          httpGet:
+#            path: /healthz
+#            port: 8080
+#          initialDelaySeconds: 60
+#          periodSeconds: 180
 #        readinessProbe:
 #          httpGet:
 #            path: /healthz
@@ -58,6 +58,6 @@ spec:
           - name: SPRING_CLOUD_CONFIG_URI
             value: "http://sccs-svc:8888"
           - name: VERSIONING_TRIGGER
-            value: "12"
+            value: "4"
           - name: SERVER_TOMCAT_MAX-CONNECTIONS
             value: "5"
