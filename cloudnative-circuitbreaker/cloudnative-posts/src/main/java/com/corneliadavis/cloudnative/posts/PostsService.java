@@ -35,7 +35,7 @@ public class PostsService {
     @Value("${postscontroller.sleepDuration}")
     private int sleepDuration;
 
-    @HystrixCommand()
+    @HystrixCommand(fallbackMethod = "getSponsoredPosts")
     public Iterable<Post> getPostsByUserId(String userIds,
                                            String secret) throws Exception {
 
@@ -58,5 +58,14 @@ public class PostsService {
             return postsForUsers;
 
         }
+    }
+
+    public Iterable<Post> getSponsoredPosts(String userIds,
+                                            String secret) {
+        logger.info(utils.ipTag() + "Accessing Hystrix fallback getSponsoredPosts");
+        ArrayList<Post> posts = new ArrayList<Post>();
+        posts.add(new Post(999L, "Some catchy title", "Some great sponsored content"));
+        posts.add(new Post(999L, "Another catchy title", "Some more great sponsored content"));
+        return posts;
     }
 }

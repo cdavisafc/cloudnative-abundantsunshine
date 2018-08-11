@@ -19,7 +19,6 @@
     <modules>
         <module>cloudnative-posts</module>
         <module>cloudnative-connections</module>
-        <module>cloudnative-connectionposts</module>
     </modules>
 
 
