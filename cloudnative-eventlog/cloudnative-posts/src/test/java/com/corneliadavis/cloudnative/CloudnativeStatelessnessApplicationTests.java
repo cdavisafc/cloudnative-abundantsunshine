@@ -1,12 +1,17 @@
 package com.corneliadavis.cloudnative;
 
 import com.corneliadavis.cloudnative.config.CloudnativeApplication;
+import com.corneliadavis.cloudnative.config.RepositoriesPopulator;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -20,10 +25,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CloudnativeApplication.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 @TestPropertySource(properties = {
-        "spring.cloud.config.enabled:false"})
+        "spring.cloud.config.enabled:false",
+        "connectionspostscontroller.url:http://localhost:9999"})
 @AutoConfigureMockMvc
 @DirtiesContext
-public class CloudnativeStatelessnessApplicationTests {
+public class CloudnativeStatelessnessApplicationTests implements ApplicationContextAware {
 
 /*    public static class CustomLoader extends SpringBootContextLoader {
 
@@ -35,10 +41,20 @@ public class CloudnativeStatelessnessApplicationTests {
         }
     }*/
 
+    private ApplicationContext applicationContext;
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
     @Autowired
     private  MockMvc mockMvc;
-//    @Autowired
-//    private RepositoriesPopulator repositoriesPopulator;
+
+    @Before
+    public void loadData() throws InterruptedException {
+        RepositoriesPopulator rp = applicationContext.getBean(RepositoriesPopulator.class);
+        rp.populate();
+    }
 
     @Test
     public void contextLoads() {

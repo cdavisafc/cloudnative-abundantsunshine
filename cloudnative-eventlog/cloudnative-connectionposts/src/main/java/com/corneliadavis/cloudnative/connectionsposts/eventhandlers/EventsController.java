@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RefreshScope
 @RestController
-@RequestMapping(value="/connectionsPosts")
+@RequestMapping(value="/eventHandlers")
 public class EventsController {
 
     private static final Logger logger = LoggerFactory.getLogger(EventsController.class);
@@ -72,8 +72,8 @@ public class EventsController {
 
         MConnection connection = connectionRepository.findOne(connectionId);
 
-        logger.info("deleting connection: " + connection.getFollower() +
-                    " is no longer following " + connection.getFollowed());
+        logger.info("deleting connection: " + connection.getFollowerUser().getId() +
+                    " is no longer following " + connection.getFollowedUser().getId());
         connectionRepository.delete(connectionId);
 
     }

@@ -1,9 +1,8 @@
 package com.corneliadavis.cloudnative.posts;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.corneliadavis.cloudnative.posts.localstorage.User;
+
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -16,15 +15,17 @@ public class Post {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     private Date date;
-    private Long userId;
+    //private Long userId;
     private String title;
     private String body;
 
+    @ManyToOne
+    private User user;
+
     protected Post() {}
 
-    public Post(Long userId, String title, String body) {
+    public Post(String title, String body) {
         this.date = new Date();
-        this.userId = userId;
         this.title = title;
         this.body = body;
     }
@@ -37,11 +38,7 @@ public class Post {
         return date;
     }
 
-    public void setDate(Date date) { this.date = date; }
-
-    public Long getUserId() {
-        return userId;
-    }
+    //public void setDate(Date date) { this.date = date; }
 
     public String getTitle() {
         return title;
@@ -50,4 +47,8 @@ public class Post {
     public String getBody() {
         return body;
     }
+
+    public void setUser(User user) { this.user = user; }
+
+    public User getUser() { return user; }
 }

@@ -12,7 +12,7 @@ public class MPost {
     @Id
     private Long id;
     private Date date;
-    private Long userId;
+    //private Long userId;
     private String title;
 
     @ManyToOne
@@ -23,7 +23,7 @@ public class MPost {
     public MPost(Long id, Date date, Long userId, String title) {
         this.id = id;
         this.date = date;
-        this.userId = userId;
+       // this.userId = userId;
         this.title = title;
     }
 
@@ -31,9 +31,7 @@ public class MPost {
         return date;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
+    //public Long getUserId() { return userId; }
 
     public String getTitle() {
         return title;
@@ -43,9 +41,7 @@ public class MPost {
         this.date = date;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+    //public void setUserId(Long userId) { this.userId = userId; }
 
     public void setTitle(String title) {
         this.title = title;
@@ -64,8 +60,7 @@ public class MPost {
     }
 
     @Override
-    public String toString() {
-        return "Post [date=" + date + ", userId = " + userId + ", title = " + title + "]";
-    }
+    public String toString() { return "Post [date=" + date + ", userId = " + mUser.getId() + ", title = " + title + "]"; }
+    //public String toString() { return "Post [date=" + date + ", title = " + title + "]";}
 
 }

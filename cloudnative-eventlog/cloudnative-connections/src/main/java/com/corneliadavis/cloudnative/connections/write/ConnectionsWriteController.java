@@ -4,6 +4,7 @@ import com.corneliadavis.cloudnative.connections.UserRepository;
 import com.corneliadavis.cloudnative.connections.Connection;
 import com.corneliadavis.cloudnative.connections.ConnectionRepository;
 import com.corneliadavis.cloudnative.connections.User;
+import com.corneliadavis.cloudnative.connections.apirepresentations.ApiConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 
-@RefreshScope
+//@RefreshScope
 @RestController
 public class ConnectionsWriteController {
 
@@ -31,6 +32,8 @@ public class ConnectionsWriteController {
 
     @Value("${connectionspostscontroller.url}")
     private String connectionsPostsControllerUrl;
+    @Value("${postscontroller.url}")
+    private String postsControllerUrl;
 
     @RequestMapping(method = RequestMethod.POST, value="/users")
     public void newUser(@RequestBody User newUser, HttpServletResponse response) {
@@ -38,15 +41,29 @@ public class ConnectionsWriteController {
         logger.info("Have a new user with username " + newUser.getUsername());
         userRepository.save(newUser);
 
+        // posts needs to be notified of new users
         try {
             //event
             RestTemplate restTemplate = new RestTemplate();
+            restTemplate.postForEntity(postsControllerUrl+"/users", newUser, String.class);
+        } catch (Exception e) {
+            // for now, do nothing
+            // It's a known bad that the successful delivery of this event depends on successful connection
+            // to Connections' Posts, right at this moment. This will be fixed shortly.
+            logger.info("[Connections] appears to have been a problem sending change event to Posts");
+        }
+
+        // connections posts needs to be notified of new users
+        try {
+            //event
+            RestTemplate restTemplate = new RestTemplate();
+            logger.info("url = " + connectionsPostsControllerUrl+"/users");
             restTemplate.postForEntity(connectionsPostsControllerUrl+"/users", newUser, String.class);
         } catch (Exception e) {
             // for now, do nothing
             // It's a known bad that the successful delivery of this event depends on successful connection
             // to Connections' Posts, right at this moment. This will be fixed shortly.
-            logger.info("[Connections] appears to have been a problem sending change event");
+            logger.info("[Connections] appears to have been a problem sending change event to ConnectionsPosts");
         }
     }
 
@@ -72,17 +89,20 @@ public class ConnectionsWriteController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value="/connections")
-    public void newConnection(@RequestBody Connection newConnection, HttpServletResponse response) {
+    public void newConnection(@RequestBody ApiConnection newConnection, HttpServletResponse response) {
 
         logger.info("Have a new connection: " + newConnection.getFollower() +
                     " is following " + newConnection.getFollowed());
-        connectionRepository.save(newConnection);
+        Long followerId = userRepository.findByUsername(newConnection.getFollower()).getId();
+        Long followedId = userRepository.findByUsername(newConnection.getFollowed()).getId();
+        Connection newConnectionIds = new Connection(followerId, followedId);
+        connectionRepository.save(newConnectionIds);
 
         try {
             //event
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<String> resp = restTemplate.postForEntity(
-                    connectionsPostsControllerUrl+"/connections", newConnection, String.class);
+                    connectionsPostsControllerUrl+"/connections", newConnectionIds, String.class);
             logger.info("resp " + resp.getStatusCode());
         } catch (Exception e) {
             // for now, do nothing

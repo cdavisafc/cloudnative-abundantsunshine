@@ -12,7 +12,7 @@ public interface MPostRepository extends CrudRepository<MPost, Long> {
 
     Iterable<MPost> findBymUserId(Long userId);
 
-    @Query("select p.title as title, p.date as date, p.userId as usersName "
+    @Query("select p.title as title, p.date as date, p.mUser as usersName "
             + "from MPost p")
     Iterable<PostSummary> findAllOfThem();
 
