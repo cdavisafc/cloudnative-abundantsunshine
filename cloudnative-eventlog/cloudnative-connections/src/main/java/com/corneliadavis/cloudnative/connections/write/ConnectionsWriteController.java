@@ -4,12 +4,11 @@ import com.corneliadavis.cloudnative.connections.UserRepository;
 import com.corneliadavis.cloudnative.connections.Connection;
 import com.corneliadavis.cloudnative.connections.ConnectionRepository;
 import com.corneliadavis.cloudnative.connections.User;
-import com.corneliadavis.cloudnative.connections.apirepresentations.ApiConnection;
+import com.corneliadavis.cloudnative.connections.ConnectionApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -89,7 +88,7 @@ public class ConnectionsWriteController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value="/connections")
-    public void newConnection(@RequestBody ApiConnection newConnection, HttpServletResponse response) {
+    public void newConnection(@RequestBody ConnectionApi newConnection, HttpServletResponse response) {
 
         logger.info("Have a new connection: " + newConnection.getFollower() +
                     " is following " + newConnection.getFollowed());

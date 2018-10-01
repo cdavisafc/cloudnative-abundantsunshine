@@ -1,5 +1,6 @@
-package com.corneliadavis.cloudnative.connectionsposts;
+package com.corneliadavis.cloudnative.connectionsposts.read;
 
+import com.corneliadavis.cloudnative.connectionsposts.PostSummary;
 import com.corneliadavis.cloudnative.connectionsposts.localstorage.MConnectionRepository;
 import com.corneliadavis.cloudnative.connectionsposts.localstorage.MPostRepository;
 import com.corneliadavis.cloudnative.connectionsposts.localstorage.MUserRepository;

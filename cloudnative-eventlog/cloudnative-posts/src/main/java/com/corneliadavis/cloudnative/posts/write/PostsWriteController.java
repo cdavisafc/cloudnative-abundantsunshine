@@ -2,8 +2,7 @@ package com.corneliadavis.cloudnative.posts.write;
 
 import com.corneliadavis.cloudnative.posts.PostRepository;
 //import com.corneliadavis.cloudnative.posts.Post;
-import com.corneliadavis.cloudnative.posts.apirepresentations.ApiPost;
-import com.corneliadavis.cloudnative.posts.apirepresentations.IApiPost;
+import com.corneliadavis.cloudnative.posts.PostApi;
 import com.corneliadavis.cloudnative.posts.localstorage.User;
 import com.corneliadavis.cloudnative.posts.localstorage.UserRepository;
 import org.slf4j.Logger;
@@ -35,7 +34,7 @@ public class PostsWriteController {
     private String connectionsPostsControllerUrl;
 
     @RequestMapping(method = RequestMethod.POST, value="/posts")
-    public void newPost(@RequestBody ApiPost newPost, HttpServletResponse response) {
+    public void newPost(@RequestBody PostApi newPost, HttpServletResponse response) {
 
         logger.info("Have a new post with title " + newPost.getTitle());
 

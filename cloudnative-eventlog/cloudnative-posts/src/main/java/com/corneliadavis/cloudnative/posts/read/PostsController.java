@@ -1,7 +1,7 @@
-package com.corneliadavis.cloudnative.posts;
+package com.corneliadavis.cloudnative.posts.read;
 
-import com.corneliadavis.cloudnative.posts.apirepresentations.IApiPost;
-import com.corneliadavis.cloudnative.posts.localstorage.User;
+import com.corneliadavis.cloudnative.posts.IPostApi;
+import com.corneliadavis.cloudnative.posts.PostRepository;
 import com.corneliadavis.cloudnative.posts.localstorage.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,10 +40,10 @@ public class PostsController {
     private int sleepDuration;
 
     @RequestMapping(method = RequestMethod.GET, value="/posts")
-    public Iterable<IApiPost> getPostsByUsername(@RequestParam(value="usernames", required=false) String usernames,
+    public Iterable<IPostApi> getPostsByUsername(@RequestParam(value="usernames", required=false) String usernames,
                                                  HttpServletResponse response) throws InterruptedException {
 
-        Iterable<IApiPost> posts;
+        Iterable<IPostApi> posts;
 
         long currentMillis = System.currentTimeMillis();
         if (currentMillis < healthTimeout) {
@@ -58,7 +58,7 @@ public class PostsController {
                 posts = postRepository.findAllPosts();
                 return posts;
             } else {
-                ArrayList<IApiPost> postsForUsers = new ArrayList<IApiPost>();
+                ArrayList<IPostApi> postsForUsers = new ArrayList<IPostApi>();
                 String username[] = usernames.split(",");
                 for (int i = 0; i < username.length; i++) {
                     logger.info(utils.ipTag() + "getting posts for username " + username[i]);
@@ -72,21 +72,6 @@ public class PostsController {
         }
 
     }
-
-
-    // despite the fact that we are writing a value here, this is not in the write controller because this
-    // service is not the source of truth, rather the user table is just a cache, having picked up change events
-    // (in this case a create event) from the Connections service. In this case it is not this service's
-    // responsibility to send the "event" out.
-    @RequestMapping(method = RequestMethod.POST, value="/eventHandlers/users")
-    public void newUser(@RequestBody User user, HttpServletResponse response) {
-
-        logger.info("New user cached in local storage " + user.getUsername());
-
-        userRepository.save(user);
-
-    }
-
 
     @RequestMapping(method = RequestMethod.GET, value="/healthz")
     public void healthCheck(HttpServletResponse response) throws InterruptedException {

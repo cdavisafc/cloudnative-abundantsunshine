@@ -1,21 +1,21 @@
-package com.corneliadavis.cloudnative.posts.apirepresentations;
+package com.corneliadavis.cloudnative.posts;
 
 import java.util.Date;
 
-public class ApiPost implements IApiPost {
+public class PostApi implements IPostApi {
 
     private String username;
     private String title;
     private String body;
     private Date date;
 
-    public ApiPost(String username, String title, String body) {
+    public PostApi(String username, String title, String body) {
         this.username = username;
         this.title = title;
         this.body = body;
     }
 
-    public ApiPost() { }
+    public PostApi() { }
 
     @Override
     public String getUsername() {

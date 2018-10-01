@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.connections.apirepresentations;
+package com.corneliadavis.cloudnative.connections;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,14 +8,14 @@ import javax.persistence.Id;
 /**
  * Created by corneliadavis on 10/1/18.
  */
-public class ApiConnection {
+public class ConnectionApi {
 
     private String follower;
     private String followed;
 
-    protected ApiConnection() {}
+    protected ConnectionApi() {}
 
-    public ApiConnection(String follower, String followed) {
+    public ConnectionApi(String follower, String followed) {
         this.follower = follower;
         this.followed = followed;
     }
