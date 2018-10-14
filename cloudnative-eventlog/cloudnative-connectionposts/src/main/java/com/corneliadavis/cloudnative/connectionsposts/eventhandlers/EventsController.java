@@ -36,25 +36,25 @@ public class EventsController {
     @RequestMapping(method = RequestMethod.POST, value="/users")
     public void newUser(@RequestBody com.corneliadavis.cloudnative.eventschemas.connections.User newUser, HttpServletResponse response) {
 
-        logger.info("[NewPosts] Creating new user with username " + newUser.getUsername());
+        logger.info("Creating new user in the cache with username " + newUser.getUsername());
         userRepository.save(new MUser(newUser.getId(), newUser.getName(), newUser.getUsername()));
 
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value="/users/{id}")
-    public void updateUser(@PathVariable("id") Long userId,
-                           @RequestBody com.corneliadavis.cloudnative.eventschemas.connections.User newUser, HttpServletResponse response) {
+    @RequestMapping(method = RequestMethod.PUT, value="/users/{username}")
+    public void updateUser(@PathVariable("username") String username, @RequestBody MUser newUser, HttpServletResponse response) {
 
-        logger.info("Updating user with id " + userId);
-        MUser user = userRepository.findOne(userId);
-        userRepository.save(user);
+        logger.info("Updating user cached in local storage with username " + username);
+        MUser user = userRepository.findByUsername(username);
+        newUser.setId(user.getId());
+        userRepository.save(newUser);
 
     }
 
     @RequestMapping(method = RequestMethod.POST, value="/connections")
     public void newConnection(@RequestBody com.corneliadavis.cloudnative.eventschemas.connections.Connection newConnection, HttpServletResponse response) {
 
-        logger.info("Have a new connection: " + newConnection.getFollower() +
+        logger.info("Have a new connection in the cache: " + newConnection.getFollower() +
                     " is following " + newConnection.getFollowed());
         MConnection connection = new MConnection(newConnection.getId(), newConnection.getFollower(),
                                                   newConnection.getFollowed());
@@ -67,21 +67,28 @@ public class EventsController {
         connectionRepository.save(connection);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value="/connections/{id}")
-    public void deleteConnection(@PathVariable("id") Long connectionId, HttpServletResponse response) {
+    @RequestMapping(method = RequestMethod.DELETE, value="/connections/{follower}/{followed}")
+    public void deleteConnection(@PathVariable("follower") String followerUsername,
+                                 @PathVariable("followed") String followedUsername, HttpServletResponse response) {
 
-        MConnection connection = connectionRepository.findOne(connectionId);
 
-        logger.info("deleting connection: " + connection.getFollowerUser().getId() +
-                    " is no longer following " + connection.getFollowedUser().getId());
-        connectionRepository.delete(connectionId);
+
+        logger.info("deleting from the cache connection: " + followerUsername +
+                " is no longer following " + followedUsername);
+        MUser follower = userRepository.findByUsername(followerUsername);
+        MUser followed = userRepository.findByUsername(followedUsername);
+        MConnection connection = connectionRepository.findByFollowerUserAndFollowedUser(follower,followed);
+        if (connection == null)
+            logger.info("unable to find or delete that connection");
+        else
+            connectionRepository.delete(connection);
 
     }
 
     @RequestMapping(method = RequestMethod.POST, value="/posts")
     public void newPost(@RequestBody com.corneliadavis.cloudnative.eventschemas.posts.Post newPost, HttpServletResponse response) {
 
-        logger.info("Have a new post with title " + newPost.getTitle());
+        logger.info("Have a new post in the cache with title " + newPost.getTitle());
         MPost post = new MPost(newPost.getId(), newPost.getDate(), newPost.getUserId(), newPost.getTitle());
         MUser user;
         user = userRepository.findOne(newPost.getUserId());

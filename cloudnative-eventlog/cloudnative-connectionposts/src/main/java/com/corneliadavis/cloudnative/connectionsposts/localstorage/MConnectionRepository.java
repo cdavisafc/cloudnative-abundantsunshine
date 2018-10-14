@@ -7,5 +7,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface MConnectionRepository extends CrudRepository<MConnection, Long> {
 
+    MConnection findByFollowerUserAndFollowedUser(MUser follower, MUser followed);
 
 }

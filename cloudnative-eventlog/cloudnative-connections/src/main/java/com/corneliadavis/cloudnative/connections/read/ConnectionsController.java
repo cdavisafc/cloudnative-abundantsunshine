@@ -36,15 +36,11 @@ public class ConnectionsController {
 		return users;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value="/users/{user}")
-	public User getByUsername(@PathVariable("user") String user, HttpServletResponse response) {
-        logger.info("getting user " + user);
-        try {
-            Long id = Long.parseLong(user);
-            return userRepository.findOne(id);
-        } catch(NumberFormatException e) {
-            return userRepository.findByUsername(user);
-        }
+	@RequestMapping(method = RequestMethod.GET, value="/users/{username}")
+	public User getByUsername(@PathVariable("username") String username, HttpServletResponse response) {
+        logger.info("getting user " + username);
+
+        return userRepository.findByUsername(username);
     }
 
     @RequestMapping(method = RequestMethod.GET, value="/connections")

@@ -66,18 +66,19 @@ public class ConnectionsWriteController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value="/users/{id}")
-    public void updateUser(@PathVariable("id") Long userId, @RequestBody User newUser, HttpServletResponse response) {
+    @RequestMapping(method = RequestMethod.PUT, value="/users/{username}")
+    public void updateUser(@PathVariable("username") String username, @RequestBody User newUser, HttpServletResponse response) {
 
-        logger.info("Updating user with id " + userId);
-        User user = userRepository.findOne(userId);
-        newUser.setId(userId);
+        logger.info("Updating user with username " + username);
+        User user = userRepository.findByUsername(username);
+        newUser.setId(user.getId());
         userRepository.save(newUser);
 
+        // posts needs to be notified of changes to users
         try {
             //event
             RestTemplate restTemplate = new RestTemplate();
-            restTemplate.put(connectionsPostsControllerUrl+"/users/"+newUser.getId(), newUser);
+            restTemplate.put(postsControllerUrl+"/users/"+username, newUser);
         } catch (Exception e) {
             // for now, do nothing
             // It's a known bad that the successful delivery of this event depends on successful connection
@@ -85,6 +86,17 @@ public class ConnectionsWriteController {
             logger.info("[Connections] appears to have been a problem sending change event");
         }
 
+        // connections posts needs to be notified of changes to users
+        try {
+            //event
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.put(connectionsPostsControllerUrl+"/users/"+username, newUser);
+        } catch (Exception e) {
+            // for now, do nothing
+            // It's a known bad that the successful delivery of this event depends on successful connection
+            // to Connections' Posts, right at this moment. This will be fixed shortly.
+            logger.info("[Connections] appears to have been a problem sending change event");
+        }
     }
 
     @RequestMapping(method = RequestMethod.POST, value="/connections")
@@ -97,6 +109,7 @@ public class ConnectionsWriteController {
         Connection newConnectionIds = new Connection(followerId, followedId);
         connectionRepository.save(newConnectionIds);
 
+        // connections posts needs to be notified of new connections
         try {
             //event
             RestTemplate restTemplate = new RestTemplate();
@@ -111,7 +124,39 @@ public class ConnectionsWriteController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value="/connections/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, value="/connections/{follower}/{followed}")
+    public void deleteConnection(@PathVariable("follower") String followerUsername,
+                                 @PathVariable("followed") String followedUsername, HttpServletResponse response) {
+
+
+
+        logger.info("deleting connection: " + followerUsername +
+                    " is no longer following " + followedUsername);
+        Long followerId = userRepository.findByUsername(followerUsername).getId();
+        Long followedId = userRepository.findByUsername(followedUsername).getId();
+        logger.info("(ID) deleting connection: " + followerId +
+                " is no longer following " + followedId);
+        Connection connection = connectionRepository.findByFollowerAndFollowed(followerId,followedId);
+        if (connection == null)
+            logger.info("unable to find or delete that connection");
+        else
+            connectionRepository.delete(connection);
+
+        // connections posts needs to be notified of deleted connections
+        try {
+            //event
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.delete(connectionsPostsControllerUrl+"/connections/"+followerUsername+"/"+followedUsername);
+        } catch (Exception e) {
+            // for now, do nothing
+            // It's a known bad that the successful delivery of this event depends on successful connection
+            // to Connections' Posts, right at this moment. This will be fixed shortly.
+            logger.info("[Connections] appears to have been a problem sending change event");
+        }
+
+    }
+
+/*    @RequestMapping(method = RequestMethod.DELETE, value="/connections/{id}")
     public void deleteConnection(@PathVariable("id") Long connectionId, HttpServletResponse response) {
 
         Connection connection = connectionRepository.findOne(connectionId);
@@ -119,6 +164,7 @@ public class ConnectionsWriteController {
         logger.info("deleting connection: " + connection.getFollower() + " is no longer following " + connection.getFollowed());
         connectionRepository.delete(connectionId);
 
+        // connections posts needs to be notified of deleted connections
         try {
             //event
             RestTemplate restTemplate = new RestTemplate();
@@ -130,6 +176,6 @@ public class ConnectionsWriteController {
             logger.info("[Connections] appears to have been a problem sending change event");
         }
 
-    }
+    } */
 
 }

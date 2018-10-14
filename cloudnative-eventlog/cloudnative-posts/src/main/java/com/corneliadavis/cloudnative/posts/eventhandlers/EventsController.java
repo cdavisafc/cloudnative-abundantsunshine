@@ -5,10 +5,7 @@ import com.corneliadavis.cloudnative.posts.localstorage.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -37,6 +34,15 @@ public class EventsController {
 
     }
 
+    @RequestMapping(method = RequestMethod.PUT, value="/users/{username}")
+    public void updateUser(@PathVariable("username") String username, @RequestBody User newUser, HttpServletResponse response) {
+
+        logger.info("Updating user cached in local storage with username " + username);
+        User user = userRepository.findByUsername(username);
+        newUser.setId(user.getId());
+        userRepository.save(newUser);
+
+    }
 
 
 }
