@@ -1,0 +1,65 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: connectionsposts-svc
+spec:
+  selector:
+    app: connections-posts
+  ports:
+  - protocol: "TCP"
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: connections-posts
+  labels:
+    app: connections-posts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: connections-posts
+  template:
+    metadata:
+      labels:
+        app: connections-posts
+        appcollection: blog-aggregator
+    spec:
+      containers:
+      - name: connections-posts
+        image: cdavisafc/cloudnative-eventlog-connectionsposts
+        resources:
+          limits:
+            memory: "2048Mi"
+#        livenessProbe:
+#          httpGet:
+#            path: /healthz
+#            port: 8080
+#          initialDelaySeconds: 60
+#          periodSeconds: 5
+        env:
+          - name: INSTANCE_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: CONNECTIONSPOSTSCONTROLLER_USERSURL
+            value: "http://connections-svc/users/"
+          - name: CONNECTIONSPOSTSCONTROLLER_IMPLEMENTRETRIES
+            value: "true"
+          - name: CONNECTIONPOSTSCONTROLLER_CONNECTTIMEOUT
+            value: "250"
+          - name: CONNECTIONPOSTSCONTROLLER_READTIMEOUT
+            value: "500"
+          - name: REDIS_HOSTNAME
+            value: "redis-svc"
+          - name: REDIS_PORT
+            value: "6379"
+          - name: SPRING_APPLICATION_NAME
+            value: "mycookbook"
+          - name: SPRING_CLOUD_CONFIG_URI
+            value: "http://sccs-svc:8888"
+          - name: VERSIONING_TRIGGER
+            value: "15"
