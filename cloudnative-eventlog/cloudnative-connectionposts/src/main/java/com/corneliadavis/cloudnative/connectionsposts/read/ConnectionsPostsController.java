@@ -1,9 +1,9 @@
 package com.corneliadavis.cloudnative.connectionsposts.read;
 
 import com.corneliadavis.cloudnative.connectionsposts.PostSummary;
-import com.corneliadavis.cloudnative.connectionsposts.localstorage.MConnectionRepository;
-import com.corneliadavis.cloudnative.connectionsposts.localstorage.MPostRepository;
-import com.corneliadavis.cloudnative.connectionsposts.localstorage.MUserRepository;
+import com.corneliadavis.cloudnative.connectionsposts.localstorage.ConnectionRepository;
+import com.corneliadavis.cloudnative.connectionsposts.localstorage.PostRepository;
+import com.corneliadavis.cloudnative.connectionsposts.localstorage.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +22,17 @@ public class ConnectionsPostsController {
 
     private static final Logger logger = LoggerFactory.getLogger(ConnectionsPostsController.class);
 
-    private MUserRepository mUserRepository;
-    private MPostRepository mPostRepository;
-    private MConnectionRepository mConnectionRepository;
+    private UserRepository userRepository;
+    private PostRepository postRepository;
+    private ConnectionRepository connectionRepository;
 
     @Autowired
-    public ConnectionsPostsController(MUserRepository mUserRepository,
-                                      MPostRepository postRepository,
-                                      MConnectionRepository connectionRepository) {
-        this.mUserRepository = mUserRepository;
-        this.mPostRepository = postRepository;
-        this.mConnectionRepository = connectionRepository;
+    public ConnectionsPostsController(UserRepository userRepository,
+                                      PostRepository postRepository,
+                                      ConnectionRepository connectionRepository) {
+        this.userRepository = userRepository;
+        this.postRepository = postRepository;
+        this.connectionRepository = connectionRepository;
     }
 
     @RequestMapping(method = RequestMethod.GET, value="/connectionsPosts/{username}")
@@ -42,7 +42,7 @@ public class ConnectionsPostsController {
         Iterable<PostSummary> postSummaries;
         logger.info("getting posts for user network " + username);
 
-        postSummaries = mPostRepository.findForUsersConnections(username);
+        postSummaries = postRepository.findForUsersConnections(username);
 
         return postSummaries;
     }

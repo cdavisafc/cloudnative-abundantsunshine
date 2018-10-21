@@ -5,7 +5,8 @@ import org.springframework.data.repository.CrudRepository;
 /**
  * Created by corneliadavis on 9/4/17.
  */
-public interface MUserRepository extends CrudRepository<MUser, Long> {
+public interface ConnectionRepository extends CrudRepository<Connection, Long> {
 
-    MUser findByUsername(String username);
+    Connection findByFollowerUserAndFollowedUser(User follower, User followed);
+
 }

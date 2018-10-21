@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by corneliadavis on 9/4/17.
  */
 @Entity
-public class MConnection {
+public class Connection {
 
     @Id
     private Long id;
@@ -14,14 +14,14 @@ public class MConnection {
 //    private Long followed;
 
     @ManyToOne
-    private MUser followerUser;
+    private User followerUser;
 
     @ManyToOne
-    private MUser followedUser;
+    private User followedUser;
 
-    protected  MConnection() {}
+    protected Connection() {}
 
-    public MConnection(Long id, Long follower, Long followed) {
+    public Connection(Long id, Long follower, Long followed) {
         this.id = id;
     }
 
@@ -33,16 +33,16 @@ public class MConnection {
         this.id = id;
     }
 
-    public void setFollowerUser(MUser followerUser) {
+    public void setFollowerUser(User followerUser) {
         this.followerUser = followerUser;
     }
 
-    public MUser getFollowerUser() { return followerUser; }
+    public User getFollowerUser() { return followerUser; }
 
-    public void setFollowedUser(MUser followedUser) {
+    public void setFollowedUser(User followedUser) {
         this.followedUser = followedUser;
     }
 
-    public MUser getFollowedUser() { return followedUser; }
+    public User getFollowedUser() { return followedUser; }
 
 }
