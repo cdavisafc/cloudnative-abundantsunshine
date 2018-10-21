@@ -5,11 +5,13 @@ import com.corneliadavis.cloudnative.connections.Connection;
 import com.corneliadavis.cloudnative.connections.ConnectionRepository;
 import com.corneliadavis.cloudnative.connections.User;
 import com.corneliadavis.cloudnative.connections.ConnectionApi;
+import com.corneliadavis.cloudnative.eventschemas.UserEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,6 +24,8 @@ public class ConnectionsWriteController {
     private static final Logger logger = LoggerFactory.getLogger(ConnectionsWriteController.class);
     private UserRepository userRepository;
     private ConnectionRepository connectionRepository;
+    @Autowired
+    private KafkaTemplate<String, Object> kafkaTemplate;
 
     @Autowired
     public ConnectionsWriteController(UserRepository userRepository, ConnectionRepository connectionRepository) {
@@ -41,7 +45,7 @@ public class ConnectionsWriteController {
         userRepository.save(newUser);
 
         // posts needs to be notified of new users
-        try {
+/*        try {
             //event
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.postForEntity(postsControllerUrl+"/users", newUser, String.class);
@@ -50,7 +54,7 @@ public class ConnectionsWriteController {
             // It's a known bad that the successful delivery of this event depends on successful connection
             // to Connections' Posts, right at this moment. This will be fixed shortly.
             logger.info("[Connections] appears to have been a problem sending change event to Posts");
-        }
+        }*/
 
         // connections posts needs to be notified of new users
         try {
@@ -64,6 +68,16 @@ public class ConnectionsWriteController {
             // to Connections' Posts, right at this moment. This will be fixed shortly.
             logger.info("[Connections] appears to have been a problem sending change event to ConnectionsPosts");
         }
+
+        // send event to Kafka
+        UserEvent userEvent =
+                new UserEvent(
+                        "created",
+                        newUser.getId(),
+                        newUser.getName(),
+                        newUser.getUsername());
+        kafkaTemplate.send("user", userEvent);
+
     }
 
     @RequestMapping(method = RequestMethod.PUT, value="/users/{username}")

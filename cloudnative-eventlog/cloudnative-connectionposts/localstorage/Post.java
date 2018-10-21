@@ -60,9 +60,9 @@ public class Post {
     }
 
     @Override
-    //public String toString() { return "Post [date=" + date + ", userId = " + userId + ", title = " + title + "]"; }
+    //public String toString() { return "PostEvent [date=" + date + ", userId = " + userId + ", title = " + title + "]"; }
     public String toString() {
-        return "Post [date=" + date + ", title = " + title + "]";
+        return "PostEvent [date=" + date + ", title = " + title + "]";
     }
 
 }

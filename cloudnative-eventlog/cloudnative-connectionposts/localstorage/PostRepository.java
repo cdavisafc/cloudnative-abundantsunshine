@@ -13,15 +13,15 @@ public interface PostRepository extends CrudRepository<Post, Long> {
     Iterable<Post> findByUserId(Long userId);
 
     @Query("select p.title as title, p.date as date, p.userId as usersName "
-            + "from Post p")
+            + "from PostEvent p")
     Iterable<PostSummary> findAllOfThem();
 
     @Query("select p.title as title, p.date as date, u.name as usersName "
-            + "from Post p inner join p.user u where u.username = :username")
+            + "from PostEvent p inner join p.user u where u.username = :username")
     Iterable<PostSummary> findByUsername(@Param("username") String username);
 
     @Query("select p.title as title, p.date as date, u1.name as usersName " +
-            "from Post p " +
+            "from PostEvent p " +
             "inner join p.user u1 " +
             "inner join u1.followed c " +
             "inner join c.followerUser u " +
