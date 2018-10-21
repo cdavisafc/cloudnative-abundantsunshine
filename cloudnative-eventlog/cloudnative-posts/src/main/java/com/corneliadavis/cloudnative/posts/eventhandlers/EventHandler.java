@@ -10,8 +10,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-//@RestController
-//@RequestMapping(value="/eventHandlers")
 @Component
 public class EventHandler {
 
@@ -32,42 +30,21 @@ public class EventHandler {
 
         if (userEvent.getEventType().equals("created")) {
 
-            User user = new User(userEvent.getId(), userEvent.getUsername());
-            userRepository.save(user);
+            // make event handler idempotent. If user already exists, do nothing
+            User existingUser = userRepository.findByUsername(userEvent.getUsername());
+            if (existingUser == null) {
 
-            logger.info("New user cached in local storage " + user.getUsername());
+                User user = new User(userEvent.getId(), userEvent.getUsername());
+                userRepository.save(user);
+
+                logger.info("New user cached in local storage " + user.getUsername());
+            }
         }
 
 
-            /* The only thing that can be changed for users is the name and we don't store that locally in the
-               Posts service, so do not do anything with "updated" events
-             */
-    }
-
-    // despite the fact that we are writing a value here, this is not in the write controller because this
-    // service is not the source of truth, rather the user table is just a cache, having picked up change events
-    // (in this case a create event) from the Connections service. In this case it is not this service's
-    // responsibility to send the "event" out.
-/*    @RequestMapping(method = RequestMethod.POST, value="/users")
-    public void newUser(@RequestBody UserEvent user, HttpServletResponse response) {
-
-        logger.info("New user cached in local storage " + user.getUsername());
-
-        userRepository.save(user);
+        // The only thing that can be changed for users is the name and we don't store that locally in the
+        // Posts service, so do not do anything with "updated" events
 
     }
-
-    @RequestMapping(method = RequestMethod.PUT, value="/users/{username}")
-    public void updateUser(@PathVariable("username") String username, @RequestBody UserEvent newUser, HttpServletResponse response) {
-
-        logger.info("Updating user cached in local storage with username " + username);
-        UserEvent user = userRepository.findByUsername(username);
-        newUser.setId(user.getId());
-        userRepository.save(newUser);
-
-    } */
-
-
-
 
 }
