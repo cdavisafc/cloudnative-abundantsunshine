@@ -7,7 +7,7 @@ import java.util.Date;
  * Created by corneliadavis on 9/9/17.
  */
 @Entity
-public class MPost {
+public class Post {
 
     @Id
     private Long id;
@@ -16,11 +16,11 @@ public class MPost {
     private String title;
 
     @ManyToOne
-    private MUser mUser;
+    private User user;
 
-    protected MPost() {}
+    protected Post() {}
 
-    public MPost(Long id, Date date, Long userId, String title) {
+    public Post(Long id, Date date, Long userId, String title) {
         this.id = id;
         this.date = date;
        // this.userId = userId;
@@ -55,12 +55,12 @@ public class MPost {
         this.id = id;
     }
 
-    public void setmUser(MUser mUser) {
-        this.mUser = mUser;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
-    public String toString() { return "PostEvent [date=" + date + ", userId = " + mUser.getId() + ", title = " + title + "]"; }
+    public String toString() { return "PostEvent [date=" + date + ", userId = " + user.getId() + ", title = " + title + "]"; }
     //public String toString() { return "PostEvent [date=" + date + ", title = " + title + "]";}
 
 }
