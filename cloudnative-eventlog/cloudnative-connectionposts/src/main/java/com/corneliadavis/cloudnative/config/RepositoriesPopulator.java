@@ -35,25 +35,25 @@ public class RepositoriesPopulator implements ApplicationContextAware {
 
         user1 = new UserEvent("created", 1L,"Cornelia", "cdavisafc");
         eventsController.newUser(user1,null);
-        user2 = new UserEvent("created", 2L,"Max", "madmax");
+        user2 = new UserEvent("created",2L,"Max", "madmax");
         eventsController.newUser(user2,null);
         user3 = new UserEvent("created", 3L, "Glen", "gmaxdavis");
         eventsController.newUser(user3,null);
 
-        post1 = new PostEvent("created", 1L, new Date(), 2L, "Max Title", "The body of the post");
+        post1 = new PostEvent("created",1L, new Date(), 2L, "Max Title", "The body of the post");
         eventsController.newPost(post1, null);
-        post2 = new PostEvent("created", 2L, new Date(), 1L, "Cornelia Title", "The body of the post");
+        post2 = new PostEvent("created",2L, new Date(), 1L, "Cornelia Title", "The body of the post");
         eventsController.newPost(post2, null);
-        post3 = new PostEvent("created", 3L, new Date(), 1L, "Cornelia Title2", "The body of the post");
+        post3 = new PostEvent("created",3L, new Date(), 1L, "Cornelia Title2", "The body of the post");
         eventsController.newPost(post3, null);
-        post4 = new PostEvent("created", 4L, new Date(), 3L, "Glen Title", "The body of the post");
+        post4 = new PostEvent("created",4L, new Date(), 3L, "Glen Title", "The body of the post");
         eventsController.newPost(post4, null);
 
-        connection1 = new ConnectionEvent("created", 1L, 2L, 1L);
+        connection1 = new ConnectionEvent("created",1L, 2L, 1L);
         eventsController.newConnection(connection1, null);
-        connection2 = new ConnectionEvent("created", 2L, 1L, 2L);
+        connection2 = new ConnectionEvent("created",2L, 1L, 2L);
         eventsController.newConnection(connection2, null);
-        connection3 = new ConnectionEvent("created", 3L, 1L, 3L);
+        connection3 = new ConnectionEvent("created",3L, 1L, 3L);
         eventsController.newConnection(connection3, null);
 
     }

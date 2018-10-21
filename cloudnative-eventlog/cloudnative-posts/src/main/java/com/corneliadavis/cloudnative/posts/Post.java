@@ -15,12 +15,9 @@ public class Post {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     private Date date;
-    //private Long userId;
+    private Long userId;
     private String title;
     private String body;
-
-    @ManyToOne
-    private User user;
 
     protected Post() {}
 
@@ -38,8 +35,6 @@ public class Post {
         return date;
     }
 
-    //public void setDate(Date date) { this.date = date; }
-
     public String getTitle() {
         return title;
     }
@@ -48,7 +43,7 @@ public class Post {
         return body;
     }
 
-    public void setUser(User user) { this.user = user; }
+    public void setUserId(Long user) { this.userId = user; }
 
-    public User getUser() { return user; }
+    public Long getUserId() { return userId; }
 }

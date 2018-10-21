@@ -47,11 +47,11 @@ public class PostsWriteController {
             logger.info("user is null - username was " + newPost.getUsername());
         else
             logger.info("user username = " + user.getUsername() + " id = " + user.getId());
-        post.setUser(user);
+        post.setUserId(user.getId());
         postRepository.save(post);
 
         // send out new post "event"
-        PostEvent postEvent = new PostEvent("created", post.getId(), post.getDate(), post.getUser().getId(),
+        PostEvent postEvent = new PostEvent("created", post.getId(), post.getDate(), post.getUserId(),
                                   post.getTitle(), post.getBody());
 
         try {

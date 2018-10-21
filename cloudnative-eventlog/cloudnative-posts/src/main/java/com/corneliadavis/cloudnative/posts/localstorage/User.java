@@ -18,9 +18,6 @@ public class User {
     private Long id;
     private String username;
 
-    @OneToMany(mappedBy ="user")
-    private Collection<Post> posts = new ArrayList<Post>();
-
     protected User() {}
 
     public User(Long id, String username) {
