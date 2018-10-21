@@ -1,6 +1,9 @@
 package com.corneliadavis.cloudnative.connectionsposts.eventhandlers;
 
 import com.corneliadavis.cloudnative.connectionsposts.localstorage.*;
+import com.corneliadavis.cloudnative.eventschemas.ConnectionEvent;
+import com.corneliadavis.cloudnative.eventschemas.UserEvent;
+import com.corneliadavis.cloudnative.eventschemas.PostEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +37,7 @@ public class EventsController {
 
 
     @RequestMapping(method = RequestMethod.POST, value="/users")
-    public void newUser(@RequestBody com.corneliadavis.cloudnative.eventschemas.connections.User newUser, HttpServletResponse response) {
+    public void newUser(@RequestBody UserEvent newUser, HttpServletResponse response) {
 
         logger.info("Creating new user in the cache with username " + newUser.getUsername());
         userRepository.save(new MUser(newUser.getId(), newUser.getName(), newUser.getUsername()));
@@ -52,17 +55,17 @@ public class EventsController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value="/connections")
-    public void newConnection(@RequestBody com.corneliadavis.cloudnative.eventschemas.connections.Connection newConnection, HttpServletResponse response) {
+    public void newConnection(@RequestBody ConnectionEvent newConnectionEvent, HttpServletResponse response) {
 
-        logger.info("Have a new connection in the cache: " + newConnection.getFollower() +
-                    " is following " + newConnection.getFollowed());
-        MConnection connection = new MConnection(newConnection.getId(), newConnection.getFollower(),
-                                                  newConnection.getFollowed());
+        logger.info("Have a new connection in the cache: " + newConnectionEvent.getFollower() +
+                    " is following " + newConnectionEvent.getFollowed());
+        MConnection connection = new MConnection(newConnectionEvent.getId(), newConnectionEvent.getFollower(),
+                                                  newConnectionEvent.getFollowed());
         // add connection to the users
         MUser user;
-        user = userRepository.findOne(newConnection.getFollower());
+        user = userRepository.findOne(newConnectionEvent.getFollower());
         connection.setFollowerUser(user);
-        user = userRepository.findOne(newConnection.getFollowed());
+        user = userRepository.findOne(newConnectionEvent.getFollowed());
         connection.setFollowedUser(user);
         connectionRepository.save(connection);
     }
@@ -86,7 +89,7 @@ public class EventsController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value="/posts")
-    public void newPost(@RequestBody com.corneliadavis.cloudnative.eventschemas.posts.Post newPost, HttpServletResponse response) {
+    public void newPost(@RequestBody PostEvent newPost, HttpServletResponse response) {
 
         logger.info("Have a new post in the cache with title " + newPost.getTitle());
         MPost post = new MPost(newPost.getId(), newPost.getDate(), newPost.getUserId(), newPost.getTitle());

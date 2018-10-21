@@ -60,7 +60,7 @@ public class MPost {
     }
 
     @Override
-    public String toString() { return "Post [date=" + date + ", userId = " + mUser.getId() + ", title = " + title + "]"; }
-    //public String toString() { return "Post [date=" + date + ", title = " + title + "]";}
+    public String toString() { return "PostEvent [date=" + date + ", userId = " + mUser.getId() + ", title = " + title + "]"; }
+    //public String toString() { return "PostEvent [date=" + date + ", title = " + title + "]";}
 
 }

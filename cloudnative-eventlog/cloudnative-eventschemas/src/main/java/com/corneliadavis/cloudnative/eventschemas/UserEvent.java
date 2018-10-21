@@ -1,21 +1,24 @@
-package com.corneliadavis.cloudnative.eventschemas.connections;
+package com.corneliadavis.cloudnative.eventschemas;
 
 /**
  * Created by corneliadavis on 9/4/17.
  */
-public class User {
+public class UserEvent {
+
+    private String eventType;
 
     private Long id;
     private String name;
     private String username;
 
-    public User(Long id, String name, String username) {
+    public UserEvent(String eventType, Long id, String name, String username) {
+        this.eventType = eventType;
         this.id = id;
         this.name = name;
         this.username = username;
     }
 
-    public User() {}
+    public UserEvent() {}
 
     public Long getId() {
         return id;
@@ -37,5 +40,13 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
     }
 }

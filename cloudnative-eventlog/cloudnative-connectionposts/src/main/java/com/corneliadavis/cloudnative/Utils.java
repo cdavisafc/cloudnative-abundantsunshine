@@ -43,7 +43,7 @@ public class Utils implements ApplicationContextAware, ApplicationListener<Appli
         } else if (applicationEvent instanceof ApplicationPreparedEvent) {
             connectionsSecret = connectionsSecretsIn.split(",")[0];
             postsSecret = postsSecretsIn.split(",")[0];
-            logger.info(ipTag() + "Connection Posts Service initialized with Post secret: " + postsSecret + " and Connections secret: " + connectionsSecret);
+            logger.info(ipTag() + "ConnectionEvent Posts Service initialized with PostEvent secret: " + postsSecret + " and Connections secret: " + connectionsSecret);
         }
     }
 

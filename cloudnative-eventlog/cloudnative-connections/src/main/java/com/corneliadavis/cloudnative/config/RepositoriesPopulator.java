@@ -50,7 +50,7 @@ public class RepositoriesPopulator implements ApplicationContextAware {
 
         } catch (Exception e)
         {
-            // slightly hacky but with a uniqueness constraint on the username for a User, can stop
+            // slightly hacky but with a uniqueness constraint on the username for a UserEvent, can stop
             // repository population if it's already been done.
         }
 

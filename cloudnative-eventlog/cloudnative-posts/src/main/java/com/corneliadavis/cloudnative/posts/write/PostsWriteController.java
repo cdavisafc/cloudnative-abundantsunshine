@@ -1,7 +1,8 @@
 package com.corneliadavis.cloudnative.posts.write;
 
+import com.corneliadavis.cloudnative.eventschemas.PostEvent;
 import com.corneliadavis.cloudnative.posts.PostRepository;
-//import com.corneliadavis.cloudnative.posts.Post;
+//import com.corneliadavis.cloudnative.posts.PostEvent;
 import com.corneliadavis.cloudnative.posts.PostApi;
 import com.corneliadavis.cloudnative.posts.localstorage.User;
 import com.corneliadavis.cloudnative.posts.localstorage.UserRepository;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import com.corneliadavis.cloudnative.eventschemas.posts.Post;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -51,7 +51,7 @@ public class PostsWriteController {
         postRepository.save(post);
 
         // send out new post "event"
-        Post postEvent = new Post(post.getId(), post.getDate(), post.getUser().getId(),
+        PostEvent postEvent = new PostEvent("created", post.getId(), post.getDate(), post.getUser().getId(),
                                   post.getTitle(), post.getBody());
 
         try {
@@ -59,12 +59,12 @@ public class PostsWriteController {
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<String> resp = restTemplate.postForEntity(
                     connectionsPostsControllerUrl + "/posts", postEvent, String.class);
-            logger.info("[Post] resp " + resp.getStatusCode());
+            logger.info("[PostEvent] resp " + resp.getStatusCode());
         } catch (Exception e) {
             // for now, do nothing
             // It's a known bad that the successful delivery of this event depends on successful connection
             // to Connections' Posts, right at this moment. This will be fixed shortly.
-            logger.info("[Post] appears to have been a problem sending change event");
+            logger.info("[PostEvent] appears to have been a problem sending change event");
         }
     }
 }

@@ -54,6 +54,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", name = " + name + ", username = " + username + "]";
+        return "UserEvent [id=" + id + ", name = " + name + ", username = " + username + "]";
     }
 }
