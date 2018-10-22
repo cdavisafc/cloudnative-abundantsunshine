@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Created by corneliadavis on 9/9/17.
+ * Created by corneliadavis on 9/9/18.
  */
 @Entity
 public class User {
@@ -14,15 +14,6 @@ public class User {
     private Long id;
     private String name;
     private String username;
-
-    @OneToMany(mappedBy ="user")
-    private Collection<Post> posts = new ArrayList<Post>();
-
-    @OneToMany(mappedBy = "followerUser")
-    private Collection<Connection> following = new ArrayList<Connection>();
-
-    @OneToMany(mappedBy = "followedUser")
-    private Collection<Connection> followed = new ArrayList<Connection>();
 
     protected User() {}
 

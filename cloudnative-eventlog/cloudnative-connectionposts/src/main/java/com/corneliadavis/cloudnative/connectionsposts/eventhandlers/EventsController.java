@@ -61,12 +61,6 @@ public class EventsController {
                     " is following " + newConnectionEvent.getFollowed());
         Connection connection = new Connection(newConnectionEvent.getId(), newConnectionEvent.getFollower(),
                                                   newConnectionEvent.getFollowed());
-        // add connection to the users
-        User user;
-        user = userRepository.findOne(newConnectionEvent.getFollower());
-        connection.setFollowerUser(user);
-        user = userRepository.findOne(newConnectionEvent.getFollowed());
-        connection.setFollowedUser(user);
         connectionRepository.save(connection);
     }
 
@@ -78,9 +72,9 @@ public class EventsController {
 
         logger.info("deleting from the cache connection: " + followerUsername +
                 " is no longer following " + followedUsername);
-        User follower = userRepository.findByUsername(followerUsername);
-        User followed = userRepository.findByUsername(followedUsername);
-        Connection connection = connectionRepository.findByFollowerUserAndFollowedUser(follower,followed);
+        Long follower = userRepository.findByUsername(followerUsername).getId();
+        Long followed = userRepository.findByUsername(followedUsername).getId();
+        Connection connection = connectionRepository.findByFollowerAndFollowed(follower,followed);
         if (connection == null)
             logger.info("unable to find or delete that connection");
         else
@@ -93,9 +87,6 @@ public class EventsController {
 
         logger.info("Have a new post in the cache with title " + newPost.getTitle());
         Post post = new Post(newPost.getId(), newPost.getDate(), newPost.getUserId(), newPost.getTitle());
-        User user;
-        user = userRepository.findOne(newPost.getUserId());
-        post.setUser(user);
         postRepository.save(post);
 
     }

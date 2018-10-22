@@ -7,6 +7,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface ConnectionRepository extends CrudRepository<Connection, Long> {
 
-    Connection findByFollowerUserAndFollowedUser(User follower, User followed);
+    Connection findByFollowerAndFollowed(Long follower, Long followed);
 
 }

@@ -12,19 +12,18 @@ public interface PostRepository extends CrudRepository<Post, Long> {
 
     Iterable<Post> findByUserId(Long userId);
 
-    @Query("select p.title as title, p.date as date, p.user as usersName "
-            + "from Post p")
+    @Query("select p.title as title, p.date as date, u.name as usersName "
+            + "from Post p, User u WHERE p.userId = u.id")
     Iterable<PostSummary> findAllOfThem();
 
     @Query("select p.title as title, p.date as date, u.name as usersName "
-            + "from Post p inner join p.user u where u.username = :username")
+            + "from Post p, User u where u.username = :username AND u.id = p.userId")
     Iterable<PostSummary> findByUsername(@Param("username") String username);
 
-    @Query("select p.title as title, p.date as date, u1.name as usersName " +
-            "from Post p " +
-            "inner join p.user u1 " +
-            "inner join u1.followed c " +
-            "inner join c.followerUser u " +
-            "where u.username = :username")
+    @Query("select p.title as title, p.date as date, u.name as usersName " +
+            "from Post p, User u1, Connection c, User u " +
+            "where u1.username = :username " +
+            "AND u1.id = c.follower AND c.followed = p.userId AND p.userId = u.id")
     Iterable<PostSummary> findForUsersConnections(@Param("username") String username);
+
 }
