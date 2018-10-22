@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Created by corneliadavis on 9/9/17.
+ * Created by corneliadavis on 9/9/18.
  */
 @Entity
 public class Post {
@@ -12,18 +12,15 @@ public class Post {
     @Id
     private Long id;
     private Date date;
-    //private Long userId;
+    private Long userId;
     private String title;
-
-    @ManyToOne
-    private User user;
 
     protected Post() {}
 
     public Post(Long id, Date date, Long userId, String title) {
         this.id = id;
         this.date = date;
-       // this.userId = userId;
+        this.userId = userId;
         this.title = title;
     }
 
@@ -31,7 +28,7 @@ public class Post {
         return date;
     }
 
-    //public Long getUserId() { return userId; }
+    public Long getUserId() { return userId; }
 
     public String getTitle() {
         return title;
@@ -41,7 +38,7 @@ public class Post {
         this.date = date;
     }
 
-    //public void setUserId(Long userId) { this.userId = userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
 
     public void setTitle(String title) {
         this.title = title;
@@ -55,12 +52,8 @@ public class Post {
         this.id = id;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     @Override
-    public String toString() { return "PostEvent [date=" + date + ", userId = " + user.getId() + ", title = " + title + "]"; }
+    public String toString() { return "PostEvent [date=" + date + ", userId = " + userId + ", title = " + title + "]"; }
     //public String toString() { return "PostEvent [date=" + date + ", title = " + title + "]";}
 
 }
