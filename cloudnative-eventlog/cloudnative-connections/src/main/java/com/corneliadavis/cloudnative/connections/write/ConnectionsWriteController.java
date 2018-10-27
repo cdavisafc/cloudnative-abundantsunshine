@@ -1,23 +1,17 @@
 package com.corneliadavis.cloudnative.connections.write;
 
-import com.corneliadavis.cloudnative.connections.UserRepository;
-import com.corneliadavis.cloudnative.connections.Connection;
-import com.corneliadavis.cloudnative.connections.ConnectionRepository;
-import com.corneliadavis.cloudnative.connections.User;
-import com.corneliadavis.cloudnative.connections.ConnectionApi;
+import com.corneliadavis.cloudnative.connections.*;
+import com.corneliadavis.cloudnative.eventschemas.ConnectionEvent;
 import com.corneliadavis.cloudnative.eventschemas.UserEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 
-//@RefreshScope
 @RestController
 public class ConnectionsWriteController {
 
@@ -33,41 +27,11 @@ public class ConnectionsWriteController {
         this.connectionRepository = connectionRepository;
     }
 
-    @Value("${connectionspostscontroller.url}")
-    private String connectionsPostsControllerUrl;
-    @Value("${postscontroller.url}")
-    private String postsControllerUrl;
-
     @RequestMapping(method = RequestMethod.POST, value="/users")
     public void newUser(@RequestBody User newUser, HttpServletResponse response) {
 
         logger.info("Have a new user with username " + newUser.getUsername());
         userRepository.save(newUser);
-
-        // posts needs to be notified of new users
-/*        try {
-            //event
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.postForEntity(postsControllerUrl+"/users", newUser, String.class);
-        } catch (Exception e) {
-            // for now, do nothing
-            // It's a known bad that the successful delivery of this event depends on successful connection
-            // to Connections' Posts, right at this moment. This will be fixed shortly.
-            logger.info("[Connections] appears to have been a problem sending change event to Posts");
-        }*/
-
-        // connections posts needs to be notified of new users
-        try {
-            //event
-            RestTemplate restTemplate = new RestTemplate();
-            logger.info("url = " + connectionsPostsControllerUrl+"/users");
-            restTemplate.postForEntity(connectionsPostsControllerUrl+"/users", newUser, String.class);
-        } catch (Exception e) {
-            // for now, do nothing
-            // It's a known bad that the successful delivery of this event depends on successful connection
-            // to Connections' Posts, right at this moment. This will be fixed shortly.
-            logger.info("[Connections] appears to have been a problem sending change event to ConnectionsPosts");
-        }
 
         // send event to Kafka
         UserEvent userEvent =
@@ -88,29 +52,15 @@ public class ConnectionsWriteController {
         newUser.setId(user.getId());
         userRepository.save(newUser);
 
-        // posts needs to be notified of changes to users
-        try {
-            //event
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.put(postsControllerUrl+"/users/"+username, newUser);
-        } catch (Exception e) {
-            // for now, do nothing
-            // It's a known bad that the successful delivery of this event depends on successful connection
-            // to Connections' Posts, right at this moment. This will be fixed shortly.
-            logger.info("[Connections] appears to have been a problem sending change event");
-        }
+        // send event to Kafka
+        UserEvent userEvent =
+                new UserEvent(
+                        "updated",
+                        newUser.getId(),
+                        newUser.getName(),
+                        newUser.getUsername());
+        kafkaTemplate.send("user", userEvent);
 
-        // connections posts needs to be notified of changes to users
-        try {
-            //event
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.put(connectionsPostsControllerUrl+"/users/"+username, newUser);
-        } catch (Exception e) {
-            // for now, do nothing
-            // It's a known bad that the successful delivery of this event depends on successful connection
-            // to Connections' Posts, right at this moment. This will be fixed shortly.
-            logger.info("[Connections] appears to have been a problem sending change event");
-        }
     }
 
     @RequestMapping(method = RequestMethod.POST, value="/connections")
@@ -123,19 +73,14 @@ public class ConnectionsWriteController {
         Connection newConnectionIds = new Connection(followerId, followedId);
         connectionRepository.save(newConnectionIds);
 
-        // connections posts needs to be notified of new connections
-        try {
-            //event
-            RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<String> resp = restTemplate.postForEntity(
-                    connectionsPostsControllerUrl+"/connections", newConnectionIds, String.class);
-            logger.info("resp " + resp.getStatusCode());
-        } catch (Exception e) {
-            // for now, do nothing
-            // It's a known bad that the successful delivery of this event depends on successful connection
-            // to Connections' Posts, right at this moment. This will be fixed shortly.
-            logger.info("[Connections] appears to have been a problem sending change event");
-        }
+        // send event to Kafka
+        ConnectionEvent connectionEvent =
+                new ConnectionEvent("created",
+                        newConnectionIds.getId(),
+                        newConnectionIds.getFollower(),
+                        newConnectionIds.getFollowed());
+        kafkaTemplate.send("connection", connectionEvent);
+
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value="/connections/{follower}/{followed}")
@@ -156,17 +101,12 @@ public class ConnectionsWriteController {
         else
             connectionRepository.delete(connection);
 
-        // connections posts needs to be notified of deleted connections
-        try {
-            //event
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.delete(connectionsPostsControllerUrl+"/connections/"+followerUsername+"/"+followedUsername);
-        } catch (Exception e) {
-            // for now, do nothing
-            // It's a known bad that the successful delivery of this event depends on successful connection
-            // to Connections' Posts, right at this moment. This will be fixed shortly.
-            logger.info("[Connections] appears to have been a problem sending change event");
-        }
+        // send event to Kafka
+        ConnectionEvent connectionEvent =
+                new ConnectionEvent();
+        connectionEvent.setEventType("deleted");
+        connectionEvent.setId(connection.getId());
+        kafkaTemplate.send("connection", connectionEvent);
 
     }
 

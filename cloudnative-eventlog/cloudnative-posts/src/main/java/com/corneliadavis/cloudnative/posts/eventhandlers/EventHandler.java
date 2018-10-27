@@ -23,7 +23,7 @@ public class EventHandler {
         this.userRepository = userRepository;
     }
 
-    @KafkaListener(topics="user", group="kafka-intro")
+    @KafkaListener(topics="user", groupId="postsconsumer")
     public void listenForUser(UserEvent userEvent) {
 
         logger.info("Posts UserEvent Handler processing - event: " + userEvent.getEventType());
@@ -39,11 +39,15 @@ public class EventHandler {
 
                 logger.info("New user cached in local storage " + user.getUsername());
             }
+        } else if (userEvent.getEventType().equals("updated")) {
+            logger.info("Updating user cached in local storage with username " + userEvent.getUsername());
+            User existingUser = userRepository.findById(userEvent.getId());
+            if (existingUser != null) {
+                existingUser.setUsername(userEvent.getUsername());
+                userRepository.save(existingUser);
+            } else
+                logger.info("Something is odd - trying to update a user that doesn't existing in the local cache");
         }
-
-
-        // The only thing that can be changed for users is the name and we don't store that locally in the
-        // Posts service, so do not do anything with "updated" events
 
     }
 

@@ -1,12 +1,7 @@
 package com.corneliadavis.cloudnative.posts.localstorage;
 
-import com.corneliadavis.cloudnative.posts.Post;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by corneliadavis on 10/1/2018.

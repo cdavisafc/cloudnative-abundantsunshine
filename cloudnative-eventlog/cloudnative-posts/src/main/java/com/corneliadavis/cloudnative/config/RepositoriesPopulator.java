@@ -1,11 +1,11 @@
 package com.corneliadavis.cloudnative.config;
 
-import com.corneliadavis.cloudnative.posts.PostApi;
 import com.corneliadavis.cloudnative.posts.IPostApi;
+import com.corneliadavis.cloudnative.posts.PostApi;
 import com.corneliadavis.cloudnative.posts.localstorage.User;
 import com.corneliadavis.cloudnative.posts.localstorage.UserRepository;
-import com.corneliadavis.cloudnative.posts.write.PostsWriteController;
 import com.corneliadavis.cloudnative.posts.read.PostsController;
+import com.corneliadavis.cloudnative.posts.write.PostsWriteController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -24,9 +24,6 @@ public class RepositoriesPopulator implements ApplicationContextAware {
     private static final Logger logger = LoggerFactory.getLogger(RepositoriesPopulator.class);
     private ApplicationContext applicationContext;
 
-//    @Value("${com.corneliadavis.cloudnative.posts.secrets}")
-//    private String secrets;
-
     @Autowired
     Environment environment;
 
@@ -40,8 +37,6 @@ public class RepositoriesPopulator implements ApplicationContextAware {
         PostsController postsController = applicationContext.getBean(PostsController.class);
         PostsWriteController postsWriteController = applicationContext.getBean(PostsWriteController.class);
         UserRepository userRepository = applicationContext.getBean(UserRepository.class);
-
-//        String secret = secrets.split(",")[0]; // assuming there is at least one secret
 
         // hacky way of not loading data if posts already exist - could be race conditions but not worrying about that
 
