@@ -1,5 +1,6 @@
 package com.corneliadavis.cloudnative.posts.read;
 
+import com.corneliadavis.cloudnative.Utils;
 import com.corneliadavis.cloudnative.posts.IPostApi;
 import com.corneliadavis.cloudnative.posts.PostRepository;
 import com.corneliadavis.cloudnative.posts.localstorage.UserRepository;
@@ -8,8 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.web.bind.annotation.*;
-import com.corneliadavis.cloudnative.Utils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -62,7 +65,6 @@ public class PostsController {
                 String username[] = usernames.split(",");
                 for (int i = 0; i < username.length; i++) {
                     logger.info(utils.ipTag() + "getting posts for username " + username[i]);
-                    //posts = postRepository.findByUserId(Long.parseLong(userId[i]));
                     posts = postRepository.findByUsername(username[i]);
                     posts.forEach(post -> postsForUsers.add(post));
                 }

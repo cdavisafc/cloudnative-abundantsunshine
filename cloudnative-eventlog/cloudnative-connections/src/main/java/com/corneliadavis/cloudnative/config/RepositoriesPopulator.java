@@ -1,8 +1,8 @@
 package com.corneliadavis.cloudnative.config;
 
 import com.corneliadavis.cloudnative.connections.ConnectionApi;
-import com.corneliadavis.cloudnative.connections.write.ConnectionsWriteController;
 import com.corneliadavis.cloudnative.connections.User;
+import com.corneliadavis.cloudnative.connections.write.ConnectionsWriteController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;

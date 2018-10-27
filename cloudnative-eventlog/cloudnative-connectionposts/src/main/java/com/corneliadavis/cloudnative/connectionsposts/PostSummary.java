@@ -3,7 +3,7 @@ package com.corneliadavis.cloudnative.connectionsposts;
 import java.util.Date;
 
 /**
- * Created by corneliadavis on 9/9/17.
+ * Created by corneliadavis on 9/9/18.
  */
 
 public interface PostSummary {

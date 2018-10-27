@@ -1,8 +1,9 @@
 package com.corneliadavis.cloudnative.posts;
 
-import com.corneliadavis.cloudnative.posts.localstorage.User;
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
 
 /**

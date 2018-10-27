@@ -1,11 +1,11 @@
 package com.corneliadavis.cloudnative.config;
 
-import com.corneliadavis.cloudnative.posts.PostApi;
 import com.corneliadavis.cloudnative.posts.IPostApi;
+import com.corneliadavis.cloudnative.posts.PostApi;
 import com.corneliadavis.cloudnative.posts.localstorage.User;
 import com.corneliadavis.cloudnative.posts.localstorage.UserRepository;
-import com.corneliadavis.cloudnative.posts.write.PostsWriteController;
 import com.corneliadavis.cloudnative.posts.read.PostsController;
+import com.corneliadavis.cloudnative.posts.write.PostsWriteController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
