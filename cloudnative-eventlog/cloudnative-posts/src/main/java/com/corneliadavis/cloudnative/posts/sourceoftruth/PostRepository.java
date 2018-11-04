@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.posts;
+package com.corneliadavis.cloudnative.posts.sourceoftruth;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

@@ -1,7 +1,7 @@
 package com.corneliadavis.cloudnative.config;
 
-import com.corneliadavis.cloudnative.connections.ConnectionApi;
-import com.corneliadavis.cloudnative.connections.User;
+import com.corneliadavis.cloudnative.connections.sourceoftruth.ConnectionApi;
+import com.corneliadavis.cloudnative.connections.sourceoftruth.User;
 import com.corneliadavis.cloudnative.connections.write.ConnectionsWriteController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

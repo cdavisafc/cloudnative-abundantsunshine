@@ -1,7 +1,7 @@
 package com.corneliadavis.cloudnative.config;
 
-import com.corneliadavis.cloudnative.posts.IPostApi;
-import com.corneliadavis.cloudnative.posts.PostApi;
+import com.corneliadavis.cloudnative.posts.sourceoftruth.IPostApi;
+import com.corneliadavis.cloudnative.posts.sourceoftruth.PostApi;
 import com.corneliadavis.cloudnative.posts.localstorage.User;
 import com.corneliadavis.cloudnative.posts.localstorage.UserRepository;
 import com.corneliadavis.cloudnative.posts.read.PostsController;
