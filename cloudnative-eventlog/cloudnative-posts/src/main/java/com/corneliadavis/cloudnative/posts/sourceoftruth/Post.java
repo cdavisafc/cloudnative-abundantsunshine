@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.posts;
+package com.corneliadavis.cloudnative.posts.sourceoftruth;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

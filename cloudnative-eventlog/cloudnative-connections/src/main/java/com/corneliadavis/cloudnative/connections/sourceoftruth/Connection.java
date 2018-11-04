@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.connections;
+package com.corneliadavis.cloudnative.connections.sourceoftruth;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
