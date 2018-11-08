@@ -48,7 +48,7 @@ public class EventHandler {
                 logger.info("New user cached in local storage " + user.getUsername());
                 userRepository.save(new User(userEvent.getId(), userEvent.getName(), userEvent.getUsername()));
             } else
-                logger.info("Already existing user not ached again id " + userEvent.getId());
+                logger.info("Already existing user not cached again id " + userEvent.getId());
         } else if (userEvent.getEventType().equals("updated")) {
             logger.info("Updating user cached in local storage with username " + userEvent.getUsername());
             User existingUser = userRepository.findById(userEvent.getId());
