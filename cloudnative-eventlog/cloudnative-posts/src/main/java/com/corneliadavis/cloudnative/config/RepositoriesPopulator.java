@@ -1,10 +1,10 @@
 package com.corneliadavis.cloudnative.config;
 
 import com.corneliadavis.cloudnative.posts.IPostApi;
-import com.corneliadavis.cloudnative.posts.localstorage.User;
-import com.corneliadavis.cloudnative.posts.localstorage.UserRepository;
-import com.corneliadavis.cloudnative.posts.localstorage.Post;
-import com.corneliadavis.cloudnative.posts.localstorage.PostRepository;
+import com.corneliadavis.cloudnative.posts.projection.Post;
+import com.corneliadavis.cloudnative.posts.projection.PostRepository;
+import com.corneliadavis.cloudnative.posts.projection.User;
+import com.corneliadavis.cloudnative.posts.projection.UserRepository;
 import com.corneliadavis.cloudnative.posts.read.PostsController;
 import com.corneliadavis.cloudnative.posts.write.PostsWriteController;
 import org.slf4j.Logger;

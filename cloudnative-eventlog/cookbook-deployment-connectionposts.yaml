@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: connectionsposts
-        image: cdavisafc/cloudnative-eventlog-connectionposts:0.0.1
+        image: cdavisafc/cloudnative-eventlog-connectionposts:0.0.2
         resources:
           limits:
             memory: "2048Mi"

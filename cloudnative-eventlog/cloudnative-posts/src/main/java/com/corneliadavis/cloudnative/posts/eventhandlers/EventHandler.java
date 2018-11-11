@@ -2,10 +2,10 @@ package com.corneliadavis.cloudnative.posts.eventhandlers;
 
 import com.corneliadavis.cloudnative.eventschemas.PostEvent;
 import com.corneliadavis.cloudnative.eventschemas.UserEvent;
-import com.corneliadavis.cloudnative.posts.localstorage.Post;
-import com.corneliadavis.cloudnative.posts.localstorage.PostRepository;
-import com.corneliadavis.cloudnative.posts.localstorage.User;
-import com.corneliadavis.cloudnative.posts.localstorage.UserRepository;
+import com.corneliadavis.cloudnative.posts.projection.Post;
+import com.corneliadavis.cloudnative.posts.projection.PostRepository;
+import com.corneliadavis.cloudnative.posts.projection.User;
+import com.corneliadavis.cloudnative.posts.projection.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,21 +71,5 @@ public class EventHandler {
             } else
                 logger.info("Did not create already cached post with id " + postEvent.getId());
         }
-
-
-
-        /*        // store the post
-        com.corneliadavis.cloudnative.posts.localstorage.Post post
-                = new com.corneliadavis.cloudnative.posts.localstorage.Post(newPost.getTitle(), newPost.getBody());
-        User user = userRepository.findByUsername(newPost.getUsername());
-        logger.info("find by username output ");
-        if (user == null)
-            logger.info("user is null - username was " + newPost.getUsername());
-        else
-            logger.info("user username = " + user.getUsername() + " id = " + user.getId());
-        post.setUserId(user.getId());
-        postRepository.save(post); */
     }
-	
-
 }

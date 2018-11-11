@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: connections
-        image: cdavisafc/cloudnative-eventlog-connections:0.0.1
+        image: cdavisafc/cloudnative-eventlog-connections:0.0.2
         env:
           - name: INSTANCE_IP
             valueFrom:

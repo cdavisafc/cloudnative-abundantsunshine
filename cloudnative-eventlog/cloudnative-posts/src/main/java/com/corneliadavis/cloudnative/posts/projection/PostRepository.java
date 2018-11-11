@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.posts.localstorage;
+package com.corneliadavis.cloudnative.posts.projection;
 
 import com.corneliadavis.cloudnative.posts.IPostApi;
 import org.springframework.data.jpa.repository.Query;

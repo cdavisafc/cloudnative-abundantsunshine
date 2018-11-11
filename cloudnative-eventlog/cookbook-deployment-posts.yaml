@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
       - name: posts
-        image: cdavisafc/cloudnative-eventlog-posts:0.0.1
+        image: cdavisafc/cloudnative-eventlog-posts:0.0.2
         env:
           - name: INSTANCE_IP
             valueFrom:

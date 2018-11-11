@@ -1,9 +1,9 @@
 package com.corneliadavis.cloudnative.connectionsposts.read;
 
 import com.corneliadavis.cloudnative.connectionsposts.PostSummary;
-import com.corneliadavis.cloudnative.connectionsposts.localstorage.ConnectionRepository;
-import com.corneliadavis.cloudnative.connectionsposts.localstorage.PostRepository;
-import com.corneliadavis.cloudnative.connectionsposts.localstorage.UserRepository;
+import com.corneliadavis.cloudnative.connectionsposts.projection.ConnectionRepository;
+import com.corneliadavis.cloudnative.connectionsposts.projection.PostRepository;
+import com.corneliadavis.cloudnative.connectionsposts.projection.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
