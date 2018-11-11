@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.posts.localstorage;
+package com.corneliadavis.cloudnative.posts.projection;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

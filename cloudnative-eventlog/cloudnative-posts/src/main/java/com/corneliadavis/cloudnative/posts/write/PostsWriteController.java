@@ -2,7 +2,7 @@ package com.corneliadavis.cloudnative.posts.write;
 
 import com.corneliadavis.cloudnative.eventschemas.PostEvent;
 import com.corneliadavis.cloudnative.posts.PostApi;
-import com.corneliadavis.cloudnative.posts.localstorage.*;
+import com.corneliadavis.cloudnative.posts.projection.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

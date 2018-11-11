@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.connectionsposts.localstorage;
+package com.corneliadavis.cloudnative.connectionsposts.projection;
 
 import javax.persistence.*;
 import java.util.ArrayList;
