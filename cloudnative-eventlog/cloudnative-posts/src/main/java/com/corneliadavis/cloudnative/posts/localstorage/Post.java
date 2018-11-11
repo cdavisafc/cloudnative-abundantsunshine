@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.posts.sourceoftruth;
+package com.corneliadavis.cloudnative.posts.localstorage;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +13,7 @@ import java.util.Date;
 public class Post {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+//    @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     private Date date;
     private Long userId;
@@ -22,8 +22,10 @@ public class Post {
 
     protected Post() {}
 
-    public Post(String title, String body) {
-        this.date = new Date();
+    public Post(Long id, Date date, Long userId, String title, String body) {
+        this.id = id;
+        this.date = date;
+        this.userId = userId;
         this.title = title;
         this.body = body;
     }

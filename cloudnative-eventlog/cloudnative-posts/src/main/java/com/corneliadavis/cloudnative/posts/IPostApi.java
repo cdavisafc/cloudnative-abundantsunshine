@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.posts.sourceoftruth;
+package com.corneliadavis.cloudnative.posts;
 
 import java.util.Date;
 
@@ -10,5 +10,4 @@ public interface IPostApi {
     String getUsername();
     String getTitle();
     String getBody();
-    Date getDate();
 }
