@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.connections.sourceoftruth;
+package com.corneliadavis.cloudnative.connections.projection;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,14 +12,14 @@ import javax.persistence.Id;
 public class Connection {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     private Long follower;
     private Long followed;
 
     protected Connection() {}
 
-    public Connection(Long follower, Long followed) {
+    public Connection(Long id, Long follower, Long followed) {
+        this.id = id;
         this.follower = follower;
         this.followed = followed;
     }

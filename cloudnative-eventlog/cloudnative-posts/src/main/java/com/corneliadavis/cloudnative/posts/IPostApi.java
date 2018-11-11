@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.posts.sourceoftruth;
+package com.corneliadavis.cloudnative.posts;
 
 import java.util.Date;
 

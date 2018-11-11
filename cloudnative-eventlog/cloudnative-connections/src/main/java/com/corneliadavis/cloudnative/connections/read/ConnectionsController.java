@@ -1,9 +1,9 @@
 package com.corneliadavis.cloudnative.connections.read;
 
-import com.corneliadavis.cloudnative.connections.sourceoftruth.Connection;
-import com.corneliadavis.cloudnative.connections.sourceoftruth.ConnectionRepository;
-import com.corneliadavis.cloudnative.connections.sourceoftruth.User;
-import com.corneliadavis.cloudnative.connections.sourceoftruth.UserRepository;
+import com.corneliadavis.cloudnative.connections.projection.Connection;
+import com.corneliadavis.cloudnative.connections.projection.ConnectionRepository;
+import com.corneliadavis.cloudnative.connections.projection.User;
+import com.corneliadavis.cloudnative.connections.projection.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

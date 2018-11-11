@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.connections.sourceoftruth;
+package com.corneliadavis.cloudnative.connections;
 
 /**
  * Created by corneliadavis on 10/1/18.

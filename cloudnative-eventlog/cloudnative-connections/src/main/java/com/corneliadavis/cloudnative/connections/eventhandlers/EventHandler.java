@@ -1,9 +1,11 @@
-package com.corneliadavis.cloudnative.connectionsposts.eventhandlers;
+package com.corneliadavis.cloudnative.connections.eventhandlers;
 
-import com.corneliadavis.cloudnative.connectionsposts.localstorage.*;
+import com.corneliadavis.cloudnative.connections.projection.Connection;
+import com.corneliadavis.cloudnative.connections.projection.ConnectionRepository;
+import com.corneliadavis.cloudnative.connections.projection.User;
+import com.corneliadavis.cloudnative.connections.projection.UserRepository;
 import com.corneliadavis.cloudnative.eventschemas.ConnectionEvent;
 import com.corneliadavis.cloudnative.eventschemas.UserEvent;
-import com.corneliadavis.cloudnative.eventschemas.PostEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +13,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 /**
- * Created by corneliadavis on 9/29/18.
+ * Created by corneliadavis on 11/10/18.
  */
-
 
 @Component
 public class EventHandler {
@@ -21,18 +22,15 @@ public class EventHandler {
     private static final Logger logger = LoggerFactory.getLogger(EventHandler.class);
     private UserRepository userRepository;
     private ConnectionRepository connectionRepository;
-    private PostRepository postRepository;
 
     @Autowired
     public EventHandler(UserRepository userRepository,
-                        ConnectionRepository connectionRepository,
-                        PostRepository postRepository) {
+                        ConnectionRepository connectionRepository) {
         this.userRepository = userRepository;
         this.connectionRepository = connectionRepository;
-        this.postRepository = postRepository;
     }
 
-    @KafkaListener(topics="user", groupId = "connectionspostsconsumer", containerFactory = "kafkaListenerContainerFactory")
+    @KafkaListener(topics="user", groupId = "connectionsconsumer", containerFactory = "kafkaListenerContainerFactory")
     public void userEvent(UserEvent userEvent) {
 
         logger.info("Posts UserEvent Handler processing - event: " + userEvent.getEventType());
@@ -64,7 +62,7 @@ public class EventHandler {
 
     }
 
-    @KafkaListener(topics="connection", groupId = "connectionspostsconsumer", containerFactory = "kafkaListenerContainerFactory")
+    @KafkaListener(topics="connection", groupId = "connectionsconsumer", containerFactory = "kafkaListenerContainerFactory")
     public void connectionEvent(ConnectionEvent connectionEvent) {
 
         if (connectionEvent.getEventType().equals("created")) {
@@ -88,21 +86,5 @@ public class EventHandler {
         }
     }
 
-    @KafkaListener(topics="post", groupId = "connectionspostsconsumer", containerFactory = "kafkaListenerContainerFactory")
-    public void postEvent(PostEvent postEvent) {
-
-        if (postEvent.getEventType().equals("created")) {
-            Post existingPost = postRepository.findOne(postEvent.getId());
-            if (existingPost == null) {
-                logger.info("Creating a new post in the cache with title " + postEvent.getTitle());
-                Post post = new Post(postEvent.getId(), postEvent.getDate(), postEvent.getUserId(), postEvent.getTitle());
-                postRepository.save(post);
-            } else
-                logger.info("Did not create already cached post with id " + existingPost.getId());
-        }
-
-
-
-    }
-
 }
+
