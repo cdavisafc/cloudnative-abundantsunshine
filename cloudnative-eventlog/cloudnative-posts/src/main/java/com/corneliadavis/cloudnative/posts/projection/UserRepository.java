@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.posts.localstorage;
+package com.corneliadavis.cloudnative.posts.projection;
 
 import org.springframework.data.repository.CrudRepository;
 

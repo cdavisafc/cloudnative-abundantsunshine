@@ -1,6 +1,6 @@
 package com.corneliadavis.cloudnative.connectionsposts.eventhandlers;
 
-import com.corneliadavis.cloudnative.connectionsposts.localstorage.*;
+import com.corneliadavis.cloudnative.connectionsposts.projection.*;
 import com.corneliadavis.cloudnative.eventschemas.ConnectionEvent;
 import com.corneliadavis.cloudnative.eventschemas.UserEvent;
 import com.corneliadavis.cloudnative.eventschemas.PostEvent;
