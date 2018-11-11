@@ -3,6 +3,8 @@ curl -X POST -H "Content-Type:application/json" --data '{"name":"Cornelia","user
 curl -X POST -H "Content-Type:application/json" --data '{"name":"Max","username":"madmax"}' localhost:8082/users
 curl -X POST -H "Content-Type:application/json" --data '{"name":"Glen","username":"gmaxdavis"}' localhost:8082/users
 
+sleep 5
+
 curl -X POST -H "Content-Type:application/json" --data '{"follower":"madmax","followed":"cdavisafc"}' localhost:8082/connections
 curl -X POST -H "Content-Type:application/json" --data '{"follower":"cdavisafc","followed":"madmax"}' localhost:8082/connections
 curl -X POST -H "Content-Type:application/json" --data '{"follower":"cdavisafc","followed":"gmaxdavis"}' localhost:8082/connections

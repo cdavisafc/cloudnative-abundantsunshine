@@ -10,5 +10,4 @@ public interface IPostApi {
     String getUsername();
     String getTitle();
     String getBody();
-    Date getDate();
 }

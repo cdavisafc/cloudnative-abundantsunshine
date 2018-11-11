@@ -1,7 +1,7 @@
 package com.corneliadavis.cloudnative.config;
 
 import com.corneliadavis.cloudnative.connections.ConnectionApi;
-import com.corneliadavis.cloudnative.connections.User;
+import com.corneliadavis.cloudnative.connections.projection.User;
 import com.corneliadavis.cloudnative.connections.write.ConnectionsWriteController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +34,11 @@ public class RepositoriesPopulator implements ApplicationContextAware {
         try {
 
             logger.info("new user cdavisafc");
-            user1 = new User("Cornelia", "cdavisafc");
+            user1 = new User(1L,"Cornelia", "cdavisafc");
             connectionsWriteController.newUser(user1, null);
-            user2 = new User("Max", "madmax");
+            user2 = new User(2L,"Max", "madmax");
             connectionsWriteController.newUser(user2, null);
-            user3 = new User("Glen", "gmaxdavis");
+            user3 = new User(3L, "Glen", "gmaxdavis");
             connectionsWriteController.newUser(user3, null);
 
             connection1 = new ConnectionApi("madmax", "cdavisafc");
