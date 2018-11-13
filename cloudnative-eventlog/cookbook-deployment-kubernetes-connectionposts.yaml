@@ -30,36 +30,17 @@ spec:
     spec:
       containers:
       - name: connections-posts
-        image: cdavisafc/cloudnative-eventlog-connectionsposts
-        resources:
-          limits:
-            memory: "2048Mi"
-#        livenessProbe:
-#          httpGet:
-#            path: /healthz
-#            port: 8080
-#          initialDelaySeconds: 60
-#          periodSeconds: 5
+        image: cdavisafc/cloudnative-eventlog-connectionposts
         env:
           - name: INSTANCE_IP
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
-          - name: CONNECTIONSPOSTSCONTROLLER_USERSURL
-            value: "http://connections-svc/users/"
-          - name: CONNECTIONSPOSTSCONTROLLER_IMPLEMENTRETRIES
-            value: "true"
-          - name: CONNECTIONPOSTSCONTROLLER_CONNECTTIMEOUT
-            value: "250"
-          - name: CONNECTIONPOSTSCONTROLLER_READTIMEOUT
-            value: "500"
-          - name: REDIS_HOSTNAME
-            value: "redis-svc"
-          - name: REDIS_PORT
-            value: "6379"
           - name: SPRING_APPLICATION_NAME
             value: "mycookbook"
-          - name: SPRING_CLOUD_CONFIG_URI
-            value: "http://sccs-svc:8888"
+          - name: SPRING_APPLICATION_JSON
+            value: '{"spring":{"datasource":{"url":"jdbc:mysql://mysql-svc/cookbookconnectionsposts"}}}'
+          - name: KAFKA_BOOTSTRAP_SERVERS
+            value: "kafkasvc:9092"
           - name: VERSIONING_TRIGGER
-            value: "15"
+            value: "1"

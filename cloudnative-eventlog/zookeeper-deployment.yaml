@@ -1,0 +1,50 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: zoo
+  labels:
+    app: zookeeper
+spec:
+  selector:
+    app: zookeeper
+  ports:
+  - name: client
+    port: 2181
+    protocol: TCP
+  - name: follower
+    port: 2888
+    protocol: TCP
+  - name: leader
+    port: 3888
+    protocol: TCP
+#  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zookeeper
+  labels:
+    app: zookeeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zookeeper
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      containers:
+      - name: zookeeper
+        image: digitalwonderland/zookeeper
+        ports:
+        - containerPort: 2181
+        args: []
+        securityContext:
+          privileged: true
+        env:
+          - name: ZOOKEEPER_ID
+            value: "1"
+          - name: ZOOKEEPER_SERVER_1
+            value: zookeeper
