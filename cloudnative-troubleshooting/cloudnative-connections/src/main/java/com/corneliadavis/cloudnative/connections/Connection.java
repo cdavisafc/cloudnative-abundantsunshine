@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- * Created by corneliadavis on 9/4/17.
+ * Created by corneliadavis on 11/15/18.
  */
 @Entity
 public class Connection {

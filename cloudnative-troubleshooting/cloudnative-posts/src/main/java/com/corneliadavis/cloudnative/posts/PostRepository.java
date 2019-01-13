@@ -3,7 +3,7 @@ package com.corneliadavis.cloudnative.posts;
 import org.springframework.data.repository.CrudRepository;
 
 /**
- * Created by corneliadavis on 9/4/17.
+ * Created by corneliadavis on 11/15/18.
  */
 public interface PostRepository extends CrudRepository<Post, Long> {
 
