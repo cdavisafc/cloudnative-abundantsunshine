@@ -31,15 +31,6 @@ spec:
       containers:
       - name: connection-posts
         image: cdavisafc/cloudnative-troubleshooting-connectionposts
-#        resources:
-#          limits:
-#            memory: "2048Mi"
-#        livenessProbe:
-#          httpGet:
-#            path: /healthz
-#            port: 8080
-#          initialDelaySeconds: 60
-#          periodSeconds: 5
         env:
           - name: INSTANCE_IP
             valueFrom:

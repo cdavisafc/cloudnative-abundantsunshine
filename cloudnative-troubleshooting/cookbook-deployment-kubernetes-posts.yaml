@@ -32,18 +32,6 @@ spec:
       containers:
       - name: posts
         image: cdavisafc/cloudnative-troubleshooting-posts
-#        livenessProbe:
-#          httpGet:
-#            path: /healthz
-#            port: 8080
-#          initialDelaySeconds: 60
-#          periodSeconds: 5
-#        readinessProbe:
-#          httpGet:
-#            path: /healthz
-#            port: 8080
-#          initialDelaySeconds: 30
-#          periodSeconds: 5
         securityContext:
           privileged: true
         env:
