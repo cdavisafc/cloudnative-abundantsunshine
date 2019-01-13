@@ -1,0 +1,50 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: connections-svc
+spec:
+  selector:
+    app: connections
+  ports:
+  - protocol: "TCP"
+    port: 80
+    targetPort: 8080
+  type: NodePort
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: connections
+  labels:
+    app: connections
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: connections
+  template:
+    metadata:
+      labels:
+        app: connections
+        appcollection: blog-aggregator
+    spec:
+      containers:
+      - name: connections
+        image: cdavisafc/cloudnative-troubleshooting-connections
+        env:
+          - name: INSTANCE_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: SPRING_APPLICATION_JSON
+            value: '{"spring":{"datasource":{"url":"jdbc:mysql://mysql-svc/cookbook"}, "zipkin":{"baseUrl":"http://zipkin-svc:9411/"}}}'
+          - name: SPRING_APPLICATION_NAME
+            value: "mycookbook-connections"
+          - name: SPRING_CLOUD_CONFIG_URI
+            value: "http://sccs-svc:8888"
+          - name: SPRING_CLOUD_CONFIG_NAME
+            value: "mycookbook"
+          - name: SPRING_SLEUTH_SAMPLER_PERCENTAGE
+            value: "0.01"
+          - name: VERSIONING_TRIGGER
+            value: "2"
