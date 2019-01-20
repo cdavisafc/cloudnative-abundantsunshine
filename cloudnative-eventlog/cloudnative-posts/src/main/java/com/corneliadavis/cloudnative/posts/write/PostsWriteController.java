@@ -1,7 +1,7 @@
 package com.corneliadavis.cloudnative.posts.write;
 
 import com.corneliadavis.cloudnative.eventschemas.PostEvent;
-import com.corneliadavis.cloudnative.posts.IPostApi;
+import com.corneliadavis.cloudnative.posts.PostApi;
 import com.corneliadavis.cloudnative.posts.projection.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ public class PostsWriteController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value="/posts")
-    public void newPost(@RequestBody IPostApi newPost, HttpServletResponse response) {
+    public void newPost(@RequestBody PostApi newPost, HttpServletResponse response) {
 
         logger.info("Have a new post with title " + newPost.getTitle());
 
