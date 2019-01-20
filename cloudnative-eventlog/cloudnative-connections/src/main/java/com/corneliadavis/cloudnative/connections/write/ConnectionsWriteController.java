@@ -1,6 +1,7 @@
 package com.corneliadavis.cloudnative.connections.write;
 
-import com.corneliadavis.cloudnative.connections.sourceoftruth.*;
+import com.corneliadavis.cloudnative.connections.*;
+import com.corneliadavis.cloudnative.connections.projection.*;
 import com.corneliadavis.cloudnative.eventschemas.ConnectionEvent;
 import com.corneliadavis.cloudnative.eventschemas.UserEvent;
 import org.slf4j.Logger;
@@ -19,6 +20,8 @@ public class ConnectionsWriteController {
     private ConnectionRepository connectionRepository;
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
+    @Autowired
+    private IdManager idManager;
 
     @Autowired
     public ConnectionsWriteController(UserRepository userRepository, ConnectionRepository connectionRepository) {
@@ -29,14 +32,15 @@ public class ConnectionsWriteController {
     @RequestMapping(method = RequestMethod.POST, value="/users")
     public void newUser(@RequestBody User newUser, HttpServletResponse response) {
 
-        logger.info("Have a new user with username " + newUser.getUsername());
-        userRepository.save(newUser);
+        logger.info("Event: Created user with username " + newUser.getUsername());
+
+        Long id = idManager.nextUserId();
 
         // send event to Kafka
         UserEvent userEvent =
                 new UserEvent(
                         "created",
-                        newUser.getId(),
+                        id,
                         newUser.getName(),
                         newUser.getUsername());
         kafkaTemplate.send("user", userEvent);
@@ -46,16 +50,14 @@ public class ConnectionsWriteController {
     @RequestMapping(method = RequestMethod.PUT, value="/users/{username}")
     public void updateUser(@PathVariable("username") String username, @RequestBody User newUser, HttpServletResponse response) {
 
-        logger.info("Updating user with username " + username);
+        logger.info("Event: Updated user with username " + username);
         User user = userRepository.findByUsername(username);
-        newUser.setId(user.getId());
-        userRepository.save(newUser);
 
         // send event to Kafka
         UserEvent userEvent =
                 new UserEvent(
                         "updated",
-                        newUser.getId(),
+                        user.getId(),
                         newUser.getName(),
                         newUser.getUsername());
         kafkaTemplate.send("user", userEvent);
@@ -65,19 +67,18 @@ public class ConnectionsWriteController {
     @RequestMapping(method = RequestMethod.POST, value="/connections")
     public void newConnection(@RequestBody ConnectionApi newConnection, HttpServletResponse response) {
 
-        logger.info("Have a new connection: " + newConnection.getFollower() +
+        logger.info("Event: Created connection: " + newConnection.getFollower() +
                     " is following " + newConnection.getFollowed());
         Long followerId = userRepository.findByUsername(newConnection.getFollower()).getId();
         Long followedId = userRepository.findByUsername(newConnection.getFollowed()).getId();
-        Connection newConnectionIds = new Connection(followerId, followedId);
-        connectionRepository.save(newConnectionIds);
+        Long id = idManager.nextConnectionId();
 
         // send event to Kafka
         ConnectionEvent connectionEvent =
                 new ConnectionEvent("created",
-                        newConnectionIds.getId(),
-                        newConnectionIds.getFollower(),
-                        newConnectionIds.getFollowed());
+                        id,
+                        followerId,
+                        followedId);
         kafkaTemplate.send("connection", connectionEvent);
 
     }
@@ -88,25 +89,20 @@ public class ConnectionsWriteController {
 
 
 
-        logger.info("deleting connection: " + followerUsername +
+        logger.info("Event: deleted connection: " + followerUsername +
                     " is no longer following " + followedUsername);
         Long followerId = userRepository.findByUsername(followerUsername).getId();
         Long followedId = userRepository.findByUsername(followedUsername).getId();
-        logger.info("(ID) deleting connection: " + followerId +
-                " is no longer following " + followedId);
         Connection connection = connectionRepository.findByFollowerAndFollowed(followerId,followedId);
         if (connection == null)
             logger.info("unable to find or delete that connection");
-        else
-            connectionRepository.delete(connection);
-
-        // send event to Kafka
-        ConnectionEvent connectionEvent =
-                new ConnectionEvent();
-        connectionEvent.setEventType("deleted");
-        connectionEvent.setId(connection.getId());
-        kafkaTemplate.send("connection", connectionEvent);
-
+        else {
+            // send event to Kafka
+            ConnectionEvent connectionEvent = new ConnectionEvent();
+            connectionEvent.setEventType("deleted");
+            connectionEvent.setId(connection.getId());
+            kafkaTemplate.send("connection", connectionEvent);
+        }
     }
 
 }

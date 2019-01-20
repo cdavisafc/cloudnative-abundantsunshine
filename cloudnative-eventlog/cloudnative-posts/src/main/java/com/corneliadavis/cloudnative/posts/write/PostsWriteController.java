@@ -1,11 +1,8 @@
 package com.corneliadavis.cloudnative.posts.write;
 
 import com.corneliadavis.cloudnative.eventschemas.PostEvent;
-import com.corneliadavis.cloudnative.posts.sourceoftruth.PostApi;
-import com.corneliadavis.cloudnative.posts.sourceoftruth.PostRepository;
-import com.corneliadavis.cloudnative.posts.localstorage.User;
-import com.corneliadavis.cloudnative.posts.localstorage.UserRepository;
-import com.corneliadavis.cloudnative.posts.sourceoftruth.Post;
+import com.corneliadavis.cloudnative.posts.PostApi;
+import com.corneliadavis.cloudnative.posts.projection.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 @RestController
 public class PostsWriteController {
@@ -25,6 +23,8 @@ public class PostsWriteController {
     private UserRepository userRepository;
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
+    @Autowired
+    private IdManager idManager;
 
     @Autowired
     public PostsWriteController(PostRepository postRepository,
@@ -38,22 +38,16 @@ public class PostsWriteController {
 
         logger.info("Have a new post with title " + newPost.getTitle());
 
-        // store the post
-        Post post
-                = new Post(newPost.getTitle(), newPost.getBody());
+        Long id = idManager.nextId();
         User user = userRepository.findByUsername(newPost.getUsername());
-        logger.info("find by username output ");
-        if (user == null)
-            logger.info("user is null - username was " + newPost.getUsername());
-        else
-            logger.info("user username = " + user.getUsername() + " id = " + user.getId());
-        post.setUserId(user.getId());
-        postRepository.save(post);
-
-        // send out new post event
-        PostEvent postEvent = new PostEvent("created", post.getId(), post.getDate(), post.getUserId(),
-                                  post.getTitle(), post.getBody());
-        kafkaTemplate.send("post", postEvent);
+        if (user != null) {
+            // send out new post event
+            PostEvent postEvent = new PostEvent("created", id, new Date(), user.getId(),
+                    newPost.getTitle(), newPost.getBody());
+            kafkaTemplate.send("post", postEvent);
+        } else
+            logger.info("Something went awry with creating a new Post - user with username "
+                    + newPost.getUsername() + " is not known");
 
     }
 }

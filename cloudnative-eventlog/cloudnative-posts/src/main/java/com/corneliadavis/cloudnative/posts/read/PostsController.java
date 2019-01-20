@@ -1,9 +1,9 @@
 package com.corneliadavis.cloudnative.posts.read;
 
 import com.corneliadavis.cloudnative.Utils;
-import com.corneliadavis.cloudnative.posts.sourceoftruth.IPostApi;
-import com.corneliadavis.cloudnative.posts.sourceoftruth.PostRepository;
-import com.corneliadavis.cloudnative.posts.localstorage.UserRepository;
+import com.corneliadavis.cloudnative.posts.IPostApi;
+import com.corneliadavis.cloudnative.posts.projection.PostRepository;
+import com.corneliadavis.cloudnative.posts.projection.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

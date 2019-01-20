@@ -31,29 +31,17 @@ spec:
     spec:
       containers:
       - name: posts
-        image: cdavisafc/cloudnative-eventlog-posts:0.0.1
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 60
-          periodSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 5
+        image: cdavisafc/cloudnative-eventlog-posts
         env:
           - name: INSTANCE_IP
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
-          - name: CONNECTIONSPOSTSCONTROLLER_URL
-            value: "http://connectionsposts-svc/posts?userIds="
-          - name: SPRING_APPLICATION_JSON
-            value: '{"spring":{"datasource":{"url":"jdbc:mysql://mysql-svc/cookbookposts"}}}'
           - name: SPRING_APPLICATION_NAME
             value: "mycookbook"
+          - name: SPRING_APPLICATION_JSON
+            value: '{"spring":{"datasource":{"url":"jdbc:mysql://mysql-svc/cookbookposts"}}}'
+          - name: KAFKA_BOOTSTRAP_SERVERS
+            value: "kafkasvc:9092"
           - name: VERSIONING_TRIGGER
-            value: "12"
+            value: "1"

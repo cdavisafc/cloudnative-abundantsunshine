@@ -1,13 +1,10 @@
-package com.corneliadavis.cloudnative.posts.sourceoftruth;
-
-import java.util.Date;
+package com.corneliadavis.cloudnative.posts;
 
 public class PostApi implements IPostApi {
 
     private String username;
     private String title;
     private String body;
-    private Date date;
 
     public PostApi(String username, String title, String body) {
         this.username = username;
@@ -31,11 +28,5 @@ public class PostApi implements IPostApi {
     public String getBody() {
         return body;
     }
-
-    @Override
-    public Date getDate() {
-        return date;
-    }
-
 
 }

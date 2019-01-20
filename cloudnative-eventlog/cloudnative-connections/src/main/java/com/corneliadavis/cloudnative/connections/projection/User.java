@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.connections.sourceoftruth;
+package com.corneliadavis.cloudnative.connections.projection;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,14 +12,14 @@ import javax.persistence.Id;
 public class User {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     private String name;
     private String username;
 
     protected User() {}
 
-    public User(String name, String username) {
+    public User(Long id, String name, String username) {
+        this.id = id;
         this.name = name;
         this.username = username;
     }

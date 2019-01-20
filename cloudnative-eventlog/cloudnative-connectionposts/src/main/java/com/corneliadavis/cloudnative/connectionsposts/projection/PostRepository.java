@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.connectionsposts.localstorage;
+package com.corneliadavis.cloudnative.connectionsposts.projection;
 
 import com.corneliadavis.cloudnative.connectionsposts.PostSummary;
 import org.springframework.data.jpa.repository.Query;

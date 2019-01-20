@@ -1,13 +1,15 @@
 package com.corneliadavis.cloudnative.posts.eventhandlers;
 
+import com.corneliadavis.cloudnative.eventschemas.PostEvent;
 import com.corneliadavis.cloudnative.eventschemas.UserEvent;
-import com.corneliadavis.cloudnative.posts.localstorage.User;
-import com.corneliadavis.cloudnative.posts.localstorage.UserRepository;
+import com.corneliadavis.cloudnative.posts.projection.Post;
+import com.corneliadavis.cloudnative.posts.projection.PostRepository;
+import com.corneliadavis.cloudnative.posts.projection.User;
+import com.corneliadavis.cloudnative.posts.projection.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,15 +17,16 @@ public class EventHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(EventHandler.class);
     private UserRepository userRepository;
-    @Autowired
-    private KafkaTemplate<String, Object> kafkaTemplate;
+    private PostRepository postRepository;
 
     @Autowired
-    public EventHandler(UserRepository userRepository) {
+    public EventHandler(UserRepository userRepository, PostRepository postRepository) {
+
         this.userRepository = userRepository;
+        this.postRepository = postRepository;
     }
 
-    @KafkaListener(topics="user", groupId="postsconsumer")
+    @KafkaListener(topics="user", groupId="postsconsumer", containerFactory = "kafkaListenerContainerFactory")
     public void listenForUser(UserEvent userEvent) {
 
         logger.info("Posts UserEvent Handler processing - event: " + userEvent.getEventType());
@@ -50,5 +53,21 @@ public class EventHandler {
         }
 
     }
+	
+    @KafkaListener(topics="post", groupId = "postsconsumer", containerFactory = "kafkaListenerContainerFactory")
+    public void postEvent(PostEvent postEvent) {
 
+        logger.info("PostEvent Handler processing - event: " + postEvent.getEventType());
+
+        if (postEvent.getEventType().equals("created")) {
+            Post existingPost = postRepository.findOne(postEvent.getId());
+            if (existingPost == null) {
+                logger.info("Creating a new post in the cache with title " + postEvent.getTitle());
+                Post post = new Post(postEvent.getId(), postEvent.getDate(), postEvent.getUserId(),
+                        postEvent.getTitle(), postEvent.getBody());
+                postRepository.save(post);
+            } else
+                logger.info("Did not create already cached post with id " + existingPost.getId());
+        }
+    }
 }
