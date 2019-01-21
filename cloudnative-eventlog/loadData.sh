@@ -11,7 +11,7 @@ curl -X POST -H "Content-Type:application/json" --data '{"follower":"cdavisafc",
 
 sleep 5
 
-curl -X POST -H "Content-Type:application/json" --data '{"username":"madmax","title":"Max Title","body":"The body of Max first post"}' $(minikube service posts-svc --format "{{.IP}}"):$(minikube service posts-svc --format "{{.Port}}")/posts
-curl -X POST -H "Content-Type:application/json" --data '{"username":"cdavisafc","title":"Cornelia Title","body":"The body of Cornelia first post"}' $(minikube service posts-svc --format "{{.IP}}"):$(minikube service posts-svc --format "{{.Port}}")/posts
-curl -X POST -H "Content-Type:application/json" --data '{"username":"cdavisafc","title":"Cornelia Title2","body":"The body of Cornelia second post"}' $(minikube service posts-svc --format "{{.IP}}"):$(minikube service posts-svc --format "{{.Port}}")/posts
-curl -X POST -H "Content-Type:application/json" --data '{"username":"gmaxdavis","title":"Glen Title","body":"The body of Glen first post"}' $(minikube service posts-svc --format "{{.IP}}"):$(minikube service posts-svc --format "{{.Port}}")/posts
+curl -X POST -H "Content-Type:application/json" --data '{"username":"madmax","title":"Chicken Pho","body":"This is my attempt to recreate what I ate in Vietnam..."}' $(minikube service posts-svc --format "{{.IP}}"):$(minikube service posts-svc --format "{{.Port}}")/posts
+curl -X POST -H "Content-Type:application/json" --data '{"username":"cdavisafc","title":"Whole Orange Cake","body":"That's right, you blend up whole oranges, rind and all..."}' $(minikube service posts-svc --format "{{.IP}}"):$(minikube service posts-svc --format "{{.Port}}")/posts
+curl -X POST -H "Content-Type:application/json" --data '{"username":"cdavisafc","title":"German Dumplings (Kloesse)","body":"Russet potatoes, flour (gluten free!) and more..."}' $(minikube service posts-svc --format "{{.IP}}"):$(minikube service posts-svc --format "{{.Port}}")/posts
+curl -X POST -H "Content-Type:application/json" --data '{"username":"gmaxdavis","title":"French Press Lattes","body":"We've figured out how to make these dairy free, but just as good!..."}' $(minikube service posts-svc --format "{{.IP}}"):$(minikube service posts-svc --format "{{.Port}}")/posts

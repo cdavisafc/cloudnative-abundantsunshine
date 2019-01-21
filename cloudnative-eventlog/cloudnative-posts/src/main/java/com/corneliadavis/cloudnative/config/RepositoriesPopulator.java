@@ -57,13 +57,13 @@ public class RepositoriesPopulator implements ApplicationContextAware {
             user = new User(3L, "gmaxdavis");
             userRepository.save(user);
 
-            post1 = new Post(1L, new Date(), 2L, "Max Title", "The body of the post");
+            post1 = new Post(1L, new Date(), 2L, "Chicken Pho", "This is my attempt to recreate what I ate in Vietnam...");
             postRepository.save(post1);
-            post2 = new Post(2L, new Date(), 1L, "Cornelia Title", "The body of the post");
+            post2 = new Post(2L, new Date(), 1L, "Whole Orange Cake", "That's right, you blend up whole oranges, rind and all...");
             postRepository.save(post2);
-            post3 = new Post(3L, new Date(), 1L, "Cornelia Title2", "The body of the post");
+            post3 = new Post(3L, new Date(), 1L, "German Dumplings (Kloesse)", "Russet potatoes, flour (gluten free!) and more...");
             postRepository.save(post3);
-            post4 = new Post(4L, new Date(), 3L, "Glen Title", "The body of the post");
+            post4 = new Post(4L, new Date(), 3L, "French Press Lattes", "We've figured out how to make these dairy free, but just as good!...");
             postRepository.save(post4);
 
         } else

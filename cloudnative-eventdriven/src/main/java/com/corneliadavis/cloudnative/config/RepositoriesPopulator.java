@@ -30,10 +30,8 @@ public class RepositoriesPopulator implements ApplicationListener<ApplicationRea
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
-
         logger.info("Loading sample data");
         populate();
-
     }
 
     private void populate() {
@@ -50,13 +48,13 @@ public class RepositoriesPopulator implements ApplicationListener<ApplicationRea
         user3 = new User( "Glen", "gmaxdavis");
         connectionsWriteController.newUser(user3,null);
 
-        post1 = new Post(2L, "Max Title", "The body of the post");
+        post1 = new Post(2L, "Chicken Pho", "This is my attempt to recreate what I ate in Vietnam...");
         postsWriteController.newPost(post1, null);
-        post2 = new Post(1L, "Cornelia Title", "The body of the post");
+        post2 = new Post(1L, "Whole Orange Cake", "That's right, you blend up whole oranges, rind and all...");
         postsWriteController.newPost(post2, null);
-        post3 = new Post(1L, "Cornelia Title2", "The body of the post");
+        post3 = new Post(1L, "German Dumplings (Kloesse)", "Russet potatoes, flour (gluten free!) and more...");
         postsWriteController.newPost(post3, null);
-        post4 = new Post(3L, "Glen Title", "The body of the post");
+        post4 = new Post(3L, "French Press Lattes", "We've figured out how to make these dairy free, but just as good!...");
         postsWriteController.newPost(post4, null);
 
         connection1 = new Connection(2L, 1L);
