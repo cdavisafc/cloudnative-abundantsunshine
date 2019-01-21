@@ -15,24 +15,24 @@ import javax.servlet.http.HttpServletResponse;
 
 @RefreshScope
 @RestController
-public class NewFromConnectionsController {
+public class ConnectionsPostsController {
 
-    private static final Logger logger = LoggerFactory.getLogger(NewFromConnectionsController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConnectionsPostsController.class);
 
     private MUserRepository mUserRepository;
     private MPostRepository mPostRepository;
     private MConnectionRepository mConnectionRepository;
 
     @Autowired
-    public NewFromConnectionsController(MUserRepository mUserRepository,
-                                        MPostRepository mPostRepository,
-                                        MConnectionRepository mConnectionRepository) {
+    public ConnectionsPostsController(MUserRepository mUserRepository,
+                                      MPostRepository mPostRepository,
+                                      MConnectionRepository mConnectionRepository) {
         this.mUserRepository = mUserRepository;
         this.mPostRepository = mPostRepository;
         this.mConnectionRepository = mConnectionRepository;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value="/connectionsNewPosts/{username}")
+    @RequestMapping(method = RequestMethod.GET, value="/connectionsposts/{username}")
     public Iterable<PostSummary> getByUsername(@PathVariable("username") String username,
                                                HttpServletResponse response) {
 

@@ -60,7 +60,7 @@ public class CloudnativeEventDrivenTests {
     }
     @Test
     public void	checkNewPostCounts() throws Exception {
-        mockMvc.perform(get("/connectionsNewPosts/cdavisafc"))
+        mockMvc.perform(get("/connectionsposts/cdavisafc"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$", hasSize(2)));
