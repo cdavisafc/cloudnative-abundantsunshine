@@ -37,7 +37,7 @@ public class ConnectionsController {
         logger.info("getting user " + user);
         try {
             Long id = Long.parseLong(user);
-            return userRepository.findOne(id);
+            return userRepository.findById(id).get();
         } catch(NumberFormatException e) {
             return userRepository.findByUsername(user);
         }

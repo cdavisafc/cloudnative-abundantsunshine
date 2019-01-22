@@ -49,7 +49,7 @@ public class EventsController {
                            @RequestBody User newUser, HttpServletResponse response) {
 
         logger.info("Updating user with id " + userId);
-        MUser mUser = mUserRepository.findOne(userId);
+        MUser mUser = mUserRepository.findById(userId).get();
         mUserRepository.save(mUser);
 
     }
@@ -63,9 +63,9 @@ public class EventsController {
                                                   newConnection.getFollowed());
         // add connection to the users
         MUser mUser;
-        mUser = mUserRepository.findOne(newConnection.getFollower());
+        mUser = mUserRepository.findById(newConnection.getFollower()).get();
         mConnection.setFollowerUser(mUser);
-        mUser = mUserRepository.findOne(newConnection.getFollowed());
+        mUser = mUserRepository.findById(newConnection.getFollowed()).get();
         mConnection.setFollowedUser(mUser);
         mConnectionRepository.save(mConnection);
     }
@@ -73,11 +73,11 @@ public class EventsController {
     @RequestMapping(method = RequestMethod.DELETE, value="/connections/{id}")
     public void deleteConnection(@PathVariable("id") Long connectionId, HttpServletResponse response) {
 
-        MConnection mConnection = mConnectionRepository.findOne(connectionId);
+        MConnection mConnection = mConnectionRepository.findById(connectionId).get();
 
         logger.info("deleting connection: " + mConnection.getFollower() +
                     " is no longer following " + mConnection.getFollowed());
-        mConnectionRepository.delete(connectionId);
+        mConnectionRepository.delete(mConnection);
 
     }
 
@@ -87,7 +87,7 @@ public class EventsController {
         logger.info("Have a new post with title " + newPost.getTitle());
         MPost mPost = new MPost(newPost.getId(), newPost.getDate(), newPost.getUserId(), newPost.getTitle());
         MUser mUser;
-        mUser = mUserRepository.findOne(newPost.getUserId());
+        mUser = mUserRepository.findById(newPost.getUserId()).get();
         mPost.setmUser(mUser);
         mPostRepository.save(mPost);
 

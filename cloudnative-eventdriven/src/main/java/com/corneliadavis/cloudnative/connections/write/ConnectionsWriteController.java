@@ -44,7 +44,7 @@ public class ConnectionsWriteController {
     public void updateUser(@PathVariable("id") Long userId, @RequestBody User newUser, HttpServletResponse response) {
 
         logger.info("Updating user with id " + userId);
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findById(userId).get();
         newUser.setId(userId);
         userRepository.save(newUser);
 
@@ -71,10 +71,10 @@ public class ConnectionsWriteController {
     @RequestMapping(method = RequestMethod.DELETE, value="/connections/{id}")
     public void deleteConnection(@PathVariable("id") Long connectionId, HttpServletResponse response) {
 
-        Connection connection = connectionRepository.findOne(connectionId);
+        Connection connection = connectionRepository.findById(connectionId).get();
 
         logger.info("deleting connection: " + connection.getFollower() + " is no longer following " + connection.getFollowed());
-        connectionRepository.delete(connectionId);
+        connectionRepository.delete(connection);
 
         //event
         RestTemplate restTemplate = new RestTemplate();
