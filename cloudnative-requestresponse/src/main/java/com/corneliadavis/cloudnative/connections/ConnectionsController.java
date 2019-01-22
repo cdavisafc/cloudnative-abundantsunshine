@@ -37,7 +37,7 @@ public class ConnectionsController {
         logger.info("getting user " + user);
         try {
             Long id = Long.parseLong(user);
-            return userRepository.findOne(id);
+            return userRepository.findById(id).get();
         } catch(NumberFormatException e) {
             return userRepository.findByUsername(user);
         }
@@ -55,7 +55,7 @@ public class ConnectionsController {
     public void updateUser(@PathVariable("id") Long userId, @RequestBody User newUser, HttpServletResponse response) {
 
         logger.info("Updating user with id " + userId);
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findById(userId).get();
         newUser.setId(userId);
         userRepository.save(newUser);
 
@@ -92,10 +92,10 @@ public class ConnectionsController {
     @RequestMapping(method = RequestMethod.DELETE, value="/connections/{id}")
     public void deleteConnection(@PathVariable("id") Long connectionId, HttpServletResponse response) {
 
-        Connection connection = connectionRepository.findOne(connectionId);
+        Connection connection = connectionRepository.findById(connectionId).get();
 
         logger.info("deleting connection: " + connection.getFollower() + " is no longer following " + connection.getFollowed());
-        connectionRepository.delete(connectionId);
+        connectionRepository.delete(connection);
 
     }
 
