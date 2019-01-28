@@ -36,7 +36,7 @@ public class ConnectionsWriteController {
 
         //event
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.postForEntity("http://localhost:8080/connectionsNewPosts/users", newUser, String.class);
+        restTemplate.postForEntity("http://localhost:8080/connectionsposts/users", newUser, String.class);
 
     }
 
@@ -50,7 +50,7 @@ public class ConnectionsWriteController {
 
         //event
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.put("http://localhost:8080/connectionsNewPosts/users/"+newUser.getId(), newUser);
+        restTemplate.put("http://localhost:8080/connectionsposts/users/"+newUser.getId(), newUser);
 
     }
 
@@ -64,7 +64,7 @@ public class ConnectionsWriteController {
         //event
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> resp = restTemplate.postForEntity(
-                "http://localhost:8080/connectionsNewPosts/connections", newConnection, String.class);
+                "http://localhost:8080/connectionsposts/connections", newConnection, String.class);
         logger.info("resp " + resp.getStatusCode());
     }
 
@@ -78,7 +78,7 @@ public class ConnectionsWriteController {
 
         //event
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.delete("http://localhost:8080/connectionsNewPosts/connections/"+connectionId);
+        restTemplate.delete("http://localhost:8080/connectionsposts/connections/"+connectionId);
 
     }
 

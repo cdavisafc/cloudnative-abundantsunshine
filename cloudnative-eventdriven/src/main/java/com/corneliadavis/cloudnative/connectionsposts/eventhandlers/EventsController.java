@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RefreshScope
 @RestController
-@RequestMapping(value="/connectionsNewPosts")
+@RequestMapping(value="/connectionsposts")
 public class EventsController {
 
     private static final Logger logger = LoggerFactory.getLogger(EventsController.class);
@@ -39,7 +39,7 @@ public class EventsController {
     @RequestMapping(method = RequestMethod.POST, value="/users")
     public void newUser(@RequestBody User newUser, HttpServletResponse response) {
 
-        logger.info("[NewPosts] Creating new user with username " + newUser.getUsername());
+        logger.info("[ConnectionsPosts] Creating new user with username " + newUser.getUsername());
         mUserRepository.save(new MUser(newUser.getId(), newUser.getName(), newUser.getUsername()));
 
     }

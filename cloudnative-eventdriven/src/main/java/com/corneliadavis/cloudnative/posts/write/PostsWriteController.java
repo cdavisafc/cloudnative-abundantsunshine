@@ -37,7 +37,7 @@ public class PostsWriteController {
         //event
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> resp = restTemplate.postForEntity(
-                "http://localhost:8080/connectionsNewPosts/posts", newPost, String.class);
+                "http://localhost:8080/connectionsposts/posts", newPost, String.class);
         logger.info("[Post] resp " + resp.getStatusCode());
 
     }
