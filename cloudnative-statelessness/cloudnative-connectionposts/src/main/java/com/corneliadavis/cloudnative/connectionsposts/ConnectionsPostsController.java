@@ -76,7 +76,7 @@ public class ConnectionsPostsController {
     private String p;
 
 
-    @RequestMapping(method = RequestMethod.GET, value="/connectionsPosts/{username}")
+    @RequestMapping(method = RequestMethod.GET, value="/connectionsposts/{username}")
     public Iterable<PostSummary> getByUsername(@PathVariable("username") String username, HttpServletResponse response) {
 
         ArrayList<PostSummary> postSummaries = new ArrayList<PostSummary>();
