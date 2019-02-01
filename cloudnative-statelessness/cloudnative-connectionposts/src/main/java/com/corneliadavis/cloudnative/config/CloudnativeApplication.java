@@ -19,5 +19,7 @@ import java.util.Map;
 @EntityScan("com.corneliadavis.cloudnative.*")
 public class CloudnativeApplication {
 
+	public static Map<String, String> validTokens = new HashMap<String, String>();
+
 	public static void main(String[] args) { SpringApplication.run(CloudnativeApplication.class, args); }
 }
