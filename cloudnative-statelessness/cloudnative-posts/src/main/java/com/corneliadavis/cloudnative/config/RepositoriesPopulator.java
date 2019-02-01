@@ -40,13 +40,13 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
         Iterable<Post> posts = postsController.getPostsByUserId("2",null);
         if (!posts.iterator().hasNext()) {
 
-            post1 = new Post(2L, "Chicken Pho", "This is my attempt to recreate what I ate in Vietnam...");
+            post1 = new Post(2L, "Max Title", "The body of the post");
             postsController.newPost(post1, null);
-            post2 = new Post(1L, "Whole Orange Cake", "That's right, you blend up whole oranges, rind and all...");
+            post2 = new Post(1L, "Cornelia Title", "The body of the post");
             postsController.newPost(post2, null);
-            post3 = new Post(1L, "German Dumplings (Kloesse)", "Russet potatoes, flour (gluten free!) and more...");
+            post3 = new Post(1L, "Cornelia Title2", "The body of the post");
             postsController.newPost(post3, null);
-            post4 = new Post(3L, "French Press Lattes", "We've figured out how to make these dairy free, but just as good!...");
+            post4 = new Post(3L, "Glen Title", "The body of the post");
             postsController.newPost(post4, null);
 
         }
