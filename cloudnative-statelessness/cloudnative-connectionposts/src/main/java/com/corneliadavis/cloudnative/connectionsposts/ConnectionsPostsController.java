@@ -77,13 +77,15 @@ public class ConnectionsPostsController {
     @RequestMapping(method = RequestMethod.GET, value="/connectionsposts")
     public Iterable<PostSummary> getByUsername(@CookieValue(value = "userToken", required=false) String token, HttpServletResponse response) {
 
-        if (token == null)
+        if (token == null) {
+            logger.info(Utils.ipTag(ip, p) + "connectionsPosts access attempt without auth token");
             response.setStatus(401);
-        else {
+        } else {
             String username = CloudnativeApplication.validTokens.get(token);
-            if (username == null)
+            if (username == null) {
+                logger.info(Utils.ipTag(ip, p) + "connectionsPosts access attempt with invalid token");
                 response.setStatus(401);
-            else {
+            } else {
 
                 ArrayList<PostSummary> postSummaries = new ArrayList<PostSummary>();
                 logger.info(Utils.ipTag(ip, p) + "getting posts for user network " + username);

@@ -1,0 +1,45 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: connectionsposts-svc
+spec:
+  selector:
+    app: connectionsposts
+  ports:
+  - protocol: "TCP"
+    port: 80
+    targetPort: 8080
+  type: NodePort
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: connectionsposts
+  labels:
+    app: connectionsposts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: connectionsposts
+  template:
+    metadata:
+      labels:
+        app: connectionsposts
+    spec:
+      containers:
+      - name: connectionsposts
+        image: cdavisafc/cloudnative-statelessness-connectionsposts-stateful
+        env:
+          - name: INSTANCE_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: PORT
+            value: "8080"
+          - name: CONNECTIONPOSTSCONTROLLER_POSTSURL
+            value: "http://192.168.99.100:32145/posts?userIds="
+          - name: CONNECTIONPOSTSCONTROLLER_CONNECTIONSURL
+            value: "http://192.168.99.100:30967/connections/"
+          - name: CONNECTIONPOSTSCONTROLLER_USERSURL
+            value: "http://192.168.99.100:30967/users/"

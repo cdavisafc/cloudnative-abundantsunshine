@@ -1,0 +1,41 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: connections-svc
+spec:
+  selector:
+    app: connections
+  ports:
+  - protocol: "TCP"
+    port: 80
+    targetPort: 8080
+  type: NodePort
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: connections
+  labels:
+    app: connections
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: connections
+  template:
+    metadata:
+      labels:
+        app: connections
+    spec:
+      containers:
+      - name: connections
+        image: cdavisafc/cloudnative-statelessness-connections
+        env:
+          - name: INSTANCE_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: PORT
+            value: "8080"
+          - name: SPRING_APPLICATION_JSON
+            value: '{"spring":{"datasource":{"url":"jdbc:mysql://192.168.99.100:32591/cookbook"}}}'
