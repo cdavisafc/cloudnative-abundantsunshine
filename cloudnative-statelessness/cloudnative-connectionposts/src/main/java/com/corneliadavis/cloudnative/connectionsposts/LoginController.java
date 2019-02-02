@@ -1,4 +1,4 @@
-package com.corneliadavis.cloudnative.newpostsfromconnections;
+package com.corneliadavis.cloudnative.connectionsposts;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
