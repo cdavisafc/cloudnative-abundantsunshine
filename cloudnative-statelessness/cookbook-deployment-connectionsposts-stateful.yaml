@@ -38,8 +38,8 @@ spec:
           - name: PORT
             value: "8080"
           - name: CONNECTIONPOSTSCONTROLLER_POSTSURL
-            value: "http://192.168.99.100:32145/posts?userIds="
+            value: "<insert posts url here>/posts?userIds="
           - name: CONNECTIONPOSTSCONTROLLER_CONNECTIONSURL
-            value: "http://192.168.99.100:30967/connections/"
+            value: "<insert connections url here>/connections/"
           - name: CONNECTIONPOSTSCONTROLLER_USERSURL
-            value: "http://192.168.99.100:30967/users/"
+            value: "<insert connections url here>/users/"

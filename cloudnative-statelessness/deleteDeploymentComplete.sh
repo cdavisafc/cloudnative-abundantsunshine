@@ -6,8 +6,8 @@ kubectl delete deploy/connections
 kubectl delete deploy/connectionsposts
 
 if [ "$1" = "all" ]; then
-	kubectl delete deploy/mysql-svc
-	kubectl delete deploy/redis-svc
+	kubectl delete deploy/mysql
+	kubectl delete deploy/redis
 else
 	echo "mysql, redis and other services may still be running"
 fi
