@@ -1,10 +1,10 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: connection-posts
+  name: connectionsposts-svc
 spec:
   selector:
-    app: connection-posts
+    app: connectionsposts
   ports:
   - protocol: "TCP"
     port: 80
@@ -14,21 +14,21 @@ spec:
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: connection-posts
+  name: connectionsposts
   labels:
-    app: connection-posts
+    app: connectionsposts
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: connection-posts
+      app: connectionsposts
   template:
     metadata:
       labels:
-        app: connection-posts
+        app: connectionsposts
     spec:
       containers:
-      - name: connection-posts
+      - name: connectionsposts
         image: cdavisafc/cloudnative-statelessness-connectionposts-stateless
         env:
           - name: INSTANCE_IP
@@ -38,12 +38,12 @@ spec:
           - name: PORT
             value: "8080"
           - name: CONNECTIONPOSTSCONTROLLER_POSTSURL
-            value: "http://192.168.99.100:31040/posts?userIds="
+            value: "http://192.168.99.100:32145/posts?userIds="
           - name: CONNECTIONPOSTSCONTROLLER_CONNECTIONSURL
-            value: "http://192.168.99.100:30494/connections/"
+            value: "http://192.168.99.100:30967/connections/"
           - name: CONNECTIONPOSTSCONTROLLER_USERSURL
-            value: "http://192.168.99.100:30494/users/"
+            value: "http://192.168.99.100:30967/users/"
           - name: REDIS_HOSTNAME
             value: "192.168.99.100"
           - name: REDIS_PORT
-            value: "32410"
+            value: "31506"

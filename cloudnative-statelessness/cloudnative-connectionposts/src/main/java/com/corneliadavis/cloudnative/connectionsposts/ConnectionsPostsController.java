@@ -1,19 +1,19 @@
 package com.corneliadavis.cloudnative.connectionsposts;
 
 import com.corneliadavis.cloudnative.Utils;
-import com.corneliadavis.cloudnative.config.CloudnativeApplication;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
@@ -94,7 +94,6 @@ public class ConnectionsPostsController {
             logger.info(Utils.ipTag(ip, p) + "connectionsPosts access attempt without auth token");
             response.setStatus(401);
         } else {
-            //String username = CloudnativeApplication.validTokens.get(token);
             ValueOperations<String, String> ops = this.template.opsForValue();
             String username = ops.get(token);
             if (username == null) {
