@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: connectionsposts
-        image: cdavisafc/cloudnative-statelessness-connectionposts-stateless
+        image: cdavisafc/cloudnative-statelessness-connectionsposts-stateless
         env:
           - name: INSTANCE_IP
             valueFrom:
@@ -46,4 +46,4 @@ spec:
           - name: REDIS_HOSTNAME
             value: "192.168.99.100"
           - name: REDIS_PORT
-            value: "31506"
+            value: "31133"
