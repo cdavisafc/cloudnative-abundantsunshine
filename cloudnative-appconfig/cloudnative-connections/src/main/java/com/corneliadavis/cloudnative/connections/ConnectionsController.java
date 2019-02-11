@@ -19,7 +19,7 @@ public class ConnectionsController {
     private UserRepository userRepository;
     private ConnectionRepository connectionRepository;
 
-    @Value("${com.corneliadavis.cloudnative.connections.secret}")
+    @Value("${com.corneliadavis.cloudnative.connections.secrets}")
     private String configuredSecret;
 
     @Autowired
@@ -60,7 +60,7 @@ public class ConnectionsController {
             logger.info(utils.ipTag() + "getting user " + user);
             try {
                 Long id = Long.parseLong(user);
-                return userRepository.findOne(id);
+                return userRepository.findById(id).get();
             } catch (NumberFormatException e) {
                 return userRepository.findByUsername(user);
             }
@@ -96,7 +96,7 @@ public class ConnectionsController {
         if (secret.equals(configuredSecret)) {
 
             logger.info(utils.ipTag() + "Updating user with id " + userId);
-            User user = userRepository.findOne(userId);
+            User user = userRepository.findById(userId).get();
             newUser.setId(userId);
             userRepository.save(newUser);
 
@@ -166,10 +166,10 @@ public class ConnectionsController {
 
         if (secret.equals(configuredSecret)) {
 
-            Connection connection = connectionRepository.findOne(connectionId);
+            Connection connection = connectionRepository.findById(connectionId).get();
 
             logger.info(utils.ipTag() + "deleting connection: " + connection.getFollower() + " is no longer following " + connection.getFollowed());
-            connectionRepository.delete(connectionId);
+            connectionRepository.delete(connection);
 
         } else {
             logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting " + configuredSecret + ")");

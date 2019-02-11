@@ -26,13 +26,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "newfromconnectionscontroller.connectionsUrl:http://localhost:8080/connections/",
         "newfromconnectionscontroller.postsUrl:http://localhost:8080/posts?userIds=",
         "newfromconnectionscontroller.usersUrl:http://localhost:8080/users/",
-        "com.corneliadavis.cloudnative.posts.secret:forTests",
+        "com.corneliadavis.cloudnative.posts.secrets:forTests",
         "spring.cloud.config.enabled:false"})
 @AutoConfigureMockMvc
 public class CloudnativeStatelessnessApplicationTests implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
-    @Value("${com.corneliadavis.cloudnative.posts.secret}")
+    @Value("${com.corneliadavis.cloudnative.posts.secrets}")
     private String password;
 
     @Override
@@ -50,7 +50,7 @@ public class CloudnativeStatelessnessApplicationTests implements ApplicationCont
     @Test
     public void	actuator() throws Exception {
 
-        mockMvc.perform(get("/env"))
+        mockMvc.perform(get("/actuator/env"))
                 .andExpect(status().isOk());
     }
 

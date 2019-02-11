@@ -1,10 +1,10 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: posts
+  name: connections-svc
 spec:
   selector:
-    app: posts
+    app: connections
   ports:
   - protocol: "TCP"
     port: 80
@@ -14,30 +14,30 @@ spec:
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: posts
+  name: connections
   labels:
-    app: posts
+    app: connections
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: posts
+      app: connections
   template:
     metadata:
       labels:
-        app: posts
+        app: connections
     spec:
       containers:
-      - name: posts
-        image: cdavisafc/cloudnative-appconfig-posts:0.0.2
+      - name: connections
+        image: cdavisafc/cloudnative-appconfig-connections:0.0.2
         env:
           - name: INSTANCE_IP
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
           - name: SPRING_APPLICATION_JSON
-            value: '{"spring":{"datasource":{"url":"jdbc:mysql://192.168.99.100:30423/cookbook"}}}'
+            value: '{"spring":{"datasource":{"url":"jdbc:mysql://192.168.99.100:30917/cookbook"}}}'
           - name: SPRING_APPLICATION_NAME
             value: "mycookbook"
           - name: SPRING_CLOUD_CONFIG_URI
-            value: "http://192.168.99.100:31681"
+            value: "http://192.168.99.100:31868"

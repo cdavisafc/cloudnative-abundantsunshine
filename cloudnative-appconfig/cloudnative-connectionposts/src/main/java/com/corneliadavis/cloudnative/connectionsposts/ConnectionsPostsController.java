@@ -72,9 +72,9 @@ public class ConnectionsPostsController {
     private String postsUrl;
     @Value("${connectionpostscontroller.usersUrl}")
     private String usersUrl;
-    @Value("${com.corneliadavis.cloudnative.posts.secret}")
+    @Value("${com.corneliadavis.cloudnative.posts.secrets}")
     private String postsSecret;
-    @Value("${com.corneliadavis.cloudnative.connections.secret}")
+    @Value("${com.corneliadavis.cloudnative.connections.secrets}")
     private String connectionsSecret;
 
     private StringRedisTemplate template;
@@ -87,7 +87,7 @@ public class ConnectionsPostsController {
     @Autowired
     Utils utils;
 
-    @RequestMapping(method = RequestMethod.GET, value="/connectionPosts")
+    @RequestMapping(method = RequestMethod.GET, value="/connectionsposts")
     public Iterable<PostSummary> getByUsername(@CookieValue(value = "userToken", required=false) String token, HttpServletResponse response) {
 
         if (token == null) {

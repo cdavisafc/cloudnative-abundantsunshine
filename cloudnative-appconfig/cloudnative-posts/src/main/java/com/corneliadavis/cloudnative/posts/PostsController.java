@@ -18,7 +18,7 @@ public class PostsController {
     private static final Logger logger = LoggerFactory.getLogger(PostsController.class);
     private PostRepository postRepository;
 
-    @Value("${com.corneliadavis.cloudnative.posts.secret}")
+    @Value("${com.corneliadavis.cloudnative.posts.secrets}")
     private String configuredSecret;
 
     @Autowired

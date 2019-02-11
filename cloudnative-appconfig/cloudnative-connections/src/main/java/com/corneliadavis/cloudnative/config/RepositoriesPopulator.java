@@ -22,7 +22,7 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
     private static final Logger logger = LoggerFactory.getLogger(RepositoriesPopulator.class);
     private ApplicationContext applicationContext;
 
-    @Value("${com.corneliadavis.cloudnative.connections.secret}")
+    @Value("${com.corneliadavis.cloudnative.connections.secrets}")
     private String secret;
 
     @Override
