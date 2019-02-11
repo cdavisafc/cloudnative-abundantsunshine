@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: connections
-        image: cdavisafc/cloudnative-appconfig-connections:0.0.2
+        image: cdavisafc/cloudnative-appconfig-connections:0.0.1
         env:
           - name: INSTANCE_IP
             valueFrom:
@@ -37,7 +37,3 @@ spec:
                 fieldPath: status.podIP
           - name: SPRING_APPLICATION_JSON
             value: '{"spring":{"datasource":{"url":"jdbc:mysql://192.168.99.100:30917/cookbook"}}}'
-          - name: SPRING_APPLICATION_NAME
-            value: "mycookbook"
-          - name: SPRING_CLOUD_CONFIG_URI
-            value: "http://192.168.99.100:31868"

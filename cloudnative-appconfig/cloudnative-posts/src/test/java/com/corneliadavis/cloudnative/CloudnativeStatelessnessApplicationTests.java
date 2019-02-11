@@ -25,15 +25,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(properties = {
         "newfromconnectionscontroller.connectionsUrl:http://localhost:8080/connections/",
         "newfromconnectionscontroller.postsUrl:http://localhost:8080/posts?userIds=",
-        "newfromconnectionscontroller.usersUrl:http://localhost:8080/users/",
-        "com.corneliadavis.cloudnative.posts.secrets:forTests",
-        "spring.cloud.config.enabled:false"})
+        "newfromconnectionscontroller.usersUrl:http://localhost:8080/users/"})
 @AutoConfigureMockMvc
 public class CloudnativeStatelessnessApplicationTests implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
-    @Value("${com.corneliadavis.cloudnative.posts.secrets}")
-    private String password;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -57,7 +53,7 @@ public class CloudnativeStatelessnessApplicationTests implements ApplicationCont
     @Test
     public void	checkPostCounts() throws Exception {
 
-        mockMvc.perform(get("/posts").param("secret", password))
+        mockMvc.perform(get("/posts"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$", hasSize(4)));

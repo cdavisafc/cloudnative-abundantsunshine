@@ -25,9 +25,6 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
     private static final Logger logger = LoggerFactory.getLogger(RepositoriesPopulator.class);
     private ApplicationContext applicationContext;
 
-    @Value("${com.corneliadavis.cloudnative.posts.secrets}")
-    private String secret;
-
     @Autowired
     Environment environment;
 
@@ -48,17 +45,17 @@ public class RepositoriesPopulator implements ApplicationListener<ContextRefresh
 
         // hacky way of not loading data if posts already exist - could be race conditions but not worrying about that
 
-        Iterable<Post> posts = postsController.getPostsByUserId("2", secret, null);
+        Iterable<Post> posts = postsController.getPostsByUserId("2",null);
         if (!posts.iterator().hasNext()) {
 
             post1 = new Post(2L, "Chicken Pho", "This is my attempt to recreate what I ate in Vietnam...");
-            postsController.newPost(post1, secret,null);
+            postsController.newPost(post1, null);
             post2 = new Post(1L, "Whole Orange Cake", "That's right, you blend up whole oranges, rind and all...");
-            postsController.newPost(post2, secret,null);
+            postsController.newPost(post2, null);
             post3 = new Post(1L, "German Dumplings (Kloesse)", "Russet potatoes, flour (gluten free!) and more...");
-            postsController.newPost(post3, secret,null);
+            postsController.newPost(post3, null);
             post4 = new Post(3L, "French Press Lattes", "We've figured out how to make these dairy free, but just as good!...");
-            postsController.newPost(post4, secret,null);
+            postsController.newPost(post4, null);
 
         }
 

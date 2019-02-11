@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Date;
 
-@RefreshScope
 @RestController
 public class ConnectionsPostsController {
 
@@ -72,10 +70,6 @@ public class ConnectionsPostsController {
     private String postsUrl;
     @Value("${connectionpostscontroller.usersUrl}")
     private String usersUrl;
-    @Value("${com.corneliadavis.cloudnative.posts.secrets}")
-    private String postsSecret;
-    @Value("${com.corneliadavis.cloudnative.connections.secrets}")
-    private String connectionsSecret;
 
     private StringRedisTemplate template;
 
@@ -98,6 +92,7 @@ public class ConnectionsPostsController {
             String username = ops.get(token);
             if (username == null) {
                 logger.info(utils.ipTag() + "connectionsPosts access attempt with invalid token");
+
                 response.setStatus(401);
             } else {
 
@@ -108,8 +103,7 @@ public class ConnectionsPostsController {
                 RestTemplate restTemplate = new RestTemplate();
 
                 // get connections
-                String secretQueryParam = "?secret=" + connectionsSecret;
-                ResponseEntity<ConnectionResult[]> respConns = restTemplate.getForEntity(connectionsUrl + username + secretQueryParam, ConnectionResult[].class);
+                ResponseEntity<ConnectionResult[]> respConns = restTemplate.getForEntity(connectionsUrl + username, ConnectionResult[].class);
                 ConnectionResult[] connections = respConns.getBody();
                 for (int i = 0; i < connections.length; i++) {
                     if (i > 0) ids += ",";
@@ -117,9 +111,8 @@ public class ConnectionsPostsController {
                 }
                 logger.info(utils.ipTag() + "connections = " + ids);
 
-                secretQueryParam = "&secret=" + postsSecret;
                 // get posts for those connections
-                ResponseEntity<PostResult[]> respPosts = restTemplate.getForEntity(postsUrl + ids + secretQueryParam, PostResult[].class);
+                ResponseEntity<PostResult[]> respPosts = restTemplate.getForEntity(postsUrl + ids, PostResult[].class);
                 PostResult[] posts = respPosts.getBody();
 
                 for (int i = 0; i < posts.length; i++)
@@ -133,8 +126,7 @@ public class ConnectionsPostsController {
 
     private String getUsersname(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        String secretQueryParam = "?secret=" + connectionsSecret;
-        ResponseEntity<UserResult> resp = restTemplate.getForEntity(usersUrl + id + secretQueryParam, UserResult.class);
+        ResponseEntity<UserResult> resp = restTemplate.getForEntity(usersUrl + id, UserResult.class);
         return resp.getBody().getName();
     }
 }
