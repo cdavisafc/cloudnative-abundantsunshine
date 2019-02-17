@@ -2,7 +2,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: sccs
+  name: sccs-svc
 spec:
   selector:
     app: sccs
