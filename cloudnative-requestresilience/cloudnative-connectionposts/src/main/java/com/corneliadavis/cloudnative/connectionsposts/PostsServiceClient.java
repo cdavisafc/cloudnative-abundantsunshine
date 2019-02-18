@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 
 @Service
-public class PostsService {
+public class PostsServiceClient {
 
     private static final Logger logger = LoggerFactory.getLogger(ConnectionsPostsController.class);
 

@@ -100,7 +100,7 @@ public class ConnectionsPostsController implements InitializingBean {
     RestTemplateBuilder restTemplateBuilder;
 
     @Autowired
-    PostsService postsService;
+    PostsServiceClient postsServiceClient;
 
     @Override
     public void afterPropertiesSet() {
@@ -148,7 +148,7 @@ public class ConnectionsPostsController implements InitializingBean {
                 // try getting the Posts for these users
 
                 try {
-                    postSummaries = postsService.getPosts(ids, restTemplate);
+                    postSummaries = postsServiceClient.getPosts(ids, restTemplate);
                     response.setStatus(200);
                     return postSummaries;
                 } catch (HttpServerErrorException e) {
