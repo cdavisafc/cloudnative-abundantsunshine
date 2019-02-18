@@ -1,42 +1,37 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: connections-svc
+  name: posts-svc
 spec:
   selector:
-    app: connections
+    app: posts
   ports:
   - protocol: "TCP"
     port: 80
     targetPort: 8080
   type: NodePort
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: connections
+  name: posts
   labels:
-    app: connections
+    app: posts
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: connections
+      app: posts
   template:
     metadata:
+      name: posts
       labels:
-        app: connections
+        app: posts
         appcollection: blog-aggregator
     spec:
       containers:
-      - name: connections
-        image: cdavisafc/cloudnative-requestresilience-connections
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 60
-          periodSeconds: 5
+      - name: posts
+        image: cdavisafc/cloudnative-requestresilience-posts:0.0.1
         env:
           - name: INSTANCE_IP
             valueFrom:
@@ -49,4 +44,6 @@ spec:
           - name: SPRING_CLOUD_CONFIG_URI
             value: "http://sccs-svc:8888"
           - name: VERSIONING_TRIGGER
-            value: "3"
+            value: "1"
+          - name: SERVER_TOMCAT_MAX-CONNECTIONS
+            value: "5"

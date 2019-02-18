@@ -1,39 +1,39 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: connection-posts-svc
+  name: connectionsposts-svc
 spec:
   selector:
-    app: connection-posts
+    app: connectionsposts
   ports:
   - protocol: "TCP"
     port: 80
     targetPort: 8080
-  type: LoadBalancer
+  type: NodePort
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: connection-posts
+  name: connectionsposts
   labels:
-    app: connection-posts
+    app: connectionsposts
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: connection-posts
+      app: connectionsposts
   template:
     metadata:
       labels:
-        app: connection-posts
+        app: connectionsposts
         appcollection: blog-aggregator
     spec:
       containers:
-      - name: connection-posts
-        image: cdavisafc/cloudnative-requestresilience-connectionposts:0.0.3
-        resources:
-          limits:
-            memory: "2048Mi"
+      - name: connectionsposts
+        image: cdavisafc/cloudnative-requestresilience-connectionposts:0.0.1
+#        resources:
+#          limits:
+#            memory: "2048Mi"
 #        livenessProbe:
 #          httpGet:
 #            path: /healthz
@@ -66,4 +66,4 @@ spec:
           - name: SPRING_CLOUD_CONFIG_URI
             value: "http://sccs-svc:8888"
           - name: VERSIONING_TRIGGER
-            value: "15"
+            value: "1"

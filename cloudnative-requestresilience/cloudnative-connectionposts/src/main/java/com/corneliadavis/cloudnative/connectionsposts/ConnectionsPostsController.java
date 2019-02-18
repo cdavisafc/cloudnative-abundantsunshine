@@ -13,8 +13,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 
@@ -84,13 +82,13 @@ public class ConnectionsPostsController implements InitializingBean {
     @Value("${connectionpostscontroller.readTimeout}")
     private int readTimeout;
 
-    private StringRedisTemplate stringRedisTemplate;
+    private StringRedisTemplate template;
 
     private boolean isHealthy = true;
 
     @Autowired
     public ConnectionsPostsController(StringRedisTemplate template) {
-        this.stringRedisTemplate = template;
+        this.template = template;
     }
 
     @Autowired
@@ -98,9 +96,6 @@ public class ConnectionsPostsController implements InitializingBean {
 
     @Autowired
     RestTemplateBuilder restTemplateBuilder;
-
-    @Autowired
-    PostsService postsService;
 
     @Override
     public void afterPropertiesSet() {
@@ -110,14 +105,14 @@ public class ConnectionsPostsController implements InitializingBean {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value="/connectionPosts")
+    @RequestMapping(method = RequestMethod.GET, value="/connectionsposts")
     public Iterable<PostSummary> getByUsername(@CookieValue(value = "userToken", required=false) String token, HttpServletResponse response) {
 
         if (token == null) {
             logger.info(utils.ipTag() + "connectionsPosts access attempt without auth token");
             response.setStatus(401);
         } else {
-            ValueOperations<String, String> ops = this.stringRedisTemplate.opsForValue();
+            ValueOperations<String, String> ops = this.template.opsForValue();
             String username = ops.get(token);
             if (username == null) {
                 logger.info(utils.ipTag() + "connectionsPosts access attempt with invalid token");
@@ -125,9 +120,9 @@ public class ConnectionsPostsController implements InitializingBean {
                 return null;
             } else {
 
+                ArrayList<PostSummary> postSummaries = new ArrayList<PostSummary>();
                 logger.info(utils.ipTag() + "getting posts for user network " + username);
 
-                ArrayList<PostSummary> postSummaries = new ArrayList<PostSummary>();
                 String ids = "";
 				RestTemplate restTemplate = restTemplateBuilder
 												.setConnectTimeout(connectTimeout)
@@ -146,27 +141,43 @@ public class ConnectionsPostsController implements InitializingBean {
 
                 secretQueryParam = "&secret=" + utils.getPostsSecret();
                 // get posts for those connections
-                // try getting the Posts for these users
-
-                try {
-                    postSummaries = postsService.getPosts(ids, restTemplate);
-                    response.setStatus(200);
-                    return postSummaries;
-                } catch (HttpServerErrorException e) {
-                    logger.info(utils.ipTag() + "Call to Posts service returned 500");
-                    response.setStatus(500);
-                    return null;
-                } catch (ResourceAccessException e) {
-                    logger.info(utils.ipTag() + "Call to Posts service timed out");
-                    response.setStatus(500);
-                    return null;
-                } catch (Exception e) {
-                    logger.info(utils.ipTag() + "Unexpected Exception: Exception Class " + e.getClass() + e.getMessage());
-                    response.setStatus(500);
-                    return null;
+                // very naive retries on Posts service
+                int retryCount = 0;
+                while (implementRetries || retryCount == 0) {
+                    try {
+                        RestTemplate restTemp = restTemplateBuilder
+                                .setConnectTimeout(connectTimeout)
+                                .setReadTimeout(readTimeout)
+                                .build();
+                        ResponseEntity<PostResult[]> respPosts = restTemp.getForEntity(postsUrl + ids + secretQueryParam, PostResult[].class);
+                        if (respPosts.getStatusCode().is5xxServerError()) {
+                            response.setStatus(500);
+                            return null;
+                        } else {
+                            logger.info(utils.ipTag() + "Retrieved results from database");
+                            PostResult[] posts = respPosts.getBody();
+                            for (int i = 0; i < posts.length; i++)
+                                postSummaries.add(new PostSummary(getUsersname(posts[i].getUserId()), posts[i].getTitle(), posts[i].getDate()));
+                            return postSummaries;
+                        }
+                    } catch (Exception e) {
+                        // Will occur when a connection times out. For this naive implementation, we will simply
+						// try again.
+                        logger.info(utils.ipTag() + "On (" + retryCount + ") request to unhealthy posts service  " + e.getMessage());
+                        if (implementRetries)
+                            retryCount++;
+                        else {
+                            logger.info(utils.ipTag() + "Not implementing retries - returning with a 500");
+                            response.setStatus(500);
+                            return null;
+                        }
+                    }
                 }
             }
         }
+        // Do give indication that there might be some trouble but returning a success status code, but
+        // with an indication that there might be something going on.
+        response.setStatus(207);
         return null;
     }
 
@@ -178,4 +189,11 @@ public class ConnectionsPostsController implements InitializingBean {
 
     }
 
+
+    private String getUsersname(Long id) {
+        RestTemplate restTemplate = new RestTemplate();
+        String secretQueryParam = "?secret=" + utils.getConnectionsSecret();
+        ResponseEntity<UserResult> resp = restTemplate.getForEntity(usersUrl + id + secretQueryParam, UserResult.class);
+        return resp.getBody().getName();
+    }
 }

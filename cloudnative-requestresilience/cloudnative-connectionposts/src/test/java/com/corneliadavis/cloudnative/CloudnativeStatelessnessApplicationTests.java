@@ -52,13 +52,13 @@ public class CloudnativeStatelessnessApplicationTests implements ApplicationCont
     @Test
     public void	actuator() throws Exception {
 
-        mockMvc.perform(get("/env"))
+        mockMvc.perform(get("/actuator/env"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void	helloInvalidToken() throws Exception {
-        mockMvc.perform(get("/connectionPosts").cookie(new Cookie("userToken", "1234")))
+        mockMvc.perform(get("/connectionsposts").cookie(new Cookie("userToken", "1234")))
                 .andExpect(status().isUnauthorized());
     }
 
