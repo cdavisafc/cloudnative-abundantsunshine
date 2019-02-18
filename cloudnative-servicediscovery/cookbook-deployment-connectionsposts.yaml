@@ -1,10 +1,10 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: connection-posts-svc
+  name: connectionsposts-svc
 spec:
   selector:
-    app: connection-posts
+    app: connectionsposts
   ports:
   - protocol: "TCP"
     port: 80
@@ -14,21 +14,21 @@ spec:
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: connection-posts
+  name: connectionsposts
   labels:
-    app: connection-posts
+    app: connectionsposts
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: connection-posts
+      app: connectionsposts
   template:
     metadata:
       labels:
-        app: connection-posts
+        app: connectionsposts
     spec:
       containers:
-      - name: connection-posts
+      - name: connectionsposts
         image: cdavisafc/cloudnative-applifecycle-connectionposts
         livenessProbe:
           httpGet:
