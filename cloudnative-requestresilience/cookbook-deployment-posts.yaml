@@ -18,7 +18,7 @@ metadata:
   labels:
     app: posts
 spec:
-  replicas: 4
+  replicas: 1
   selector:
     matchLabels:
       app: posts
@@ -32,6 +32,12 @@ spec:
       containers:
       - name: posts
         image: cdavisafc/cloudnative-requestresilience-posts:0.0.1
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
         env:
           - name: INSTANCE_IP
             valueFrom:
