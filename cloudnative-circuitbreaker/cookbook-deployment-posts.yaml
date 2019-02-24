@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
       - name: posts
-        image: cdavisafc/cloudnative-circuitbreaker-posts:0.0.2
+        image: cdavisafc/cloudnative-circuitbreaker-posts:0.0.1
 #        livenessProbe:
 #          httpGet:
 #            path: /healthz

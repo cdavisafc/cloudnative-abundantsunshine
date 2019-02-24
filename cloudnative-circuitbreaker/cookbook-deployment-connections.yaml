@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: connections
-        image: cdavisafc/cloudnative-circuitbreaker-connections
+        image: cdavisafc/cloudnative-requestresilience-connections:0.0.1
         env:
           - name: INSTANCE_IP
             valueFrom:
