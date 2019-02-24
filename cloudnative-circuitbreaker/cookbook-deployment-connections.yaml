@@ -11,7 +11,7 @@ spec:
     targetPort: 8080
   type: NodePort
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: connections
@@ -31,12 +31,6 @@ spec:
       containers:
       - name: connections
         image: cdavisafc/cloudnative-circuitbreaker-connections
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 60
-          periodSeconds: 5
         env:
           - name: INSTANCE_IP
             valueFrom:
@@ -49,4 +43,4 @@ spec:
           - name: SPRING_CLOUD_CONFIG_URI
             value: "http://sccs-svc:8888"
           - name: VERSIONING_TRIGGER
-            value: "3"
+            value: "1"

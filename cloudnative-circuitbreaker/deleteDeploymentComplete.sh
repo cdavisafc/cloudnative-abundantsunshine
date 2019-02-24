@@ -3,7 +3,7 @@
 
 kubectl delete deploy/posts
 kubectl delete deploy/connections
-kubectl delete deploy/connection-posts
+kubectl delete deploy/connectionsposts
 
 if [ "$1" = "all" ]; then
 	kubectl delete deploy/mysql

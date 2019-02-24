@@ -35,7 +35,7 @@ public class CloudnativeStatelessnessApplicationTestTwoCreds {
     @Test
     public void	actuator() throws Exception {
 
-        mockMvc.perform(get("/env"))
+        mockMvc.perform(get("/actuator/env"))
                 .andExpect(status().isOk());
     }
 

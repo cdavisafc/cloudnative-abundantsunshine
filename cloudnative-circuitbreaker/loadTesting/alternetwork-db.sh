@@ -6,7 +6,7 @@ else
 fi
 
 echo "$action connections between posts and mysql"
-kubectl exec mysql-79bd966484-5kl7j -- route $1 -host 10.32.3.25 reject
-kubectl exec mysql-79bd966484-5kl7j -- route $1 -host 10.32.4.21 reject
-kubectl exec mysql-79bd966484-5kl7j -- route $1 -host 10.32.16.22 reject
-kubectl exec mysql-79bd966484-5kl7j -- route $1 -host 10.32.8.32 reject
+kubectl exec mysql-7496bdd68f-9vrgh -- route $1 -host 10.36.2.15 reject
+kubectl exec mysql-7496bdd68f-9vrgh -- route $1 -host 10.36.1.30 reject
+kubectl exec mysql-7496bdd68f-9vrgh -- route $1 -host 10.36.4.21 reject
+kubectl exec mysql-7496bdd68f-9vrgh -- route $1 -host 10.36.3.18 reject
