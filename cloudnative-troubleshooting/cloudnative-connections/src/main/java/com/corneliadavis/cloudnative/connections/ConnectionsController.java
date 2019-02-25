@@ -4,11 +4,14 @@ import com.corneliadavis.cloudnative.Utils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
+import org.springframework.web.client.RestTemplate;
 
 @RefreshScope
 @RestController
@@ -29,7 +32,7 @@ public class ConnectionsController {
         this.connectionRepository = connectionRepository;
     }
 
-	@RequestMapping(method = RequestMethod.GET, value="/users")
+    @RequestMapping(method = RequestMethod.GET, value="/users")
 	public Iterable<User> getUsers(@RequestParam(value="secret", required=true) String secret,
                                    HttpServletResponse response) {
 
@@ -56,7 +59,7 @@ public class ConnectionsController {
             logger.info(utils.ipTag() + "getting user " + user);
             try {
                 Long id = Long.parseLong(user);
-                return userRepository.findOne(id);
+                return userRepository.findById(id).get();
             } catch (NumberFormatException e) {
                 return userRepository.findByUsername(user);
             }
@@ -92,7 +95,7 @@ public class ConnectionsController {
         if (utils.isValidSecret(secret)) {
 
             logger.info(utils.ipTag() + "Updating user with id " + userId);
-            User user = userRepository.findOne(userId);
+            User user = userRepository.findById(userId).get();
             newUser.setId(userId);
             userRepository.save(newUser);
 
@@ -162,10 +165,10 @@ public class ConnectionsController {
 
         if (utils.isValidSecret(secret)) {
 
-            Connection connection = connectionRepository.findOne(connectionId);
+            Connection connection = connectionRepository.findById(connectionId).get();
 
             logger.info(utils.ipTag() + "deleting connection: " + connection.getFollower() + " is no longer following " + connection.getFollowed());
-            connectionRepository.delete(connectionId);
+            connectionRepository.delete(connection);
 
         } else {
             logger.info(utils.ipTag() + "Attempt to access Connections service with secret " + secret + " (expecting one of " + utils.validSecrets() + ")");

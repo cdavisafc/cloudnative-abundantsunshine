@@ -105,7 +105,7 @@ public class ConnectionsPostsController implements InitializingBean {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value="/connectionPosts")
+    @RequestMapping(method = RequestMethod.GET, value="/connectionsposts")
     public Iterable<PostSummary> getByUsername(@CookieValue(value = "userToken", required=false) String token, HttpServletResponse response) {
 
         if (token == null) {

@@ -23,4 +23,4 @@ spec:
         - name: jmeter-config-volume
           configMap:
             defaultMode: 420
-            name: jmeter-config
+            name: zipkin-jmeter-config

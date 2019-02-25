@@ -38,7 +38,7 @@
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
 <!--            <stringProp name="HTTPSampler.domain">35.192.170.240</stringProp> -->
-            <stringProp name="HTTPSampler.domain">connection-posts-svc</stringProp>
+            <stringProp name="HTTPSampler.domain">connectionsposts-svc</stringProp>
             <stringProp name="HTTPSampler.port"></stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -59,11 +59,11 @@
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
 <!--          <stringProp name="HTTPSampler.domain">35.192.170.240</stringProp> -->
-          <stringProp name="HTTPSampler.domain">connection-posts-svc</stringProp>
+          <stringProp name="HTTPSampler.domain">connectionsposts-svc</stringProp>
           <stringProp name="HTTPSampler.port">80</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/connectionPosts</stringProp>
+          <stringProp name="HTTPSampler.path">/connectionsposts</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>

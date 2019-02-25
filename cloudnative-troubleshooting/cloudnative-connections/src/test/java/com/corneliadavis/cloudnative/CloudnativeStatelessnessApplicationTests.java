@@ -48,10 +48,16 @@ public class CloudnativeStatelessnessApplicationTests implements ApplicationCont
     @Test
     public void	actuator() throws Exception {
 
-        mockMvc.perform(get("/env"))
+        mockMvc.perform(get("/actuator/env"))
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void	actuatorMetrics() throws Exception {
+
+        mockMvc.perform(get("/actuator/metrics"))
+                .andExpect(status().isOk());
+    }
 
     @Test
     public void	checkUserCounts() throws Exception {
