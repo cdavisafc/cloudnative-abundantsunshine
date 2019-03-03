@@ -1,5 +1,10 @@
 package com.corneliadavis.cloudnative.connections;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * Created by corneliadavis on 10/1/18.
  */

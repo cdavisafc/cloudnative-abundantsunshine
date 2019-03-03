@@ -46,13 +46,13 @@ public class CloudnativeEventDrivenTests implements ApplicationContextAware {
 	@Test
 	public void	actuator() throws Exception {
 
-		mockMvc.perform(get("/env"))
+		mockMvc.perform(get("/actuator/env"))
 				.andExpect(status().isOk());
 	}
 
     @Test
     public void	checkNewPostCounts() throws Exception {
-        mockMvc.perform(get("/connectionsPosts/cdavisafc"))
+        mockMvc.perform(get("/connectionsposts/cdavisafc"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$", hasSize(2)));

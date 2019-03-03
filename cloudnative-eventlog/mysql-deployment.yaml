@@ -11,7 +11,7 @@ spec:
     targetPort: 3306
   type: LoadBalancer
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: cdavisafc/mysql
+        image: mysql:5.7.22
         args: []
         securityContext:
           privileged: true

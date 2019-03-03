@@ -8,25 +8,25 @@ import java.util.Collection;
  * Created by corneliadavis on 9/9/17.
  */
 @Entity
-public class User {
+public class MUser {
 
     @Id
     private Long id;
     private String name;
     private String username;
 
-    @OneToMany(mappedBy ="user")
-    private Collection<Post> posts = new ArrayList<Post>();
+    @OneToMany(mappedBy ="mUser")
+    private Collection<MPost> posts = new ArrayList<MPost>();
 
     @OneToMany(mappedBy = "followerUser")
-    private Collection<Connection> following = new ArrayList<Connection>();
+    private Collection<MConnection> following = new ArrayList<MConnection>();
 
     @OneToMany(mappedBy = "followedUser")
-    private Collection<Connection> followed = new ArrayList<Connection>();
+    private Collection<MConnection> followed = new ArrayList<MConnection>();
 
-    protected User() {}
+    protected MUser() {}
 
-    public User(Long id, String name, String username) {
+    public MUser(Long id, String name, String username) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -54,6 +54,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", name = " + name + ", username = " + username + "]";
+        return "MUser [id=" + id + ", name = " + name + ", username = " + username + "]";
     }
 }

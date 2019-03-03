@@ -1,9 +1,9 @@
 package com.corneliadavis.cloudnative.config;
 
-import com.corneliadavis.cloudnative.connectionsposts.eventhandlers.EventHandler;
-import com.corneliadavis.cloudnative.eventschemas.ConnectionEvent;
-import com.corneliadavis.cloudnative.eventschemas.UserEvent;
-import com.corneliadavis.cloudnative.eventschemas.PostEvent;
+import com.corneliadavis.cloudnative.connectionsposts.eventhandlers.EventsController;
+import com.corneliadavis.cloudnative.eventschemas.connections.Connection;
+import com.corneliadavis.cloudnative.eventschemas.connections.User;
+import com.corneliadavis.cloudnative.eventschemas.posts.Post;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -28,33 +28,33 @@ public class RepositoriesPopulator implements ApplicationContextAware {
     }
 
     public void populate() {
-        UserEvent user1, user2, user3;
-        PostEvent post1, post2, post3, post4;
-        ConnectionEvent connection1, connection2, connection3;
-        EventHandler eventsController = applicationContext.getBean(EventHandler.class);
+        User user1, user2, user3;
+        Post post1, post2, post3, post4;
+        Connection connection1, connection2, connection3;
+        EventsController eventsController = applicationContext.getBean(EventsController.class);
 
-        user1 = new UserEvent("created", 1L,"Cornelia", "cdavisafc");
-        eventsController.userEvent(user1);
-        user2 = new UserEvent("created",2L,"Max", "madmax");
-        eventsController.userEvent(user2);
-        user3 = new UserEvent("created", 3L, "Glen", "gmaxdavis");
-        eventsController.userEvent(user3);
+        user1 = new User(1L,"Cornelia", "cdavisafc");
+        eventsController.newUser(user1,null);
+        user2 = new User(2L,"Max", "madmax");
+        eventsController.newUser(user2,null);
+        user3 = new User( 3L, "Glen", "gmaxdavis");
+        eventsController.newUser(user3,null);
 
-        post1 = new PostEvent("created",1L, new Date(), 2L, "Max Title", "The body of the post");
-        eventsController.postEvent(post1);
-        post2 = new PostEvent("created",2L, new Date(), 1L, "Cornelia Title", "The body of the post");
-        eventsController.postEvent(post2);
-        post3 = new PostEvent("created",3L, new Date(), 1L, "Cornelia Title2", "The body of the post");
-        eventsController.postEvent(post3);
-        post4 = new PostEvent("created",4L, new Date(), 3L, "Glen Title", "The body of the post");
-        eventsController.postEvent(post4);
+        post1 = new Post(1L, new Date(), 2L, "Max Title", "The body of the post");
+        eventsController.newPost(post1, null);
+        post2 = new Post(2L, new Date(), 1L, "Cornelia Title", "The body of the post");
+        eventsController.newPost(post2, null);
+        post3 = new Post(3L, new Date(), 1L, "Cornelia Title2", "The body of the post");
+        eventsController.newPost(post3, null);
+        post4 = new Post(4L, new Date(), 3L, "Glen Title", "The body of the post");
+        eventsController.newPost(post4, null);
 
-        connection1 = new ConnectionEvent("created",1L, 2L, 1L);
-        eventsController.connectionEvent(connection1);
-        connection2 = new ConnectionEvent("created",2L, 1L, 2L);
-        eventsController.connectionEvent(connection2);
-        connection3 = new ConnectionEvent("created",3L, 1L, 3L);
-        eventsController.connectionEvent(connection3);
+        connection1 = new Connection(1L, 2L, 1L);
+        eventsController.newConnection(connection1, null);
+        connection2 = new Connection(2L, 1L, 2L);
+        eventsController.newConnection(connection2, null);
+        connection3 = new Connection(3L, 1L, 3L);
+        eventsController.newConnection(connection3, null);
 
     }
 }

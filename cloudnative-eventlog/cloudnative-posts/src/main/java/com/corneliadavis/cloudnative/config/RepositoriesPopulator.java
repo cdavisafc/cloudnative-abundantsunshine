@@ -1,12 +1,11 @@
 package com.corneliadavis.cloudnative.config;
 
+import com.corneliadavis.cloudnative.posts.PostApi;
 import com.corneliadavis.cloudnative.posts.IPostApi;
-import com.corneliadavis.cloudnative.posts.projection.Post;
-import com.corneliadavis.cloudnative.posts.projection.PostRepository;
-import com.corneliadavis.cloudnative.posts.projection.User;
-import com.corneliadavis.cloudnative.posts.projection.UserRepository;
-import com.corneliadavis.cloudnative.posts.read.PostsController;
+import com.corneliadavis.cloudnative.posts.localstorage.User;
+import com.corneliadavis.cloudnative.posts.localstorage.UserRepository;
 import com.corneliadavis.cloudnative.posts.write.PostsWriteController;
+import com.corneliadavis.cloudnative.posts.read.PostsController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -15,8 +14,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
 
 /**
  * Created by corneliadavis on 9/4/17.
@@ -36,11 +33,10 @@ public class RepositoriesPopulator implements ApplicationContextAware {
     }
 
     public void populate() throws InterruptedException {
-        Post post1, post2, post3, post4;
+        PostApi post1, post2, post3, post4;
         PostsController postsController = applicationContext.getBean(PostsController.class);
         PostsWriteController postsWriteController = applicationContext.getBean(PostsWriteController.class);
         UserRepository userRepository = applicationContext.getBean(UserRepository.class);
-        PostRepository postRepository = applicationContext.getBean(PostRepository.class);
 
         // hacky way of not loading data if posts already exist - could be race conditions but not worrying about that
 
@@ -57,14 +53,14 @@ public class RepositoriesPopulator implements ApplicationContextAware {
             user = new User(3L, "gmaxdavis");
             userRepository.save(user);
 
-            post1 = new Post(1L, new Date(), 2L, "Chicken Pho", "This is my attempt to recreate what I ate in Vietnam...");
-            postRepository.save(post1);
-            post2 = new Post(2L, new Date(), 1L, "Whole Orange Cake", "That's right, you blend up whole oranges, rind and all...");
-            postRepository.save(post2);
-            post3 = new Post(3L, new Date(), 1L, "German Dumplings (Kloesse)", "Russet potatoes, flour (gluten free!) and more...");
-            postRepository.save(post3);
-            post4 = new Post(4L, new Date(), 3L, "French Press Lattes", "We've figured out how to make these dairy free, but just as good!...");
-            postRepository.save(post4);
+            post1 = new PostApi("madmax", "Max Title", "The body of the post");
+            postsWriteController.newPost(post1, null);
+            post2 = new PostApi("cdavisafc", "Cornelia Title", "The body of the post");
+            postsWriteController.newPost(post2, null);
+            post3 = new PostApi("cdavisafc", "Cornelia Title2", "The body of the post");
+            postsWriteController.newPost(post3, null);
+            post4 = new PostApi("gmaxdavis", "Glen Title", "The body of the post");
+            postsWriteController.newPost(post4, null);
 
         } else
             logger.info("Sample data previously loaded");

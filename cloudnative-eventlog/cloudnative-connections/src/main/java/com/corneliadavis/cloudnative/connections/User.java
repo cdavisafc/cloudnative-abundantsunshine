@@ -1,24 +1,25 @@
-package com.corneliadavis.cloudnative.connectionsposts.projection;
+package com.corneliadavis.cloudnative.connections;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
- * Created by corneliadavis on 9/9/18.
+ * Created by corneliadavis on 9/4/17.
  */
 @Entity
 public class User {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     private String name;
     private String username;
 
     protected User() {}
 
-    public User(Long id, String name, String username) {
-        this.id = id;
+    public User(String name, String username) {
         this.name = name;
         this.username = username;
     }
@@ -37,14 +38,12 @@ public class User {
         this.name = name;
     }
 
-    public String getUsername() { return username; }
+    public String getUsername() {
+        return username;
+    }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
-    @Override
-    public String toString() {
-        return "User [id=" + id + ", name = " + name + ", username = " + username + "]";
-    }
 }
