@@ -31,16 +31,16 @@ spec:
     spec:
       containers:
       - name: posts
-        image: cdavisafc/cloudnative-eventlog-posts:0.0.0
+        image: cdavisafc/cloudnative-eventlog-posts:0.0.1
         env:
           - name: INSTANCE_IP
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
-          - name: CONNECTIONSPOSTSCONTROLLER_URL
-            value: "http://connectionsposts-svc/eventHandlers"
           - name: SPRING_APPLICATION_JSON
             value: '{"spring":{"datasource":{"url":"jdbc:mysql://mysql-svc/cookbookposts"}}}'
+          - name: KAFKA_BOOTSTRAP_SERVERS
+            value: "kafka-svc:9092"
           - name: SPRING_APPLICATION_NAME
             value: "mycookbook"
           - name: VERSIONING_TRIGGER
