@@ -12,7 +12,7 @@ import javax.persistence.Id;
 public class Connection {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private Long follower;
     private Long followed;
