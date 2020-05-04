@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: connections
-        image: cdavisafc/cloudnative-applifecycle-connections
+        image: cdavisafc/cloudnative-applifecycle-connections:0.0.2
         livenessProbe:
           httpGet:
             path: /healthz
