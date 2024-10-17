@@ -3,6 +3,7 @@ target/
 *iml
 *.DS_Store
 cookie
+.vscode/
 
 ### STS ###
 .apt_generated
